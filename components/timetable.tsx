@@ -7,8 +7,10 @@ const HOURS = Array.from({ length: 24 }, (_, i) => `${i}:00`);
 const CELL_HEIGHT = 30;
 const CELL_WIDTH = 40;
 
-const WEEKDAYS = ["MO", "DI", "MI", "DO", "FR", "SA", "SO"];
+const WEEKDAYS = ["M", "D", "M", "D", "F", "S", "S"];
 const DAY_WIDTH = 50;
+
+const CURRENT_DAY = new Date().getDate();
 
 interface Event {
   name: string;
@@ -56,14 +58,21 @@ export function EventBlock(event: Event) {
 }
 
 function HeaderRow() {
+  let date;
+
+  function headerCell(day: string, day_date: number, index: number) {
+    return (
+      <View style={styles.headerCell} key={index}>
+        <Text style={styles.weekday}>{day}</Text>
+        <Text style={styles.weekday}>{day_date}</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.headerRow}>
       <View style={{ width: CELL_WIDTH }} />
-      {WEEKDAYS.map((day, index) => (
-        <View style={styles.headerCell} key={index}>
-          <Text style={styles.weekday}>{day}</Text>
-        </View>
-      ))}
+      {WEEKDAYS.map((day, index) => headerCell(day, 12, index))}
     </View>
   );
 }
@@ -135,6 +144,7 @@ export default function Timetable() {
 const styles = StyleSheet.create({
   headerRow: {
     flexDirection: "row",
+    marginVertical: 10,
   },
   timecell: {
     height: CELL_HEIGHT,
@@ -155,22 +165,26 @@ const styles = StyleSheet.create({
     borderColor: "#eee",
   },
   weekday: {
-    width: DAY_WIDTH,
-    alignItems: "center",
-    justifyContent: "center",
     textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 11,
   },
   lightText: {
     color: "gray",
+    fontSize: 11
   },
   headerCell: {
-    height: CELL_HEIGHT,
-    justifyContent: "center",
+    height: 51,
+    backgroundColor: "#CCCCCC",
+    borderRadius: 5,
     alignItems: "center",
-    backgroundColor: "#f2f2f2",
-    borderBottomWidth: 1,
-    borderColor: "#ccc",
+    justifyContent: "center",
+    flexDirection: "column",
+    width: DAY_WIDTH - 16,
+    marginHorizontal: 8,
+    gap: 5,
   },
+
   eventBlock: {
     position: "absolute",
     opacity: 0.9,
