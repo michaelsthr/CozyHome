@@ -1,5 +1,6 @@
+import { router } from "expo-router";
 import React from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 // Hours from 0:00 to 23:00
 const HOURS = Array.from({ length: 24 }, (_, i) => `${i}:00`);
@@ -21,12 +22,11 @@ interface Event {
 }
 
 export function EventBlock(event: Event) {
+  const startDate = new Date(event.startDate);
+  const endDate = new Date(event.endDate);
 
-  const startDate = new Date(event.startDate)
-  const endDate = new Date(event.endDate)
-
-  const startHour = startDate.getHours()
-  const endHour = endDate.getHours()
+  const startHour = startDate.getHours();
+  const endHour = endDate.getHours();
 
   const top = startHour * CELL_HEIGHT;
   const height = (endHour - startHour) * CELL_HEIGHT;
@@ -34,7 +34,9 @@ export function EventBlock(event: Event) {
   const width = DAY_WIDTH;
 
   return (
-    <View
+    <Pressable
+      // only an example!
+      onPress={() => router.push("/(tabs)/fridge")}
       style={[
         styles.eventBlock,
         {
@@ -42,12 +44,14 @@ export function EventBlock(event: Event) {
           left: left,
           height: height,
           width: width,
-          backgroundColor: event.color
+          backgroundColor: event.color,
         },
       ]}
     >
-      <Text style={styles.eventText}>{event.name}</Text>
-    </View>
+      <View>
+        <Text style={styles.eventText}>{event.name}</Text>
+      </View>
+    </Pressable>
   );
 }
 
