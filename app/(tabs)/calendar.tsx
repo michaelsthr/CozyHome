@@ -1,10 +1,13 @@
 import Timetable from "@/components/timetable";
 import React from "react";
-import { StyleSheet, Text, ScrollView } from "react-native";
+import { StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function calendar() {
   return (
+    <SafeAreaView>
       <Timetable />
+    </SafeAreaView>
   );
 }
 
