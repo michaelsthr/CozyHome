@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 // Hours from 0:00 to 23:00
 const HOURS = Array.from({ length: 24 }, (_, i) => `${i}:00`);
@@ -56,12 +56,14 @@ export default function Timetable() {
   return (
     <View>
       <HeaderRow />
-      <View style={{ flexDirection: "row" }}>
-        <View>
-          <SideTimes />
+      <ScrollView>
+        <View style={{ flexDirection: "row" }}>
+          <View>
+            <SideTimes />
+          </View>
+          <DayGrid />
         </View>
-        <DayGrid />
-      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -98,11 +100,11 @@ const styles = StyleSheet.create({
     color: "gray",
   },
   headerCell: {
-  height: CELL_HEIGHT,
-  justifyContent: "center",
-  alignItems: "center",
-  backgroundColor: "#f2f2f2",
-  borderBottomWidth: 1,
-  borderColor: "#ccc",
-},
+    height: CELL_HEIGHT,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f2f2f2",
+    borderBottomWidth: 1,
+    borderColor: "#ccc",
+  },
 });

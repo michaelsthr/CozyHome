@@ -4,9 +4,7 @@ import { StyleSheet, Text, ScrollView } from "react-native";
 
 export default function calendar() {
   return (
-    <ScrollView style={styles.container}>
       <Timetable />
-    </ScrollView>
   );
 }
 
