@@ -16,9 +16,11 @@ function HeaderRow() {
     <View style={styles.headerRow}>
       <View style={{ width: CELL_WIDTH }} />
       {WEEKDAYS.map((day, index) => (
-        <Text style={styles.weekday} key={index}>
-          {day}
-        </Text>
+        <View style={styles.headerCell}>
+          <Text style={styles.weekday} key={index}>
+            {day}
+          </Text>
+        </View>
       ))}
     </View>
   );
@@ -95,4 +97,12 @@ const styles = StyleSheet.create({
   lightText: {
     color: "gray",
   },
+  headerCell: {
+  height: CELL_HEIGHT,
+  justifyContent: "center",
+  alignItems: "center",
+  backgroundColor: "#f2f2f2",
+  borderBottomWidth: 1,
+  borderColor: "#ccc",
+},
 });
