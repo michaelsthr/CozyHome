@@ -9,17 +9,55 @@ const CELL_WIDTH = 40;
 const WEEKDAYS = ["MO", "DI", "MI", "DO", "FR", "SA", "SO"];
 const DAY_WIDTH = 50;
 
-console.log(HOURS);
+interface Event {
+  name: string;
+  dayIndex: number;
+  startDate: string;
+  endDate: string;
+  repeat: boolean;
+  creator: string;
+  description: string;
+  color: string;
+}
+
+export function EventBlock(event: Event) {
+
+  const startDate = new Date(event.startDate)
+  const endDate = new Date(event.endDate)
+
+  const startHour = startDate.getHours()
+  const endHour = endDate.getHours()
+
+  const top = startHour * CELL_HEIGHT;
+  const height = (endHour - startHour) * CELL_HEIGHT;
+  const left = event.dayIndex * DAY_WIDTH;
+  const width = DAY_WIDTH;
+
+  return (
+    <View
+      style={[
+        styles.eventBlock,
+        {
+          top: top,
+          left: left,
+          height: height,
+          width: width,
+          backgroundColor: event.color
+        },
+      ]}
+    >
+      <Text style={styles.eventText}>{event.name}</Text>
+    </View>
+  );
+}
 
 function HeaderRow() {
   return (
     <View style={styles.headerRow}>
       <View style={{ width: CELL_WIDTH }} />
       {WEEKDAYS.map((day, index) => (
-        <View style={styles.headerCell}>
-          <Text style={styles.weekday} key={index}>
-            {day}
-          </Text>
+        <View style={styles.headerCell} key={index}>
+          <Text style={styles.weekday}>{day}</Text>
         </View>
       ))}
     </View>
@@ -61,7 +99,29 @@ export default function Timetable() {
           <View>
             <SideTimes />
           </View>
-          <DayGrid />
+          <View style={{ position: "relative" }}>
+            <DayGrid />
+            <EventBlock
+              name="test"
+              startDate="2025-05-20T13:48:10"
+              endDate="2025-05-20T16:48:10"
+              repeat={false}
+              creator="Michi"
+              description="it is cool"
+              color="#4caf50"
+              dayIndex={3}
+            />
+            <EventBlock
+              name="Termin2"
+              startDate="2025-05-20T4:48:10"
+              endDate="2025-05-20T9:48:10"
+              repeat={false}
+              creator="Michi"
+              description="it is cool"
+              color="lightblue"
+              dayIndex={1}
+            />
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -106,5 +166,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#f2f2f2",
     borderBottomWidth: 1,
     borderColor: "#ccc",
+  },
+  eventBlock: {
+    position: "absolute",
+    opacity: 0.9,
+    borderRadius: 4,
+    padding: 2,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  eventText: {
+    color: "white",
+    fontSize: 10,
   },
 });
