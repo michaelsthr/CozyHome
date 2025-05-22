@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import React from "react";
 import {
   Image,
@@ -39,6 +40,8 @@ const fridgeItems = [
 ];
 
 export default function Fridge() {
+  const router = useRouter();
+
     return (
         <SafeAreaView style={styles.container}>
             {/* Header */}
@@ -93,7 +96,10 @@ export default function Fridge() {
             </ScrollView>
 
             {/* Check Fridge Button */}
-            <TouchableOpacity style={styles.checkButton}>
+            <TouchableOpacity
+                style={styles.checkButton}
+                onPress={() => router.push("/fridge/fridge_items")}
+            >
                 <Text style={styles.checkButtonText}>CHECK FRIDGE</Text>
             </TouchableOpacity>
         </SafeAreaView>
