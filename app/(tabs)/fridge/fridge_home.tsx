@@ -14,24 +14,24 @@ const fridgeItems = [
     {
         id: 1,
         name: "Milk",
-        img: require("../../assets/images/placeholder_icon.png"),
-        statusIcon: require("../../assets/images/placeholder_icon.png"),
+        img: require("../../../assets/images/placeholder_icon.png"),
+        statusIcon: require("../../../assets/images/placeholder_icon.png"),
         days: 1,
         label: "Day left",
     },
     {
         id: 2,
         name: "Bananas",
-        img: require("../../assets/images/placeholder_icon.png"),
-        statusIcon: require("../../assets/images/placeholder_icon.png"),
+        img: require("../../../assets/images/placeholder_icon.png"),
+        statusIcon: require("../../../assets/images/placeholder_icon.png"),
         days: 2,
         label: "Days left",
     },
     {
         id: 3,
         name: "Apple",
-        img: require("../../assets/images/placeholder_icon.png"),
-        statusIcon: require("../../assets/images/placeholder_icon.png"),
+        img: require("../../../assets/images/placeholder_icon.png"),
+        statusIcon: require("../../../assets/images/placeholder_icon.png"),
         days: 3,
         label: "Days left",
     },
@@ -44,18 +44,18 @@ export default function Fridge() {
             {/* Header */}
             <View style={styles.header}>
                 <Image
-                    source={require("../../assets/images/placeholder_icon.png")}
+                    source={require("../../../assets/images/placeholder_icon.png")}
                     style={styles.avatar}
                 />
                 <Image
-                    source={require("../../assets/images/placeholder_icon.png")}
+                    source={require("../../../assets/images/placeholder_icon.png")}
                     style={styles.logo}
                 />
             </View>
 
             {/* Greeting */}
-            <Text style={styles.greeting}>Hej!</Text>
-            <Text style={styles.username}>Fira Molly</Text>
+            <Text style={styles.greeting}>Hey!</Text>
+            <Text style={styles.username}>Max Mustermann</Text>
 
             {/* Search Bar */}
             <View style={styles.searchContainer}>
