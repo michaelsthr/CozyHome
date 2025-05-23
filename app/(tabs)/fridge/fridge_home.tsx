@@ -15,25 +15,25 @@ const fridgeItems = [
     {
         id: 1,
         name: "Milk",
-        img: require("../../../assets/images/placeholder_icon.png"),
-        statusIcon: require("../../../assets/images/placeholder_icon.png"),
-        days: 1,
-        label: "Day left",
+        img: require("../../../assets/images/fridge_icons/milk.png"),
+        statusIcon: require("../../../assets/images/fridge_icons/expired.png"),
+        days: 0,
+        label: "Days left",
     },
     {
         id: 2,
         name: "Bananas",
-        img: require("../../../assets/images/placeholder_icon.png"),
-        statusIcon: require("../../../assets/images/placeholder_icon.png"),
+        img: require("../../../assets/images/fridge_icons/banana.png"),
+        statusIcon: require("../../../assets/images/fridge_icons/warning.png"),
         days: 2,
         label: "Days left",
     },
     {
         id: 3,
         name: "Apple",
-        img: require("../../../assets/images/placeholder_icon.png"),
-        statusIcon: require("../../../assets/images/placeholder_icon.png"),
-        days: 3,
+        img: require("../../../assets/images/fridge_icons/apple.png"),
+        statusIcon: require("../../../assets/images/fridge_icons/eatable.png"),
+        days: 10,
         label: "Days left",
     },
     // ...more items
@@ -47,11 +47,11 @@ export default function Fridge() {
             {/* Header */}
             <View style={styles.header}>
                 <Image
-                    source={require("../../../assets/images/placeholder_icon.png")}
+                    source={require("../../../assets/images/fridge_icons/profile-picture.png")}
                     style={styles.avatar}
                 />
                 <Image
-                    source={require("../../../assets/images/placeholder_icon.png")}
+                    source={require("../../../assets/images/fridge_icons/logo-2.png")}
                     style={styles.logo}
                 />
             </View>
@@ -176,8 +176,8 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     statusIcon: {
-        width: 16,
-        height: 16,
+        width: 20,
+        height: 20,
         marginRight: 4,
     },
     statusText: {

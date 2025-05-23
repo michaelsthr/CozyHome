@@ -10,12 +10,12 @@ import {
 } from "react-native";
 
 const categories = [
-  { id: 1, name: "Fruits",    img: require("../../../assets/images/placeholder_icon.png") },
-  { id: 2, name: "Vegetable", img: require("../../../assets/images/placeholder_icon.png") },
-  { id: 3, name: "Dairy",     img: require("../../../assets/images/placeholder_icon.png") },
-  { id: 4, name: "Bread",     img: require("../../../assets/images/placeholder_icon.png") },
-  { id: 5, name: "Drinks",    img: require("../../../assets/images/placeholder_icon.png") },
-  { id: 6, name: "Meat",      img: require("../../../assets/images/placeholder_icon.png") },
+  { id: 1, name: "Fruits",    img: require("../../../assets/images/fridge_icons/fruits.png") },
+  { id: 2, name: "Vegetable", img: require("../../../assets/images/fridge_icons/vegetables.png") },
+  { id: 3, name: "Dairy",     img: require("../../../assets/images/fridge_icons/dairy.png") },
+  { id: 4, name: "Bread",     img: require("../../../assets/images/fridge_icons/bread.png") },
+  { id: 5, name: "Drinks",    img: require("../../../assets/images/fridge_icons/drinks.png") },
+  { id: 6, name: "Meat",      img: require("../../../assets/images/fridge_icons/meat-fish.png") },
 ];
 
 export default function FridgeItems() {
@@ -24,7 +24,7 @@ export default function FridgeItems() {
       {/* Header */}
       <View style={styles.header}>
         <Image
-          source={require("../../../assets/images/placeholder_icon.png")}
+          source={require("../../../assets/images/fridge_icons/profile-picture.png")}
           style={styles.avatar}/>
       </View>
       <Text style={styles.title}>Fridge</Text>
@@ -50,7 +50,7 @@ export default function FridgeItems() {
       <View style={styles.itemsContainer}>
         {categories.map((item) => (
           <View key={item.id} style={styles.itemCard}>
-            <Image source={require("../../../assets/images/placeholder_icon.png")} style={styles.itemImage} />
+            <Image source={item.img} style={styles.itemImage} />
             <Text style={styles.itemText}>{item.name}</Text>
           </View>
         ))}

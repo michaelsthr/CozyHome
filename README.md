@@ -48,3 +48,13 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+## Icons
+
+Tip: Just take a screenshot (256x256), otherwise you'll have to download the png (512x512). There's a download limit until you register.
+
+Used for fridge:
+https://www.flaticon.com/search?author_id=1&style_id=15&type=standard&word= (Lineal color by Freepik)
+
+Attribution and Link example:
+<a href="https://www.flaticon.com/free-icons/food" title="food icons">Food icons created by Freepik - Flaticon</a>
