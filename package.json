@@ -12,6 +12,13 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
+    "@gluestack-style/react": "^1.0.57",
+    "@gluestack-ui/button": "^1.0.14",
+    "@gluestack-ui/checkbox": "^0.1.39",
+    "@gluestack-ui/config": "^1.1.20",
+    "@gluestack-ui/icon": "^0.1.27",
+    "@gluestack-ui/themed": "^1.1.73",
+    "@react-native-community/datetimepicker": "github:react-native-community/datetimepicker",
     "@react-navigation/bottom-tabs": "^7.3.10",
     "@react-navigation/elements": "^2.3.8",
     "@react-navigation/native": "^7.1.6",
@@ -28,22 +35,24 @@
     "expo-symbols": "~0.4.4",
     "expo-system-ui": "~5.0.7",
     "expo-web-browser": "~14.1.6",
-    "react": "19.0.0",
+    "react": "^19.0.0",
     "react-dom": "19.0.0",
     "react-native": "0.79.2",
+    "react-native-dropdown-select-list": "^2.0.5",
     "react-native-gesture-handler": "~2.24.0",
     "react-native-reanimated": "~3.17.4",
-    "react-native-safe-area-context": "5.4.0",
+    "react-native-safe-area-context": "^5.4.0",
     "react-native-screens": "~4.10.0",
+    "react-native-svg": "^15.12.0",
     "react-native-web": "~0.20.0",
     "react-native-webview": "13.13.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@types/react": "~19.0.10",
-    "typescript": "~5.8.3",
     "eslint": "^9.25.0",
-    "eslint-config-expo": "~9.2.0"
+    "eslint-config-expo": "~9.2.0",
+    "typescript": "~5.8.3"
   },
   "private": true
 }
