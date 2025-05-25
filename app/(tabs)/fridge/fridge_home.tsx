@@ -1,14 +1,14 @@
 import { useRouter } from "expo-router";
 import React from "react";
 import {
-  Image,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Image,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 
 const fridgeItems = [
@@ -176,8 +176,8 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     statusIcon: {
-        width: 20,
-        height: 20,
+        width: 30,
+        height: 30,
         marginRight: 4,
     },
     statusText: {

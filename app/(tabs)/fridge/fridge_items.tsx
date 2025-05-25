@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import React from "react";
 import {
   Image,
@@ -9,9 +10,10 @@ import {
   View,
 } from "react-native";
 
+// add a `route` field matching your screen file names
 const categories = [
-  { id: 1, name: "Fruits",    img: require("../../../assets/images/fridge_icons/fruits.png") },
-  { id: 2, name: "Vegetable", img: require("../../../assets/images/fridge_icons/vegetables.png") },
+  { id: 1, name: "Fruits",    img: require("../../../assets/images/fridge_icons/fruits.png"),    route: "fridge_fruits" },
+  { id: 2, name: "Vegetable", img: require("../../../assets/images/fridge_icons/vegetables.png"), route: "" },
   { id: 3, name: "Dairy",     img: require("../../../assets/images/fridge_icons/dairy.png") },
   { id: 4, name: "Bread",     img: require("../../../assets/images/fridge_icons/bread.png") },
   { id: 5, name: "Drinks",    img: require("../../../assets/images/fridge_icons/drinks.png") },
@@ -19,6 +21,8 @@ const categories = [
 ];
 
 export default function FridgeItems() {
+  const router = useRouter();
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -49,10 +53,15 @@ export default function FridgeItems() {
       {/* Categories Grid */}
       <View style={styles.itemsContainer}>
         {categories.map((item) => (
-          <View key={item.id} style={styles.itemCard}>
+          <TouchableOpacity
+            key={item.id}
+            style={styles.itemCard}
+            disabled={!item.route}
+            onPress={() => router.push("/fridge/fridge_fruits")}
+          >
             <Image source={item.img} style={styles.itemImage} />
             <Text style={styles.itemText}>{item.name}</Text>
-          </View>
+          </TouchableOpacity>
         ))}
       </View>
 
