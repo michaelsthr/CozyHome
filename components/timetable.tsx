@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { Link } from "expo-router";
 import React from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
@@ -21,7 +21,7 @@ interface Event {
   creator: string;
   description: string;
   color: string;
-  borderColor: string
+  borderColor: string;
 }
 
 export function EventBlock(event: Event) {
@@ -36,11 +36,11 @@ export function EventBlock(event: Event) {
   const left = event.dayIndex * DAY_WIDTH;
   const width = DAY_WIDTH;
 
-
   return (
-    <Pressable
-      // only an example!
-      onPress={() => router.push("/(tabs)/fridge")}
+    <Link
+      href='/(tabs)/calendar/event'
+      push
+      asChild
       style={[
         styles.eventBlock,
         {
@@ -49,14 +49,17 @@ export function EventBlock(event: Event) {
           height: height,
           width: width,
           backgroundColor: event.color,
-          borderColor: event.borderColor
+          borderColor: event.borderColor,
         },
-      ]}
-        >
-      <View>
-        <Text style={styles.eventText} numberOfLines={1} ellipsizeMode="tail">{event.name}</Text>
-      </View>
-    </Pressable>
+      ]}>
+      <Pressable>
+        <View>
+          <Text style={styles.eventText} numberOfLines={1} ellipsizeMode='tail'>
+            {event.name}
+          </Text>
+        </View>
+      </Pressable>
+    </Link>
   );
 }
 
@@ -75,7 +78,9 @@ function HeaderRow() {
   return (
     <View style={styles.headerRow}>
       <View style={{ width: CELL_WIDTH }} />
-      {WEEKDAYS.map((day, index) => headerCell(day, 12, index))}
+      {WEEKDAYS.map((day, index) =>
+        headerCell(day, CURRENT_DAY - 10 + index, index)
+      )}
     </View>
   );
 }
@@ -108,36 +113,47 @@ function SideTimes() {
 
 export default function Timetable() {
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <HeaderRow />
-      <ScrollView>
+      <ScrollView style={{ flex: 1 }}>
         <View style={{ flexDirection: "row" }}>
           <View>
             <SideTimes />
           </View>
-          <View style={{ position: "relative" }}>
+          <View style={{ position: "relative", flex: 1 }}>
             <DayGrid />
             <EventBlock
-              name="G.Feier"
-              startDate="2025-05-20T13:48:10"
-              endDate="2025-05-20T16:48:10"
+              name='G.Feier'
+              startDate='2025-05-20T13:48:10'
+              endDate='2025-05-20T16:48:10'
               repeat={false}
-              creator="Michi"
-              description="it is cool"
-              color="#004e64"
-              borderColor="#004e64"
+              creator='Michi'
+              description='it is cool'
+              color='#004e64'
+              borderColor='#004e64'
               dayIndex={3}
             />
             <EventBlock
-              name="BioMüll"
-              startDate="2025-05-20T4:48:10"
-              endDate="2025-05-20T9:48:10"
+              name='BioMüll'
+              startDate='2025-05-20T4:48:10'
+              endDate='2025-05-20T9:48:10'
               repeat={false}
-              creator="Michi"
-              description="it is cool"
-              color="#4d908e"
-              borderColor="#4d908e"
+              creator='Michi'
+              description='it is cool'
+              color='#4d908e'
+              borderColor='#4d908e'
               dayIndex={1}
+            />
+            <EventBlock
+              name='Filmeabend'
+              startDate='2025-05-20T0:48:10'
+              endDate='2025-05-20T18:48:10'
+              repeat={false}
+              creator='Michi'
+              description='it is cool'
+              color='#edafb8'
+              borderColor='#edafb8'
+              dayIndex={5}
             />
           </View>
         </View>
@@ -171,12 +187,11 @@ const styles = StyleSheet.create({
   },
   weekday: {
     textAlign: "center",
-    fontWeight: "bold",
-    fontSize: 11,
+    fontSize: 15,
   },
   lightText: {
     color: "gray",
-    fontSize: 11
+    fontSize: 11,
   },
   headerCell: {
     height: 51,
