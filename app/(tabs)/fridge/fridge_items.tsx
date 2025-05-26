@@ -66,7 +66,10 @@ export default function FridgeItems() {
       </View>
 
       {/* Add New Item Button */}
-      <TouchableOpacity style={styles.addButton}>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => router.push("/fridge/fridge_add")}
+      >
         <Text style={styles.addButtonText}>ADD NEW ITEM</Text>
       </TouchableOpacity>
     </SafeAreaView>

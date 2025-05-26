@@ -21,6 +21,12 @@ export default function FridgeStack() {
         name="fridge_fruits" 
         options={{ headerTitle: "Fruits" }} 
       />
+
+      {/* screen for adding new item, no header shown */}
+      <Stack.Screen 
+        name="fridge_add" 
+        options={{ headerTitle: "New Item" }} 
+      />
     </Stack>
   );
 }
