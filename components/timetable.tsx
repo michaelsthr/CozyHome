@@ -21,6 +21,7 @@ interface Event {
   creator: string;
   description: string;
   color: string;
+  borderColor: string
 }
 
 export function EventBlock(event: Event) {
@@ -35,6 +36,7 @@ export function EventBlock(event: Event) {
   const left = event.dayIndex * DAY_WIDTH;
   const width = DAY_WIDTH;
 
+
   return (
     <Pressable
       // only an example!
@@ -47,11 +49,12 @@ export function EventBlock(event: Event) {
           height: height,
           width: width,
           backgroundColor: event.color,
+          borderColor: event.borderColor
         },
       ]}
-    >
+        >
       <View>
-        <Text style={styles.eventText}>{event.name}</Text>
+        <Text style={styles.eventText} numberOfLines={1} ellipsizeMode="tail">{event.name}</Text>
       </View>
     </Pressable>
   );
@@ -115,23 +118,25 @@ export default function Timetable() {
           <View style={{ position: "relative" }}>
             <DayGrid />
             <EventBlock
-              name="test"
+              name="G.Feier"
               startDate="2025-05-20T13:48:10"
               endDate="2025-05-20T16:48:10"
               repeat={false}
               creator="Michi"
               description="it is cool"
-              color="#4caf50"
+              color="#004e64"
+              borderColor="#004e64"
               dayIndex={3}
             />
             <EventBlock
-              name="Termin2"
+              name="BioMüll"
               startDate="2025-05-20T4:48:10"
               endDate="2025-05-20T9:48:10"
               repeat={false}
               creator="Michi"
               description="it is cool"
-              color="lightblue"
+              color="#4d908e"
+              borderColor="#4d908e"
               dayIndex={1}
             />
           </View>
@@ -175,8 +180,7 @@ const styles = StyleSheet.create({
   },
   headerCell: {
     height: 51,
-    backgroundColor: "#CCCCCC",
-    borderRadius: 5,
+    borderRadius: 15,
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",
@@ -188,13 +192,17 @@ const styles = StyleSheet.create({
   eventBlock: {
     position: "absolute",
     opacity: 0.9,
-    borderRadius: 4,
-    padding: 2,
+    borderRadius: 15, // Squircle-like rounded corners
+    padding: 5,
     alignItems: "center",
     justifyContent: "center",
+    borderWidth: 2,
+    flex: 1,
+    flexWrap: "wrap",
   },
   eventText: {
     color: "white",
+    fontWeight: "bold",
     fontSize: 10,
   },
 });
