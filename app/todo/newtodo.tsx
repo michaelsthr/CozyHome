@@ -1,0 +1,187 @@
+
+import { Box, Button, HStack } from "@gluestack-ui/themed";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import React, { useState } from "react";
+import { Dimensions, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
+import { SelectList } from "react-native-dropdown-select-list";
+  
+  const screenWidth = Dimensions.get("screen").width;
+  const containerWidth = Math.min(screenWidth * 0.9, 400);  // max 400px, sonst 90% Breite
+  
+  const data = [
+    { key: "1", value: "Bewohner1" },
+    { key: "2", value: "Bewohner2" },
+    { key: "3", value: "Bewohner3" }
+  ];
+  const dataWH = [
+    { key: "1", value: "täglich" },
+    { key: "2", value: "wöchentlich" },
+    { key: "3", value: "monatlich" },
+    { key: "4", value: "jährlich" }
+  ];
+  
+  export default function NewToDo() {
+    const [selectedPerson, setSelectedPerson] = useState('');
+    const [selectedRepeat, setSelectedRepeat] = useState('');
+    const [date, setDate] = useState(new Date());
+    const [show, setShow] = useState(false);
+  
+    const onChange = (event, selectedDate) => {
+      if (Platform.OS !== 'ios') setShow(false);
+      if (selectedDate) setDate(selectedDate);
+    };
+  
+    const showDatepicker = () => setShow(true);
+    const cancel = () => console.log("Abbrechen");
+    const save = () => console.log("Speichern");
+    return (
+      <SafeAreaView style={styles.container}>
+          <Text style={styles.heading}>Neues To Do erstellen</Text>
+        <Box style={styles.box}>
+          <TextInput
+            style={styles.textInput}
+            placeholder="Name des ToDos"
+            placeholderTextColor="#000"
+          />
+          <SelectList
+            data={data}
+            setSelected={setSelectedPerson}
+            boxStyles={[styles.selectBox, {marginBottom: "15%"}]}
+            dropdownStyles={styles.dropdown}
+            placeholder="Verantwortlicher"
+          />
+          <TouchableOpacity onPress={showDatepicker} style={styles.dateArea}>
+            <Text style={styles.dateText}>Datum wählen</Text>
+          </TouchableOpacity>
+          {show && (
+            <DateTimePicker
+              mode="date"
+              display="default"
+              value={date}
+              onChange={onChange}
+              style={styles.datePicker}
+            />
+          )}
+          <SelectList
+            data={dataWH}
+            setSelected={setSelectedRepeat}
+            boxStyles={[styles.selectBox, { marginBottom: "2%" }]}
+            dropdownStyles={styles.dropdown}
+            placeholder="Wiederholung"
+          />
+        </Box>
+        <HStack style={styles.buttonContainer}>
+                 <Button style={styles.buttons} onPress={cancel}>
+                   <Text style={styles.buttonText}>Abbrechen</Text>
+                 </Button>
+                 <Button style={styles.buttons} onPress={save}>
+                   <Text style={styles.buttonText}>Speichern</Text>
+                 </Button>
+               </HStack>
+      </SafeAreaView>
+    );
+  }
+  
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: "white",
+      alignItems: "center",
+      paddingVertical: 20,
+    },
+    box: {
+      width: containerWidth,
+      backgroundColor: "#fff",
+      borderRadius: 12,
+      padding: 16,
+      marginBottom: 24,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOpacity: 0.1,
+      shadowRadius: 6,
+      shadowOffset: { width: 0, height: 3 },
+      elevation: 3, 
+      marginTop:"10%"
+    },
+    heading: {
+      fontSize: 24,
+      fontWeight: "bold",
+      marginBottom: 12,
+      textAlign: "center",
+    },
+    textInput: {
+      width: "100%",
+      height: 44,
+      borderWidth: 1,
+      borderColor: "#ccc",
+      borderRadius: 8,
+      paddingHorizontal: 12,
+      marginBottom: "15%",
+      marginTop: "2%",
+      fontSize: 14,
+      color: "#000",
+    },
+    selectBox: {
+      width: "100%",
+      borderRadius: 8,
+      marginBottom: 16,
+      borderWidth: 1,
+      borderColor: "#ccc",
+    },
+    dropdown: {
+      maxHeight: "45%",
+    },
+    dateArea: {
+      height: 50,
+      width: "100%",
+      paddingHorizontal: 10,
+      justifyContent: "center",
+      borderWidth: 1,
+      borderColor: "#ccc",
+      borderRadius: 12,
+      marginBottom: "15%"
+    },
+    dateText: {
+      color:"#000",
+      fontSize:14
+    },
+    datePicker: {
+      width: "100%",
+      marginBottom: 16,
+    },
+    buttonRow: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      width: "100%",
+    },
+    button: {
+      flex: 1,
+      maxWidth: 160,
+      marginHorizontal: 8,
+      borderRadius: 8,
+      paddingVertical: 12,
+    },
+    buttonContainer: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+      marginBottom: "10%",
+      marginTop:"auto",
+      paddingHorizontal: 16,
+      width: containerWidth
+    },
+    buttons: {                    
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    marginBottom: "3%",
+    borderRadius: 8,
+    alignItems: "center",
+    alignSelf: "center", 
+    backgroundColor: "blue"
+    },
+    buttonText: {
+      color: "white",
+      fontSize: 14,
+      fontWeight: "bold"
+    },
+  });
+  
