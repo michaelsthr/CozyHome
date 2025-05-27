@@ -2,6 +2,7 @@ import CozyInput from "@/components/cozy_input";
 import { useNavigation } from "expo-router";
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
+import { getKalender } from "../../../lib/appwrite/dbKalender"; //für db
 
 const AddEvent = () => {
   const navigation = useNavigation();
@@ -24,8 +25,9 @@ const AddEvent = () => {
       <CozyInput placeholder='Description' placeholderTextColor={"black"} />
       <Button
         title='Create'
-        onPress={() => {
-          /* TODO */
+         onPress={async () => {
+         const inhalt = await getKalender();
+         console.log("Kalenderinhalt: ", inhalt);
         }}
       />
     </View>
