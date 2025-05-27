@@ -2,24 +2,23 @@ import { config } from "@gluestack-ui/config";
 import { Badge, Box, Button, ChevronDownIcon, ChevronUpIcon, GluestackUIProvider, HStack, RepeatIcon, VStack } from "@gluestack-ui/themed";
 import { useRouter } from "expo-router";
 import { use, useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Client, Databases, ID, Account } from "react-native-appwrite";
 import { getTodos, updateTodo, addTodo } from "../../lib/appwrite/dbTodo"; //für db
 import { Models } from 'appwrite';
-
 import { Checkbox, Menu } from 'react-native-paper';
 
-const ToDoItem = ({ title, date, routine, done, changeToDoStatus }) => (
+const ToDoItem = ({ title, date, responsible, isChecked, routine }) => (
   <Box style={styles.todoItem}>
     <VStack space={2}>
       <HStack style={styles.titleRow}>
         <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
+        <Badge style={styles.badge}>
+          <Text style={styles.badgeText}>{responsible}</Text>
+        </Badge>
       </HStack>
       <HStack style={styles.checkboxRow}>
-        <Checkbox isChecked={done} onChange={() => changeToDoStatus(ID, done)} accessibilityLabel="Checkbox">
-          <CheckboxIndicator mr="$2">
-            <CheckboxIcon as={CheckboxIcon} />
-          </CheckboxIndicator>
+        <Checkbox status={isChecked ? "checked" : "unchecked"}>
         </Checkbox>
       </HStack>
       <HStack style={styles.dateRow}>
@@ -34,6 +33,7 @@ const ToDoItem = ({ title, date, routine, done, changeToDoStatus }) => (
     </VStack>
   </Box>
 );
+
 const DropDown= ({ selected, setSelected }) => {
   const [visible, setVisible] = React.useState(false);
 
@@ -80,7 +80,7 @@ export default function Todo() {
     documents: [],
   });
   const [loading, setLoading] = useState(true);
-  const newToDo = () => router.push("./todo/newtodo");
+  const newToDo = () => router.push("../(todo)/newtodo");
   const edit = () => console.log("Bearbeiten");
 
   useEffect(() => {
@@ -91,7 +91,7 @@ export default function Todo() {
         setTodos(todos);
         setLoading(false);
       } catch (err) {
-        console.error("Error fetching refrigerator contents:", err);
+        console.error("Error fetching todo contents:", err);
         setLoading(false);
       }
     }

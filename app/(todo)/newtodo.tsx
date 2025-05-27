@@ -1,9 +1,4 @@
-<<<<<<< HEAD:app/todo/newtodo.tsx
-import { Box, Button, HStack } from "@gluestack-ui/themed";
-=======
-
 import { Box, Button, HStack, VStack } from "@gluestack-ui/themed";
->>>>>>> dev:app/(todo)/newtodo.tsx
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useEffect, useState } from "react";
 import { Dimensions, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
