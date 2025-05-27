@@ -1,7 +1,11 @@
 import { config } from "@gluestack-ui/config";
 import { Badge, Box, Button, ChevronDownIcon, ChevronUpIcon, GluestackUIProvider, HStack, RepeatIcon, VStack } from "@gluestack-ui/themed";
 import { useRouter } from "expo-router";
-import { SafeAreaView, ScrollView, StyleSheet, Text } from "react-native";
+import { use, useEffect, useState } from "react";
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Client, Databases, ID, Account } from "react-native-appwrite";
+import { getTodos, updateTodo, addTodo } from "../../lib/appwrite/dbTodo"; //für db
+import { Models } from 'appwrite';
 import { Checkbox, Menu } from 'react-native-paper';
 
 const ToDoItem = ({ title, date, responsible, isChecked, routine }) => (
@@ -29,6 +33,7 @@ const ToDoItem = ({ title, date, responsible, isChecked, routine }) => (
     </VStack>
   </Box>
 );
+
 const DropDown= ({ selected, setSelected }) => {
   const [visible, setVisible] = React.useState(false);
 
@@ -70,8 +75,54 @@ const DropDown= ({ selected, setSelected }) => {
 
 export default function Todo() {
   const router = useRouter();
-  const newToDo = () => router.push("(todo)/newtodo");
-  const edit = () => router.push("(todo)/edit");
+  const [todos, setTodos] = useState<Models.DocumentList<any>>({
+    total: 0,
+    documents: [],
+  });
+  const [loading, setLoading] = useState(true);
+  const newToDo = () => router.push("../(todo)/newtodo");
+  const edit = () => console.log("Bearbeiten");
+
+  useEffect(() => {
+    async function fetchTodos() {
+      try {
+        const todos = await getTodos();
+        console.log("Todos:", todos);
+        setTodos(todos);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching todo contents:", err);
+        setLoading(false);
+      }
+    }
+    
+    fetchTodos();
+  }, []);
+
+  const changeToDoStatus = (id, done) => {
+    if (!todos) return; // Ensure todos is not null
+    const updatedTodos = todos.map((todo) => {
+      if (todo.$id === id) {
+        return { ...todo, done: !done };  
+      }
+      return todo;
+    });
+    setTodos(updatedTodos);
+    databases.updateDocument(
+      '681cc676001b5505b333',
+      '681cc690001e33dabf95',
+      id,
+      {
+        done: !done
+      },
+      ['read("any")', 'write("any")']
+    ).then((response) => {
+      console.log("ToDo updated:", response);
+    }).catch((error) => {
+      console.log("Error updating ToDo:", error);
+    });
+  }; 
+
   return (
     <GluestackUIProvider config={config}>
       <SafeAreaView style={styles.container}>
@@ -84,10 +135,16 @@ export default function Todo() {
             <Text style={styles.buttonText}>Bearbeiten</Text>
           </Button>
         </HStack>
-        <ScrollView contentContainerStyle={styles.todoList}>
-          <ToDoItem title="ToDo1" date="21.05.2025" responsible="Bewohner1" isChecked={true} routine="täglich" />
-          <ToDoItem title="ToDo2" date="21.05.2025" responsible="Bewohner2" isChecked={false} routine="" />
-        </ScrollView>
+        {todos.documents.map((item) => (
+          <ToDoItem
+            key={item.$id}
+            title={item.name}
+            date={item.date ? item.date : null}
+            routine={item.regularity ? item.regularity : null}
+            done={item.done}
+            changeToDoStatus={changeToDoStatus}
+          />
+        ))}
       </SafeAreaView>
     </GluestackUIProvider>
   );
