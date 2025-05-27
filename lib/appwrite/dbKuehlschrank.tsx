@@ -2,12 +2,11 @@ import { Models } from 'react-native-appwrite';
 import { FridgeCategoryType } from '../constants/categories';
 import { getDatabases } from './initializer'; //für db
 
-// Interface for creating a new item (no document properties required)
 export interface NewKuehlschrankItem {
   name: string;
   anzahl: number;
   kategorie?: FridgeCategoryType;
-  mhd?: string; // ISO date string for expiration date
+  mhd?: string;
 }
 
 export type KuehlschrankItem = Models.Document & NewKuehlschrankItem;
@@ -38,10 +37,8 @@ const setKuehlschrankInhalt = async function(kuehlschrankInhalt: NewKuehlschrank
 
 const updateKuehlschrankInhalt = async function(kuehlschrankInhalt: KuehlschrankItem): Promise<Models.Document> {
     try {
-        // Strip out any system properties that shouldn't be sent to Appwrite
         const { $id, $createdAt, $updatedAt, $permissions, $databaseId, $collectionId, ...updateData } = kuehlschrankInhalt;
         
-        // Only send the actual data fields to avoid "unknown attribute" errors
         const result = await databases.updateDocument(databaseId, collectionId, $id, updateData);
         return result;
     } catch (error) {

@@ -80,11 +80,9 @@ export default function Fridge() {
     try {
       setIsSubmitting(true);
       
-      // Format date if it exists
       const formattedDate = expDate ? expDate.toISOString() : undefined;
       
       if (editingItem) {
-        // Update existing item - don't spread the entire editingItem to avoid system fields
         const updatedItem = {
           name: itemName,
           anzahl: parseInt(itemAmount) || 1,
@@ -233,7 +231,6 @@ export default function Fridge() {
           break;
       }
       
-      // Reverse the order if the direction is descending
       return sortDirection === 'desc' ? -comparison : comparison;
     });
   };
