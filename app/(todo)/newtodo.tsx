@@ -2,7 +2,7 @@
 import { Box, Button, HStack, VStack } from "@gluestack-ui/themed";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useEffect, useState } from "react";
-import { Dimensions, Platform, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Dimensions, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
   
   const screenWidth = Dimensions.get("screen").width;
@@ -90,6 +90,52 @@ import DropDownPicker from "react-native-dropdown-picker";
   );
 };
 
+const DatePickerField = ({ date, setDate }) => {
+  const [showPicker, setShowPicker] = useState(false);
+  const [hasSelected, setHasSelected] = useState(false);
+
+  const handleChange = (event, selectedDate) => {
+    if (selectedDate) {
+      setDate(selectedDate);
+      setHasSelected(true);
+    }
+    setShowPicker(false);
+  };
+
+  return (
+    <View style={{ width: '100%', marginBottom: '15%' }}>
+      <Text style={{ marginBottom: 6 }}>Datum</Text>
+      <TouchableOpacity
+        onPress={() => setShowPicker(true)}
+        style={{
+          borderWidth: 1,
+          borderColor: '#ccc',
+          borderRadius: 8,
+          paddingVertical: 12,
+          paddingHorizontal: 16,
+          justifyContent: 'center',
+          height: 44
+        }}
+      >
+        <Text style={{ color: hasSelected ? '#000' : '#999' }}>
+          {hasSelected ? date.toLocaleDateString() : ''}
+          {/* <Icon as ={CalendarDaysIcon}/> */}
+        </Text>
+      </TouchableOpacity>
+        {showPicker && (
+          <View style={{alignItems:"center"}}>
+          <DateTimePicker
+            mode="date"
+            display="default"
+            value={date || new Date()}
+            onChange={handleChange}
+          />
+          </View>
+      )}
+     </View>
+  );
+};
+
   export default function NewToDo() {
     const [selectedPerson, setSelectedPerson] = useState('');
     const [selectedRepeat, setSelectedRepeat] = useState('');
@@ -110,23 +156,15 @@ import DropDownPicker from "react-native-dropdown-picker";
           <Text style={styles.heading}>Neues To Do erstellen</Text>
         <Box style={styles.box}>
           <VStack>
+            <Text> Name des ToDos </Text>
           <TextInput
             style={styles.textInput}
-            placeholder="Name des ToDos"
             placeholderTextColor="#000"
           />
           <View style={{marginBottom: "15%"}}>
           <DropDownResponsible selected={selectedPerson} setSelected={setSelectedPerson}/>
           </View> 
-          <View style={{marginBottom: "15%", alignItems:"center"}}>
-          <DateTimePicker
-              mode="date"
-              display="default"
-              value={date}
-              onChange={onChange}
-              style={styles.datePicker}
-            />
-          </View>
+          <DatePickerField date={date} setDate={setDate}/>
            <View style={{marginBottom: "15%"}}>
           <DropDownRoutine selected={selectedPerson} setSelected={setSelectedPerson}/>
           </View> 
