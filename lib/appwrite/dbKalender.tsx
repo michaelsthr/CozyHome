@@ -35,7 +35,7 @@ interface Event {
   wholeday: boolean;
   creator: string;
   description: string;
-  documentId: string
+  category: string;
 }
 
 export const createNewEvent = async function(eventInfo: Event): Promise<Models.Document> {
