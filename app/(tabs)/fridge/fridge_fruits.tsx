@@ -1,15 +1,15 @@
 import { useRouter } from "expo-router";
 import React from "react";
 import {
+  FlatList,
   Image,
   SafeAreaView,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  FlatList,
 } from "react-native";
+import { fridgeFruitsStyles as styles } from "./styles";
 
 const data = [
   {
@@ -112,48 +112,3 @@ export default function Fruits() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", paddingHorizontal: 20 },
-  header: { flexDirection: "row", alignItems: "center", marginTop: 10 },
-  backArrow: { fontSize: 28, fontWeight: "700", marginRight: 12 },
-  avatar: { width: 40, height: 40, borderRadius: 20 },
-  title: { fontSize: 32, fontWeight: "700", marginTop: 16 },
-  searchContainer: {
-    marginTop: 20,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-  },
-  searchInput: { height: 40, paddingHorizontal: 12, fontSize: 16 },
-  labelContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 24,
-  },
-  sectionLabel: { fontSize: 18, fontWeight: "700" },
-  filterText: { fontSize: 14, color: "#007AFF" },
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 12,
-  },
-  itemImage: { width: 60, height: 60, resizeMode: "contain" },
-  info: { flex: 1, marginLeft: 12 },
-  statusRow: { flexDirection: "row", alignItems: "center" },
-  statusIcon: { width: 30, height: 30, marginRight: 6 },
-  statusText: { fontSize: 14, color: "#333" },
-  itemName: { fontSize: 16, fontWeight: "600", marginTop: 4 },
-  countContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  count: {
-    fontSize: 14,
-    fontWeight: "700",
-    marginRight: 4,
-  },
-  fridgeIcon: { width: 50, height: 50 },
-  separator: { height: 1, backgroundColor: "#eee" },
-});

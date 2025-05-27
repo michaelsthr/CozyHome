@@ -1,14 +1,14 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
+  Image,
   SafeAreaView,
-  View,
   Text,
   TextInput,
   TouchableOpacity,
-  Image,
-  StyleSheet,
+  View,
 } from "react-native";
+import { fridgeAddStyles as styles } from "./styles";
 
 export default function AddItem() {
   const router = useRouter();
@@ -73,28 +73,3 @@ export default function AddItem() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff", paddingHorizontal: 20 },
-  header: { flexDirection: "row", alignItems: "center", marginTop: 10 },
-  backArrow: { fontSize: 28, fontWeight: "700", marginRight: 12 },
-  avatar: { width: 40, height: 40, borderRadius: 20 },
-  title: { fontSize: 32, fontWeight: "700", marginVertical: 20 },
-  input: {
-    height: 48,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    fontSize: 16,
-    marginBottom: 15,
-  },
-  addButton: {
-    marginTop: 10,
-    backgroundColor: "#000",
-    borderRadius: 25,
-    paddingVertical: 14,
-    alignItems: "center",
-  },
-  addButtonText: { color: "#fff", fontSize: 16, fontWeight: "600" },
-});
