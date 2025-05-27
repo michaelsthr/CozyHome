@@ -1,13 +1,20 @@
-import CozyInput from "@/components/cozy_input";
 import { useNavigation } from "expo-router";
 import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 const Event = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <Text style={{ fontSize: 30, fontWeight: "bold", textAlign: "center", marginBottom: 20 }}>Event</Text>
+      <Text
+        style={{
+          fontSize: 30,
+          fontWeight: "bold",
+          textAlign: "center",
+          marginBottom: 20,
+        }}>
+        Event
+      </Text>
     </View>
   );
 };
@@ -22,6 +29,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginHorizontal: 30,
   },
-
-
 });

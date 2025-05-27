@@ -1,12 +1,12 @@
 import Timetable from "@/components/timetable";
-import { router , Link} from "expo-router";
+import { Link } from "expo-router";
 import React from "react";
 import { Image, Pressable, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function calendar() {
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
         <Image
           source={require("../../../assets/calendar.png")}
@@ -16,7 +16,7 @@ export default function calendar() {
           source={require("../../../assets/inbox.png")}
           style={{ width: 24, height: 24 }}
         />
-        <Link href="/(tabs)/calendar/add_event" push asChild >
+        <Link href='/(tabs)/calendar/add_event' push asChild>
           <Pressable>
             <Image
               source={require("../../../assets/symbol-plus.png")}

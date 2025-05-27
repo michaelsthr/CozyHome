@@ -7,14 +7,27 @@ const AddEvent = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <Text style={{ fontSize: 30, fontWeight: "bold", textAlign: "center", marginBottom: 20 }}>Add new Event</Text>
+      <Text
+        style={{
+          fontSize: 30,
+          fontWeight: "bold",
+          textAlign: "center",
+          marginBottom: 20,
+        }}>
+        Add new Event
+      </Text>
       {/* <Button onPress={() => navigation.goBack()} title='Dismiss' /> */}
       <CozyInput placeholder='Name' placeholderTextColor={"black"} />
       <CozyInput placeholder='Creator' placeholderTextColor={"black"} />
       <CozyInput placeholder='Color' placeholderTextColor={"black"} />
       <CozyInput placeholder='Date' placeholderTextColor={"black"} />
       <CozyInput placeholder='Description' placeholderTextColor={"black"} />
-      <Button title="Create" onPress={() => { /* TODO */ }} />
+      <Button
+        title='Create'
+        onPress={() => {
+          /* TODO */
+        }}
+      />
     </View>
   );
 };
