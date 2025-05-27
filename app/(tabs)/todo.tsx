@@ -4,7 +4,9 @@ import { useRouter } from "expo-router";
 import { use, useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text } from "react-native";
 import { Client, Databases, ID, Account } from "react-native-appwrite";
-import { databases, listDocuments, createDocument, updateDocument } from "../appwrite";
+import { getTodos, updateTodo, addTodo } from "../../lib/appwrite/dbTodo"; //für db
+import { Models } from 'appwrite';
+
 
 const ToDoItem = ({ title, date, routine, done, changeToDoStatus }) => (
   <Box style={styles.todoItem}>
@@ -36,19 +38,25 @@ const ToDoItem = ({ title, date, routine, done, changeToDoStatus }) => (
 
 export default function Todo() {
   const router = useRouter();
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState<Models.DocumentList<any> | null>(null);
+  const [loading, setLoading] = useState(true);
   const newToDo = () => router.push("/todo/newtodo");
   const edit = () => console.log("Bearbeiten");
 
   useEffect(() => {
-    listDocuments(
-      '681cc676001b5505b333', 
-      '681cc690001e33dabf95'
-    ).then((documents) => {
-      setTodos(documents);
-    }).catch((error) => {
-      console.log(error);
-    });
+    async function fetchTodos() {
+      try {
+        const todos = await getTodos();
+        console.log("Todos:", todos);
+        setTodos(todos);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching refrigerator contents:", err);
+        setLoading(false);
+      }
+    }
+    
+    fetchContents();
   }, []);
 
   const changeToDoStatus = (id, done) => {
