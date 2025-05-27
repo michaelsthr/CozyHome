@@ -1,21 +1,19 @@
 import { config } from "@gluestack-ui/config";
 import { Badge, Box, Button, Checkbox, CheckboxIcon, CheckboxIndicator, GluestackUIProvider, HStack, RepeatIcon, VStack } from "@gluestack-ui/themed";
 import { useRouter } from "expo-router";
-import { useEffect } from "react";
-import { SafeAreaView, ScrollView, Button, StyleSheet, Text } from "react-native";
+import { use, useEffect, useState } from "react";
+import { SafeAreaView, ScrollView, StyleSheet, Text } from "react-native";
 import { Client, Databases, ID, Account } from "react-native-appwrite";
+import { databases, listDocuments, createDocument, updateDocument } from "../appwrite";
 
-const ToDoItem = ({ title, date, responsible, isChecked, routine }) => (
+const ToDoItem = ({ title, date, routine, done, changeToDoStatus }) => (
   <Box style={styles.todoItem}>
     <VStack space={2}>
       <HStack style={styles.titleRow}>
         <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
-        <Badge style={styles.badge}>
-          <Text style={styles.badgeText}>{responsible}</Text>
-        </Badge>
       </HStack>
       <HStack style={styles.checkboxRow}>
-        <Checkbox value="title" isChecked={isChecked}>
+        <Checkbox isChecked={done} onChange={() => changeToDoStatus(ID, done)} accessibilityLabel="Checkbox">
           <CheckboxIndicator mr="$2">
             <CheckboxIcon as={CheckboxIcon} />
           </CheckboxIndicator>
@@ -34,27 +32,49 @@ const ToDoItem = ({ title, date, responsible, isChecked, routine }) => (
   </Box>
 );
 
-const client: Client = new Client()
-  .setEndpoint('https://cloud.appwrite.io/v1')
-  .setProject('681cc5b8000a49689753')
-  .setPlatform('com.rubberduck.cozyhome');
 
-const account = new Account(client);
 
-// The followingtwo lines are only needed until the login works correctely
-// it can be removed after the login works
-account.deleteSessions();
-account.createEmailPasswordSession("admin@diewg.com", "test-admin");
- 
-
-const databases: Databases = new Databases(client);
-
-export default function todo() {
+export default function Todo() {
   const router = useRouter();
-  const newToDo = () => router.push("todo/newtodo");
+  const [todos, setTodos] = useState([]);
+  const newToDo = () => router.push("/todo/newtodo");
   const edit = () => console.log("Bearbeiten");
-  console.log("newToDo"); 
-  databases.createDocument(
+
+  useEffect(() => {
+    listDocuments(
+      '681cc676001b5505b333', 
+      '681cc690001e33dabf95'
+    ).then((documents) => {
+      setTodos(documents);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }, []);
+
+  const changeToDoStatus = (id, done) => {
+    const updatedTodos = todos.map((todo) => {
+      if (todo.$id === id) {
+        return { ...todo, done: !done };  
+      }
+      return todo;
+    });
+    setTodos(updatedTodos);
+    databases.updateDocument(
+      '681cc676001b5505b333',
+      '681cc690001e33dabf95',
+      id,
+      {
+        done: !done
+      },
+      ['read("any")', 'write("any")']
+    ).then((response) => {
+      console.log("ToDo updated:", response);
+    }).catch((error) => {
+      console.log("Error updating ToDo:", error);
+    });
+  };
+
+  /* databases.createDocument(
     '681cc676001b5505b333',
     '681cc690001e33dabf95',
   
@@ -71,8 +91,7 @@ export default function todo() {
   }).catch((error) => {
     console.log(error);
   }
-  );
-}
+  ); */
   return (
     <GluestackUIProvider config={config}>
       <SafeAreaView style={styles.container}>
@@ -85,10 +104,16 @@ export default function todo() {
             <Text style={styles.buttonText}>Bearbeiten</Text>
           </Button>
         </HStack>
-        <ScrollView contentContainerStyle={styles.todoList}>
-          <ToDoItem title="ToDo1" date="21.05.2025" responsible="Bewohner1" isChecked={true} routine="täglich" />
-          <ToDoItem title="ToDo2" date="21.05.2025" responsible="Bewohner2" isChecked={false} routine="" />
-        </ScrollView>
+        {todos.map((item) => (
+          <ToDoItem
+            key={item.$id}
+            title={item.name}
+            date={item.date ? item.date : null}
+            routine={item.regularity ? item.regularity : null}
+            done={item.done}
+            changeToDoStatus={changeToDoStatus}
+          />
+        ))}
       </SafeAreaView>
     </GluestackUIProvider>
   );
@@ -174,8 +199,7 @@ const styles = StyleSheet.create({
   routineContainer: {
     flexDirection: "row",
     alignItems: "center",
-  },
-   marginLeft: "10%"
+    marginLeft: "10%"
   },
   icon: {
     width: 16,
@@ -187,4 +211,3 @@ const styles = StyleSheet.create({
     color: "#555"
   }
 });
-
