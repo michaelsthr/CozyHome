@@ -2,7 +2,8 @@ import CozyInput from "@/components/cozy_input";
 import { useNavigation } from "expo-router";
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
-import { getKalender } from "../../../lib/appwrite/dbKalender"; //für db
+import { getCalender, getCategory, createNewEvent, createNewCategory, deleteEvent} from "../../../lib/appwrite/dbKalender";
+import {placeholder} from "@babel/types"; //für db
 
 const AddEvent = () => {
   const navigation = useNavigation();
@@ -21,13 +22,13 @@ const AddEvent = () => {
       <CozyInput placeholder='Name' placeholderTextColor={"black"} />
       <CozyInput placeholder='Creator' placeholderTextColor={"black"} />
       <CozyInput placeholder='Color' placeholderTextColor={"black"} />
-      <CozyInput placeholder='Date' placeholderTextColor={"black"} />
+      <CozyInput placeholder='Startdate' placeholderTextColor={"black"} />
+      <CozyInput placeholder='Enddate' placeholderTextColor={"black"} />
       <CozyInput placeholder='Description' placeholderTextColor={"black"} />
       <Button
         title='Create'
          onPress={async () => {
-         const inhalt = await getKalender();
-         console.log("Kalenderinhalt: ", inhalt);
+          await deleteEvent("6835adee000616f6a65a");
         }}
       />
     </View>
