@@ -5,7 +5,7 @@ import { StyleSheet } from "react-native";
 const CalendarLayout = () => {
   return (
     <Stack>
-      <Stack.Screen name='index' options={{ headerShown: false }} />
+      <Stack.Screen name='index' options={{ headerShown: false, contentStyle: { backgroundColor: "white" } }} />
       <Stack.Screen
         name='add_event'
         options={{

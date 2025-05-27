@@ -4,7 +4,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 // Hours from 0:00 to 23:00
 const HOURS = Array.from({ length: 24 }, (_, i) => `${i}:00`);
-const CELL_HEIGHT = 30;
+const CELL_HEIGHT = 50;
 const CELL_WIDTH = 40;
 
 const WEEKDAYS = ["M", "D", "M", "D", "F", "S", "S"];
@@ -113,14 +113,14 @@ function SideTimes() {
 
 export default function Timetable() {
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ height: "100%"}}>
       <HeaderRow />
-      <ScrollView style={{ flex: 1 }}>
-        <View style={{ flexDirection: "row" }}>
+      <ScrollView style={{ flex: 1, height: "100%"}}>
+        <View style={{ flexDirection: "row",  height: "100%"}}>
           <View>
             <SideTimes />
           </View>
-          <View style={{ position: "relative", flex: 1 }}>
+          <View style={{ position: "relative", flex: 1 ,  height: "100%"}}>
             <DayGrid />
             <EventBlock
               name='G.Feier'
@@ -151,8 +151,8 @@ export default function Timetable() {
               repeat={false}
               creator='Michi'
               description='it is cool'
-              color='#edafb8'
-              borderColor='#edafb8'
+              color='#4d908e'
+              borderColor='#4d908e'
               dayIndex={5}
             />
           </View>
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
   eventBlock: {
     position: "absolute",
     opacity: 0.9,
-    borderRadius: 15, // Squircle-like rounded corners
+    borderRadius: 10,
     padding: 5,
     alignItems: "center",
     justifyContent: "center",
