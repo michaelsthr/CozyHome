@@ -1,25 +1,95 @@
 
-import { Box, Button, HStack } from "@gluestack-ui/themed";
+import { Box, Button, HStack, VStack } from "@gluestack-ui/themed";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import React, { useState } from "react";
-import { Dimensions, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
-import { SelectList } from "react-native-dropdown-select-list";
+import React, { useEffect, useState } from "react";
+import { Dimensions, Platform, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
   
   const screenWidth = Dimensions.get("screen").width;
   const containerWidth = Math.min(screenWidth * 0.9, 400);  // max 400px, sonst 90% Breite
   
-  const data = [
-    { key: "1", value: "Bewohner1" },
-    { key: "2", value: "Bewohner2" },
-    { key: "3", value: "Bewohner3" }
-  ];
   const dataWH = [
     { key: "1", value: "täglich" },
     { key: "2", value: "wöchentlich" },
     { key: "3", value: "monatlich" },
     { key: "4", value: "jährlich" }
   ];
-  
+
+  const DropDownResponsible= ({ selected, setSelected }) => {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(selected || null);
+  const [items, setItems] = useState([
+    { label: 'Bewohner 1', value: 'Bewohner 1' },
+    { label: 'Bewohner 2', value: 'Bewohner 2' },
+    { label: 'Bewohner 3', value: 'Bewohner 3' },
+  ]);
+
+  useEffect(() => {
+    setSelected(value);
+  }, [value]);
+
+  return(
+    <DropDownPicker
+      open={open}
+      value={value}
+      items={items}
+      setOpen={setOpen}
+      setValue={setValue}
+      setItems={setItems}
+      placeholder="Verantwortlichen auswählen"
+      style={{
+        borderColor: '#ccc',
+        borderRadius: 8,
+      }}
+      textStyle={{
+        fontSize: 14,
+        color: '#000',
+      }}
+      dropDownContainerStyle={{
+        borderColor: '#ccc',
+      }}
+    />
+  );
+};
+
+  const DropDownRoutine= ({ selected, setSelected }) => {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(selected || null);
+  const [items, setItems] = useState([
+    { label: 'täglich', value: 'täglich' },
+    { label: 'wöchentlich', value: 'wöchentlich' },
+    { label: 'monatlich', value: 'monatlich' },
+    { label: 'jährlich', value: 'jährlich' },
+  ]);
+
+  useEffect(() => {
+    setSelected(value);
+  }, [value]);
+
+  return(
+    <DropDownPicker
+      open={open}
+      value={value}
+      items={items}
+      setOpen={setOpen}
+      setValue={setValue}
+      setItems={setItems}
+      placeholder="Wiederholung"
+      style={{
+        borderColor: '#ccc',
+        borderRadius: 8,
+      }}
+      textStyle={{
+        fontSize: 14,
+        color: '#000',
+      }}
+      dropDownContainerStyle={{
+        borderColor: '#ccc',
+      }}
+    />
+  );
+};
+
   export default function NewToDo() {
     const [selectedPerson, setSelectedPerson] = useState('');
     const [selectedRepeat, setSelectedRepeat] = useState('');
@@ -34,41 +104,33 @@ import { SelectList } from "react-native-dropdown-select-list";
     const showDatepicker = () => setShow(true);
     const cancel = () => console.log("Abbrechen");
     const save = () => console.log("Speichern");
+    
     return (
       <SafeAreaView style={styles.container}>
           <Text style={styles.heading}>Neues To Do erstellen</Text>
         <Box style={styles.box}>
+          <VStack>
           <TextInput
             style={styles.textInput}
             placeholder="Name des ToDos"
             placeholderTextColor="#000"
           />
-          <SelectList
-            data={data}
-            setSelected={setSelectedPerson}
-            boxStyles={[styles.selectBox, {marginBottom: "15%"}]}
-            dropdownStyles={styles.dropdown}
-            placeholder="Verantwortlicher"
-          />
-          <TouchableOpacity onPress={showDatepicker} style={styles.dateArea}>
-            <Text style={styles.dateText}>Datum wählen</Text>
-          </TouchableOpacity>
-          {show && (
-            <DateTimePicker
+          <View style={{marginBottom: "15%"}}>
+          <DropDownResponsible selected={selectedPerson} setSelected={setSelectedPerson}/>
+          </View> 
+          <View style={{marginBottom: "15%", alignItems:"center"}}>
+          <DateTimePicker
               mode="date"
               display="default"
               value={date}
               onChange={onChange}
               style={styles.datePicker}
             />
-          )}
-          <SelectList
-            data={dataWH}
-            setSelected={setSelectedRepeat}
-            boxStyles={[styles.selectBox, { marginBottom: "2%" }]}
-            dropdownStyles={styles.dropdown}
-            placeholder="Wiederholung"
-          />
+          </View>
+           <View style={{marginBottom: "15%"}}>
+          <DropDownRoutine selected={selectedPerson} setSelected={setSelectedPerson}/>
+          </View> 
+          </VStack>
         </Box>
         <HStack style={styles.buttonContainer}>
                  <Button style={styles.buttons} onPress={cancel}>
@@ -94,8 +156,8 @@ import { SelectList } from "react-native-dropdown-select-list";
       backgroundColor: "#fff",
       borderRadius: 12,
       padding: 16,
-      marginBottom: 24,
-      alignItems: "center",
+      marginBottom: "15%",
+      
       shadowColor: "#000",
       shadowOpacity: 0.1,
       shadowRadius: 6,
@@ -147,7 +209,6 @@ import { SelectList } from "react-native-dropdown-select-list";
     },
     datePicker: {
       width: "100%",
-      marginBottom: 16,
     },
     buttonRow: {
       flexDirection: "row",

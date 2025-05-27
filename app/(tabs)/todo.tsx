@@ -1,8 +1,8 @@
 import { config } from "@gluestack-ui/config";
-import { Badge, Box, Button, Checkbox, CheckboxIcon, CheckboxIndicator, GluestackUIProvider, HStack, RepeatIcon, VStack } from "@gluestack-ui/themed";
+import { Badge, Box, Button, ChevronDownIcon, ChevronUpIcon, GluestackUIProvider, HStack, RepeatIcon, VStack } from "@gluestack-ui/themed";
 import { useRouter } from "expo-router";
-import React from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text } from "react-native";
+import { Checkbox, Menu } from 'react-native-paper';
 
 const ToDoItem = ({ title, date, responsible, isChecked, routine }) => (
   <Box style={styles.todoItem}>
@@ -14,10 +14,7 @@ const ToDoItem = ({ title, date, responsible, isChecked, routine }) => (
         </Badge>
       </HStack>
       <HStack style={styles.checkboxRow}>
-        <Checkbox value="title" isChecked={isChecked}>
-          <CheckboxIndicator mr="$2">
-            <CheckboxIcon as={CheckboxIcon} />
-          </CheckboxIndicator>
+        <Checkbox status={isChecked ? "checked" : "unchecked"}>
         </Checkbox>
       </HStack>
       <HStack style={styles.dateRow}>
@@ -32,11 +29,49 @@ const ToDoItem = ({ title, date, responsible, isChecked, routine }) => (
     </VStack>
   </Box>
 );
+const DropDown= ({ selected, setSelected }) => {
+  const [visible, setVisible] = React.useState(false);
+
+  const openMenu = () => setVisible(true);
+  const closeMenu = () => setVisible(false);
+
+  const handleSelect = (value: string) => {
+    setSelected(value);
+    closeMenu();
+  };
+  return(
+    <Menu
+          visible={visible}
+          onDismiss={closeMenu}
+          anchor={
+            <Button mode="outlined" onPress={openMenu}  contentStyle={{ flexDirection: 'row', justifyContent: 'space-between',  alignItems: 'center'}} style={{ width: "70%" }}>  
+            {selected || 'Auswählen'}
+            {visible ? (
+              <View style={{ justifyContent: 'center', marginTop:20 }}>
+              <ChevronUpIcon size="md"/> 
+              </View>) :
+              (
+              <View style={{ justifyContent: 'center', marginTop:20 }}>
+              <ChevronDownIcon size="md"/> 
+              </View> )
+            }
+          </Button>
+
+          }
+        >
+          <Menu.Item onPress={() => handleSelect('Bewohner 1')} title="Bewohner 1" />
+          <Menu.Item onPress={() => handleSelect('Bewohner 2')} title="Bewohner 2" />
+          <Menu.Item onPress={() => handleSelect('Bewohner 3')} title="Bewohner 3" />
+        </Menu>
+  )
+}
+
+
 
 export default function Todo() {
   const router = useRouter();
-  const newToDo = () => router.push("todo/newtodo");
-  const edit = () => console.log("Bearbeiten");
+  const newToDo = () => router.push("(todo)/newtodo");
+  const edit = () => router.push("(todo)/edit");
   return (
     <GluestackUIProvider config={config}>
       <SafeAreaView style={styles.container}>
@@ -77,8 +112,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16
   },
   button: {                    
-  paddingVertical: 6,
-  paddingHorizontal: 10,
+  paddingVertical: "1%",
+  paddingHorizontal: "5%",
   marginBottom: "3%",
   borderRadius: 8,
   alignItems: "center",
