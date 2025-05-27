@@ -1,4 +1,3 @@
-
 import { Box, Button, HStack } from "@gluestack-ui/themed";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState } from "react";

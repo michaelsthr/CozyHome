@@ -38,9 +38,12 @@ const ToDoItem = ({ title, date, routine, done, changeToDoStatus }) => (
 
 export default function Todo() {
   const router = useRouter();
-  const [todos, setTodos] = useState<Models.DocumentList<any> | null>(null);
+  const [todos, setTodos] = useState<Models.DocumentList<any>>({
+    total: 0,
+    documents: [],
+  });
   const [loading, setLoading] = useState(true);
-  const newToDo = () => router.push("/todo/newtodo");
+  const newToDo = () => router.push("./todo/newtodo");
   const edit = () => console.log("Bearbeiten");
 
   useEffect(() => {
@@ -56,10 +59,11 @@ export default function Todo() {
       }
     }
     
-    fetchContents();
+    fetchTodos();
   }, []);
 
   const changeToDoStatus = (id, done) => {
+    if (!todos) return; // Ensure todos is not null
     const updatedTodos = todos.map((todo) => {
       if (todo.$id === id) {
         return { ...todo, done: !done };  
@@ -80,26 +84,8 @@ export default function Todo() {
     }).catch((error) => {
       console.log("Error updating ToDo:", error);
     });
-  };
+  }; 
 
-  /* databases.createDocument(
-    '681cc676001b5505b333',
-    '681cc690001e33dabf95',
-  
-    ID.unique(),
-    // the follogwing blog hard codes values for the new todo
-    {
-      name: 'Test',
-      date: new Date().toISOString(),
-      done: false,
-    },
-    ['read("any")', 'write("any")'],
-  ).then((response) => {
-    console.log(response);
-  }).catch((error) => {
-    console.log(error);
-  }
-  ); */
   return (
     <GluestackUIProvider config={config}>
       <SafeAreaView style={styles.container}>
@@ -112,7 +98,7 @@ export default function Todo() {
             <Text style={styles.buttonText}>Bearbeiten</Text>
           </Button>
         </HStack>
-        {todos.map((item) => (
+        {todos.documents.map((item) => (
           <ToDoItem
             key={item.$id}
             title={item.name}
