@@ -1,12 +1,14 @@
 import { config } from "@gluestack-ui/config";
 import { Badge, Box, Button, ChevronDownIcon, ChevronUpIcon, GluestackUIProvider, HStack, RepeatIcon, VStack } from "@gluestack-ui/themed";
 import { useRouter } from "expo-router";
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useState, useCallback } from "react";
 import { LogBox, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Client, Databases, ID, Account, Models } from "react-native-appwrite";
 import { getTodos, updateTodo, addTodo } from "../../lib/appwrite/dbTodo"; //für db
 import { Model } from 'appwrite';
 import { Checkbox, Menu } from 'react-native-paper';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+
 
 interface ToDoItemProps {
   key: string;
@@ -118,6 +120,15 @@ export default function Todo() {
   useEffect(() => {
     fetchTodos();
   }, []);
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      fetchTodos();
+      console.log("Screen is focused – Daten neu geladen");
+    }
+  }, [isFocused]);
 
   const changeToDoStatus = (id: string, done: boolean) => {
     if (!todos) return; // Ensure todos is not null

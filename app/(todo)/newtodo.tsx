@@ -4,10 +4,20 @@ import React, { useEffect, useState } from "react";
 import { Dimensions, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { addTodo } from "../../lib/appwrite/dbTodo"; //für db
-
+import { router } from "expo-router";
   
-  const screenWidth = Dimensions.get("screen").width;
-  const containerWidth = Math.min(screenWidth * 0.9, 400);  // max 400px, sonst 90% Breite
+const screenWidth = Dimensions.get("screen").width;
+const containerWidth = Math.min(screenWidth * 0.9, 400);  // max 400px, sonst 90% Breite
+
+interface ToDoItemProps {
+  key: string;
+  id: string;
+  name: string;
+  date?: string;
+  done: boolean;
+  regularity?: string;
+  responsible?: string;
+}
   
   const dataWH = [
     { key: "1", value: "täglich" },
@@ -15,6 +25,7 @@ import { addTodo } from "../../lib/appwrite/dbTodo"; //für db
     { key: "3", value: "monatlich" },
     { key: "4", value: "jährlich" }
   ];
+
 
   const DropDownResponsible= ({ selected, setSelected }) => {
   const [open, setOpen] = useState(false);
@@ -140,6 +151,7 @@ const DatePickerField = ({ date, setDate }) => {
   export default function NewToDo() {
     const [selectedPerson, setSelectedPerson] = useState('');
     const [selectedRepeat, setSelectedRepeat] = useState('');
+    const [todoName, setTodoName] = useState('');
     const [date, setDate] = useState(new Date());
     const [show, setShow] = useState(false);
   
@@ -149,8 +161,31 @@ const DatePickerField = ({ date, setDate }) => {
     };
   
     const showDatepicker = () => setShow(true);
-    const cancel = () => console.log("Abbrechen");
-    const save = () => console.log("Speichern");
+    const cancel = () => {console.log("Abbrechen"); router.back();};
+    const saveNewTodo = (
+      tile: string,
+      responsible: string, 
+      date: string, 
+      regularity: string
+    ) => {
+      if (!tile) {
+        console.log("Please fill in the name of the ToDo"); // ToDo: Implement error handling
+        return;
+      }
+
+      const newTodo = {
+        name: tile,
+        // Todo: responsible: (responsible ? responsible : null),
+        date: (date ? date.toISOString() : null),
+        regularity: (regularity ? regularity : null),
+        done: false,
+      }
+
+      addTodo(newTodo)
+      console.log("Speichern");
+      router.back();
+  
+    }
     
     return (
       <SafeAreaView style={styles.container}>
@@ -159,6 +194,8 @@ const DatePickerField = ({ date, setDate }) => {
           <VStack>
             <Text> Name des ToDos </Text>
           <TextInput
+            value={todoName}
+            onChangeText={setTodoName}
             style={styles.textInput}
             placeholderTextColor="#000"
           />
@@ -175,7 +212,7 @@ const DatePickerField = ({ date, setDate }) => {
                  <Button style={styles.buttons} onPress={cancel}>
                    <Text style={styles.buttonText}>Abbrechen</Text>
                  </Button>
-                 <Button style={styles.buttons} onPress={save}>
+                 <Button style={styles.buttons} onPress={() => saveNewTodo(todoName, selectedPerson, date, selectedRepeat)}>
                    <Text style={styles.buttonText}>Speichern</Text>
                  </Button>
                </HStack>
