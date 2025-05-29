@@ -2,13 +2,32 @@ import { config } from "@gluestack-ui/config";
 import { Badge, Box, Button, ChevronDownIcon, ChevronUpIcon, GluestackUIProvider, HStack, RepeatIcon, VStack } from "@gluestack-ui/themed";
 import { useRouter } from "expo-router";
 import { use, useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
-import { Client, Databases, ID, Account } from "react-native-appwrite";
+import { LogBox, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Client, Databases, ID, Account, Models } from "react-native-appwrite";
 import { getTodos, updateTodo, addTodo } from "../../lib/appwrite/dbTodo"; //für db
-import { Models } from 'appwrite';
+import { Model } from 'appwrite';
 import { Checkbox, Menu } from 'react-native-paper';
 
-const ToDoItem = ({ title, date, responsible, isChecked, routine }) => (
+interface ToDoItemProps {
+  key: string;
+  id: string;
+  title: string;
+  date?: string;
+  isChecked: boolean;
+  routine?: string;
+  responsible?: string;
+  changeToDoStatus: (id: string, currentStatus: boolean) => void;
+}
+
+const ToDoItem = ({
+  id,
+  title,
+  date,
+  isChecked,
+  routine,
+  responsible,
+  changeToDoStatus,
+}: ToDoItemProps) => (
   <Box style={styles.todoItem}>
     <VStack space={2}>
       <HStack style={styles.titleRow}>
@@ -18,7 +37,8 @@ const ToDoItem = ({ title, date, responsible, isChecked, routine }) => (
         </Badge>
       </HStack>
       <HStack style={styles.checkboxRow}>
-        <Checkbox status={isChecked ? "checked" : "unchecked"}>
+        <Checkbox status={isChecked ? 'checked' : 'unchecked'}
+            onPress={() => changeToDoStatus(id, isChecked)} >
         </Checkbox>
       </HStack>
       <HStack style={styles.dateRow}>
@@ -35,7 +55,7 @@ const ToDoItem = ({ title, date, responsible, isChecked, routine }) => (
 );
 
 const DropDown= ({ selected, setSelected }) => {
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState(false);
 
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
@@ -75,7 +95,7 @@ const DropDown= ({ selected, setSelected }) => {
 
 export default function Todo() {
   const router = useRouter();
-  const [todos, setTodos] = useState<Models.DocumentList<any>>({
+  const [todos, setTodos] = useState<{ total: number; documents: any[] }>({
     total: 0,
     documents: [],
   });
@@ -83,45 +103,41 @@ export default function Todo() {
   const newToDo = () => router.push("../(todo)/newtodo");
   const edit = () => console.log("Bearbeiten");
 
-  useEffect(() => {
-    async function fetchTodos() {
-      try {
-        const todos = await getTodos();
-        console.log("Todos:", todos);
-        setTodos(todos);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching todo contents:", err);
-        setLoading(false);
-      }
+  const fetchTodos = async () => {
+    try {
+      const todos = await getTodos();
+      console.log("Todos:", todos);
+      setTodos(todos);
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching todo contents:", err);
+      setLoading(false);
     }
-    
+  }
+
+  useEffect(() => {
     fetchTodos();
   }, []);
 
-  const changeToDoStatus = (id, done) => {
+  const changeToDoStatus = (id: string, done: boolean) => {
     if (!todos) return; // Ensure todos is not null
-    const updatedTodos = todos.map((todo) => {
-      if (todo.$id === id) {
+
+    const updatedTodos = todos?.documents?.map((todo: ToDoItemProps) => {
+      if (todo.id == id || todo.$id == id) {
         return { ...todo, done: !done };  
+        console.log("Updated Todo:", todo);
       }
       return todo;
     });
-    setTodos(updatedTodos);
-    databases.updateDocument(
-      '681cc676001b5505b333',
-      '681cc690001e33dabf95',
-      id,
+    setTodos({ ...todos, documents: updatedTodos});
+
+    updateTodo(
       {
+        $id: id,
         done: !done
-      },
-      ['read("any")', 'write("any")']
-    ).then((response) => {
-      console.log("ToDo updated:", response);
-    }).catch((error) => {
-      console.log("Error updating ToDo:", error);
-    });
-  }; 
+      }
+    )
+  };
 
   return (
     <GluestackUIProvider config={config}>
@@ -135,13 +151,14 @@ export default function Todo() {
             <Text style={styles.buttonText}>Bearbeiten</Text>
           </Button>
         </HStack>
-        {todos.documents.map((item) => (
+        {todos?.documents?.map((item, index) => (
           <ToDoItem
-            key={item.$id}
+            key={index}
+            id={item.$id}
             title={item.name}
             date={item.date ? item.date : null}
             routine={item.regularity ? item.regularity : null}
-            done={item.done}
+            isChecked={item.done}
             changeToDoStatus={changeToDoStatus}
           />
         ))}

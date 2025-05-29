@@ -3,6 +3,8 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useEffect, useState } from "react";
 import { Dimensions, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
+import { addTodo } from "../../lib/appwrite/dbTodo"; //für db
+
   
   const screenWidth = Dimensions.get("screen").width;
   const containerWidth = Math.min(screenWidth * 0.9, 400);  // max 400px, sonst 90% Breite
