@@ -9,16 +9,20 @@ const ToDoItem = ({ title, date, responsible, isChecked, routine }) => (
     <VStack space={2}>
       <HStack style={styles.titleRow}>
         <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
-        <Badge style={styles.badge}>
-          <Text style={styles.badgeText}>{responsible}</Text>
-        </Badge>
+        {responsible ? (
+          <Badge style={styles.badge}>
+            <Text style={styles.badgeText}>{responsible}</Text>
+          </Badge>
+        ) : null} 
       </HStack>
       <HStack style={styles.checkboxRow}>
         <Checkbox status={isChecked ? "checked" : "unchecked"}>
         </Checkbox>
       </HStack>
       <HStack style={styles.dateRow}>
-        <Text style={styles.dateText}>{date}</Text>
+        {date ? (
+          <Text style={styles.dateText}>{date}</Text>
+        ) : null}
         {routine ? (
           <HStack style={styles.routineContainer}>
             <RepeatIcon style={styles.icon} />

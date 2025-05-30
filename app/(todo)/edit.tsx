@@ -7,6 +7,7 @@ import { Modal, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, Vi
 const ToDoItem = ({ title, date, responsible, isChecked, routine, onTrashPress }) => (
   <Box style={styles.todoItem}>
     <VStack space={2}>
+      <TouchableOpacity onPress={() => console.log("edit")}>
       <HStack style={styles.titleRow}>
         <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
         <Badge style={styles.badge}>
@@ -15,7 +16,7 @@ const ToDoItem = ({ title, date, responsible, isChecked, routine, onTrashPress }
       </HStack>
       <HStack style={styles.IconRow}>
         <TouchableOpacity onPress={onTrashPress}>
-          <TrashIcon size="md" />
+          <TrashIcon size="lg" />
         </TouchableOpacity>
       </HStack>
       <HStack style={styles.dateRow}>
@@ -26,7 +27,7 @@ const ToDoItem = ({ title, date, responsible, isChecked, routine, onTrashPress }
             <Text style={styles.routineText}>{routine}</Text>
           </HStack>
         ) : null}
-      </HStack>
+      </HStack></TouchableOpacity>
     </VStack>
   </Box>
 );
@@ -65,7 +66,7 @@ export default function EditTodo() {
 
         {/* Popup Modal */}
         <Modal
-          animationType="slide"
+          animationType="fade"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => setModalVisible(false)}

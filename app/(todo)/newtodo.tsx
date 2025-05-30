@@ -48,6 +48,7 @@ import DropDownPicker from "react-native-dropdown-picker";
       }}
       dropDownContainerStyle={{
         borderColor: '#ccc',
+        backgroundColor:"white",
       }}
     />
   );
@@ -94,8 +95,15 @@ import DropDownPicker from "react-native-dropdown-picker";
 const DatePickerField = ({ date, setDate }) => {
   const [showPicker, setShowPicker] = useState(false);
   const [hasSelected, setHasSelected] = useState(false);
+  const isWeb= Platform.OS =="web";
 
-  const handleChange = (event, selectedDate) => {
+   useEffect(() => {
+    if (date) {
+      setHasSelected(true);
+    }
+  }, [date]);
+
+   const handleChange = (event, selectedDate) => {
     if (selectedDate) {
       setDate(selectedDate);
       setHasSelected(true);
@@ -103,27 +111,49 @@ const DatePickerField = ({ date, setDate }) => {
     setShowPicker(false);
   };
 
+  const handleWebChange = (e) => {
+    const selectedDate = new Date(e.target.value);
+    setDate(selectedDate);
+    setHasSelected(true);
+  };
+
   return (
     <View style={{ width: '100%', marginBottom: '15%' }}>
       <Text style={{ marginBottom: 6 }}>Datum</Text>
-      <TouchableOpacity
-        onPress={() => setShowPicker(true)}
+      <View
         style={{
           borderWidth: 1,
           borderColor: '#ccc',
           borderRadius: 8,
           paddingVertical: 12,
           paddingHorizontal: 16,
-          justifyContent: 'center',
-          height: 44
+          justifyContent: 'space-between',
+          height: 44,
+          flexDirection:"row",
+          
         }}
       >
-        <Text style={{ color: hasSelected ? '#000' : '#999' }}>
-          {hasSelected ? date.toLocaleDateString() : ''}
-          <Icon as ={CalendarDaysIcon}/>
-        </Text>
-      </TouchableOpacity>
-        {showPicker && (
+        {isWeb ? (
+          <TextInput
+            style={{ flex: 1, color: '#000', fontSize: 14 }}
+            type="date"
+            value={date ? date.toISOString().split('T')[0] : ''}
+            onChange={handleWebChange}
+          />
+        ) : (
+          <>
+    
+          <Text style={{ color: hasSelected ? '#000' : '#999' }}>
+            {hasSelected ? date.toLocaleDateString() : ''}
+          </Text>
+          
+        <TouchableOpacity onPress={() => setShowPicker(true)}>
+        <Icon as ={CalendarDaysIcon}/>
+        </TouchableOpacity>
+        </>
+        )}
+      </View>
+        {!isWeb && showPicker && (
           <View style={{alignItems:"center"}}>
           <DateTimePicker
             mode="date"
@@ -286,3 +316,4 @@ const DatePickerField = ({ date, setDate }) => {
     },
   });
   
+
