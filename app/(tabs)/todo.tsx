@@ -1,14 +1,13 @@
 import { config } from "@gluestack-ui/config";
 import { Badge, Box, Button, ChevronDownIcon, ChevronUpIcon, GluestackUIProvider, HStack, RepeatIcon, VStack } from "@gluestack-ui/themed";
+import { useIsFocused } from '@react-navigation/native';
 import { useRouter } from "expo-router";
-import { use, useEffect, useState, useCallback } from "react";
-import { LogBox, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
-import { Client, Databases, ID, Account, Models } from "react-native-appwrite";
-import { getTodos, updateTodo, addTodo } from "../../lib/appwrite/dbTodo"; //für db
-import { Model } from 'appwrite';
+import { useEffect, useState } from "react";
+import { Dimensions, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Checkbox, Menu } from 'react-native-paper';
-import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import { getTodos, updateTodo } from "../../lib/appwrite/dbTodo"; //für db
 
+const screenHeight = Dimensions.get('window').height;
 
 interface ToDoItemProps {
   key: string;
@@ -29,9 +28,9 @@ const ToDoItem = ({
   routine,
   responsible,
   changeToDoStatus,
-}: ToDoItemProps) => (
+}: ToDoItemProps) => 
   <Box style={styles.todoItem}>
-    <VStack space={2}>
+    <VStack space="xs">
       <HStack style={styles.titleRow}>
         <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
         {responsible ? (
@@ -41,9 +40,17 @@ const ToDoItem = ({
         ) : null} 
       </HStack>
       <HStack style={styles.checkboxRow}>
-        <Checkbox status={isChecked ? 'checked' : 'unchecked'}
-            onPress={() => changeToDoStatus(id, isChecked)} >
-        </Checkbox>
+        <VStack alignItems="center">
+          <View style={{borderWidth: 2, borderColor:'#ccc',borderRadius: 1, marginRight: "8%", transform:[{ scale: 0.7 }]}}>
+            <Checkbox status={isChecked ? 'checked' : 'unchecked'}
+                onPress={() => changeToDoStatus(id, isChecked)}
+                color="blue">
+            </Checkbox>
+          </View>
+          {isChecked && (
+            <Text style={{ opacity: isChecked ? 1 : 0 }}>Bewohner1</Text>
+          )}
+        </VStack>
       </HStack>
       <HStack style={styles.dateRow}>
         {date ? (
@@ -58,11 +65,10 @@ const ToDoItem = ({
       </HStack>
     </VStack>
   </Box>
-);
+;
 
 const DropDown= ({ selected, setSelected }) => {
   const [visible, setVisible] = useState(false);
-
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
 
@@ -72,28 +78,27 @@ const DropDown= ({ selected, setSelected }) => {
   };
   return(
     <Menu
-          visible={visible}
-          onDismiss={closeMenu}
-          anchor={
-            <Button mode="outlined" onPress={openMenu}  contentStyle={{ flexDirection: 'row', justifyContent: 'space-between',  alignItems: 'center'}} style={{ width: "70%" }}>  
-            {selected || 'Auswählen'}
-            {visible ? (
-              <View style={{ justifyContent: 'center', marginTop:20 }}>
+      visible={visible}
+      onDismiss={closeMenu}
+      anchor={
+        <Button mode="outlined" onPress={openMenu}  contentStyle={{ flexDirection: 'row', justifyContent: 'space-between',  alignItems: 'center'}} style={{ width: "70%" }}>  
+          {selected || 'Auswählen'}
+          {visible ? (
+            <View style={{ justifyContent: 'center', marginTop:20 }}>
               <ChevronUpIcon size="md"/> 
-              </View>) :
-              (
+            </View>) :
+            (
               <View style={{ justifyContent: 'center', marginTop:20 }}>
-              <ChevronDownIcon size="md"/> 
+                <ChevronDownIcon size="md"/> 
               </View> )
-            }
-          </Button>
-
           }
-        >
-          <Menu.Item onPress={() => handleSelect('Bewohner 1')} title="Bewohner 1" />
-          <Menu.Item onPress={() => handleSelect('Bewohner 2')} title="Bewohner 2" />
-          <Menu.Item onPress={() => handleSelect('Bewohner 3')} title="Bewohner 3" />
-        </Menu>
+        </Button>
+      }
+    >
+    <Menu.Item onPress={() => handleSelect('Bewohner 1')} title="Bewohner 1" />
+    <Menu.Item onPress={() => handleSelect('Bewohner 2')} title="Bewohner 2" />
+    <Menu.Item onPress={() => handleSelect('Bewohner 3')} title="Bewohner 3" />
+  </Menu>
   )
 }
 
@@ -107,7 +112,7 @@ export default function Todo() {
   });
   const [loading, setLoading] = useState(true);
   const newToDo = () => router.push("../(todo)/newtodo");
-  const edit = () => console.log("Bearbeiten");
+  const edit = () => router.push("../(todo)/edit")
 
   const fetchTodos = async () => {
     try {
@@ -140,7 +145,6 @@ export default function Todo() {
     const updatedTodos = todos?.documents?.map((todo: ToDoItemProps) => {
       if (todo.id == id || todo.$id == id) {
         return { ...todo, done: !done };  
-        console.log("Updated Todo:", todo);
       }
       return todo;
     });
@@ -157,26 +161,30 @@ export default function Todo() {
   return (
     <GluestackUIProvider config={config}>
       <SafeAreaView style={styles.container}>
-        <Text style={styles.heading}>To Do Liste</Text>
+        <Text style={styles.heading}>To Do List</Text>
         <HStack style={styles.buttonContainer}>
           <Button style={styles.button} onPress={newToDo}>
-            <Text style={styles.buttonText}>Neues ToDo</Text>
+            <Text style={styles.buttonText}>New ToDo</Text>
           </Button>
           <Button style={styles.button} onPress={edit}>
-            <Text style={styles.buttonText}>Bearbeiten</Text>
+            <Text style={styles.buttonText}>Edit ToDo</Text>
           </Button>
         </HStack>
-        {todos?.documents?.map((item, index) => (
-          <ToDoItem
-            key={index}
-            id={item.$id}
-            title={item.name}
-            date={item.date ? item.date : null}
-            routine={item.regularity ? item.regularity : null}
-            isChecked={item.done}
-            changeToDoStatus={changeToDoStatus}
-          />
-        ))}
+        <View style={{ height: screenHeight / 1.5}}>
+          <ScrollView>
+            {todos?.documents?.map((item, index) => (
+              <ToDoItem
+                key={index}
+                id={item.$id}
+                title={item.name}
+                date={item.date ? item.date : null}
+                routine={item.regularity ? item.regularity : null}
+                isChecked={item.done}
+                changeToDoStatus={changeToDoStatus}
+              />
+            ))}
+          </ScrollView>
+        </View>
       </SafeAreaView>
     </GluestackUIProvider>
   );
@@ -192,30 +200,29 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
+    marginBottom:"5%"
   },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
     marginBottom: "5%",
     marginTop:"10%",
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
+    gap:"25%"
   },
-  button: {                    
-  paddingVertical: "1%",
-  paddingHorizontal: "5%",
-  marginBottom: "3%",
-  borderRadius: 8,
-  alignItems: "center",
-  alignSelf: "center", 
-  backgroundColor: "blue"
+  button: {     
+    flex:1,               
+    paddingVertical: "1%",
+    paddingHorizontal: "5%",
+    marginBottom: "3%",
+    borderRadius: 8,
+    alignItems: "center",
+    backgroundColor: "blue"
   },
   buttonText: {
     color: "white",
     fontSize: 14,
     fontWeight: "bold"
-  },
-  todoList: {
-    paddingBottom: 100
   },
   todoItem: {
     width: "100%",
@@ -248,7 +255,7 @@ const styles = StyleSheet.create({
   },
   checkboxRow: {
     justifyContent: "flex-end",
-    marginTop: 10
+    marginTop: 10,
   },
   dateRow: {
     flexDirection: "row",

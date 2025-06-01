@@ -5,41 +5,23 @@ import { CalendarDays } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import { Dimensions, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
-import { addTodo } from "../../lib/appwrite/dbTodo"; //für db
-  
+
 const screenWidth = Dimensions.get("screen").width;
 const containerWidth = Math.min(screenWidth * 0.9, 400);  // max 400px, sonst 90% Breite
+ 
 
-interface ToDoItemProps {
-  key: string;
-  id: string;
-  name: string;
-  date?: string;
-  done: boolean;
-  regularity?: string;
-  responsible?: string;
-}
-  
-  const dataWH = [
-    { key: "1", value: "täglich" },
-    { key: "2", value: "wöchentlich" },
-    { key: "3", value: "monatlich" },
-    { key: "4", value: "jährlich" }
-  ];
-
-
-  const DropDownAssignee= ({ selectedPerson, setSelectedPerson }) => {
+const DropDownResponsible= ({ selected, setSelected }) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(selectedPerson || null);
+  const [value, setValue] = useState(selected || null);
   const [items, setItems] = useState([
-    { label: 'Keiner', value: 'Keiner' },
+    { label: 'None', value: 'None' },
     { label: 'Bewohner 1', value: 'Bewohner 1' },
     { label: 'Bewohner 2', value: 'Bewohner 2' },
     { label: 'Bewohner 3', value: 'Bewohner 3' },
   ]);
 
   useEffect(() => {
-    setSelectedPerson(value);
+    setSelected(value);
   }, [value]);
 
   return(
@@ -69,9 +51,9 @@ interface ToDoItemProps {
   );
 };
 
-  const DropDownRepeat= ({ selectedRepeat, setSelectedRepeat }) => {
+  const DropDownRoutine= ({ selected, setSelected }) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(selectedRepeat || null);
+  const [value, setValue] = useState(selected || null);
   const [items, setItems] = useState([
     { label: 'None', value: 'None' },
     { label: 'daily', value: 'daily' },
@@ -81,7 +63,7 @@ interface ToDoItemProps {
   ]);
 
   useEffect(() => {
-    setSelectedRepeat(value);
+    setSelected(value);
   }, [value]);
 
   return(
@@ -105,14 +87,13 @@ interface ToDoItemProps {
       }}
       dropDownContainerStyle={{
         borderColor: '#ccc',
-        elevation: 10
+        backgroundColor:"white"
       }}
     />
   );
 };
 
 const DatePickerField = ({ date, setDate }) => {
-  
   const [showPicker, setShowPicker] = useState(false);
   const [hasSelected, setHasSelected] = useState(false);
   const isWeb= Platform.OS =="web";
@@ -164,28 +145,28 @@ const DatePickerField = ({ date, setDate }) => {
           <>
             <Text style={{ color: hasSelected ? '#000' : '#999' }}>
               {hasSelected && date ? date.toLocaleDateString() : ''}
-            </Text>
+            </Text> 
             <TouchableOpacity onPress={() => setShowPicker(prev => !prev)}>
               <CalendarDays size={20} color="black" />
             </TouchableOpacity>
           </>
         )}
       </View>
-      {!isWeb && showPicker && (
-        <View style={{alignItems:"center"}}>
-          <DateTimePicker
-            mode="date"
-            display="default"
-            value={date || new Date()}
-            onChange={handleChange}
-          />
-        </View>
+        {!isWeb && showPicker && (
+          <View style={{alignItems:"center"}}>
+            <DateTimePicker
+              mode="date"
+              display="default"
+              value={date || new Date()}
+              onChange={handleChange}
+            />
+          </View>
       )}
-    </View>
+     </View>
   );
 };
 
-  export default function NewToDo() {
+  export default function edit_ToDo() {
     const [selectedPerson, setSelectedPerson] = useState('');
     const [selectedRepeat, setSelectedRepeat] = useState('');
     const [todoName, setTodoName] = useState('');
@@ -199,34 +180,11 @@ const DatePickerField = ({ date, setDate }) => {
   
     const showDatepicker = () => setShow(true);
     const cancel = () => {console.log("Abbrechen"); router.back();};
-    const saveNewTodo = (
-      tile: string,
-      responsible: string, 
-      date: string, 
-      regularity: string
-    ) => {
-      if (!tile) {
-        console.log("Please fill in the name of the ToDo"); // ToDo: Implement error handling
-        return;
-      }
-
-      const newTodo = {
-        name: tile,
-        // Todo: responsible: (responsible ? responsible : null),
-        date: (date ? date.toISOString() : null),
-        regularity: (regularity ? regularity : null),
-        done: false,
-      }
-
-      addTodo(newTodo)
-      console.log("Speichern");
-      router.back();
+    const edit_todo= () => console.log("Todo bearbeitet");
   
-    }
-    
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.heading}>Add new ToDo</Text>
+        <Text style={styles.heading}>Edit ToDo</Text>
         <Box style={styles.box}>
           <VStack>
             <Text> Title </Text>
@@ -238,12 +196,12 @@ const DatePickerField = ({ date, setDate }) => {
             />
             <View style={{marginBottom: "15%", zIndex:3000}}>
               <Text style={{marginBottom: "2%"}}>Assignee</Text>
-              <DropDownAssignee selectedPerson={selectedPerson} setSelectedPerson={setSelectedPerson}/>
+              <DropDownResponsible selected={selectedPerson} setSelected={setSelectedPerson}/>
             </View> 
             <DatePickerField date={date} setDate={setDate}/>
             <View style={{marginBottom: "15%"}}>
               <Text style={{marginBottom: "2%"}}>Repeat</Text>
-              <DropDownRepeat selectedRepeat={selectedRepeat} setSelectedRepeat={setSelectedRepeat}/>
+              <DropDownRoutine selected={selectedPerson} setSelected={setSelectedPerson}/>
             </View> 
           </VStack>
         </Box>
@@ -251,8 +209,8 @@ const DatePickerField = ({ date, setDate }) => {
           <Button style={[styles.buttons, {backgroundColor: "grey"}]} onPress={cancel}>
             <Text style={styles.buttonText}>Cancel</Text>
           </Button>
-          <Button style={[styles.buttons, {backgroundColor: "blue"}]} onPress={() => saveNewTodo(todoName, selectedPerson, date, selectedRepeat)}>
-            <Text style={styles.buttonText}>Add</Text>
+          <Button style={[styles.buttons, {backgroundColor:"blue"}]} onPress={edit_todo}>
+            <Text style={styles.buttonText}>Save</Text>
           </Button>
         </HStack>
       </SafeAreaView>
@@ -278,13 +236,13 @@ const DatePickerField = ({ date, setDate }) => {
       shadowOffset: { width: 0, height: 3 },
       elevation: 3, 
       marginTop:"10%",
-      zIndex: 3000,
+      zIndex: 1000,
       position: "relative"
     },
     heading: {
       fontSize: 24,
       fontWeight: "bold",
-      marginBottom: 12,
+      marginBottom: "5%",
       textAlign: "center",
     },
     textInput: {
@@ -305,15 +263,15 @@ const DatePickerField = ({ date, setDate }) => {
       marginBottom: "10%",
       marginTop:"auto",
       width: containerWidth,
-      gap:"25%",
+      gap: "25%"
     },
-    buttons: {      
-      flex:1,            
+    buttons: {   
+      flex: 1,                 
       paddingVertical: "1%",
       paddingHorizontal: "8%",
       marginBottom: "3%",
       borderRadius: 10,
-      alignItems: "center",
+      alignItems: "center", 
     },
     buttonText: {
       color: "white",
