@@ -4,7 +4,7 @@ import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { getKalender } from "../../../lib/appwrite/dbKalender"; //für db
 
-const AddEvent = () => {
+const EditEvent = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
@@ -34,12 +34,12 @@ const AddEvent = () => {
   );
 };
 
-export default AddEvent;
+export default EditEvent;
 
 const styles = StyleSheet.create({
   container: {
     alignContent: "center",
-    height: "30%",
+    height: "80%",
     flexGrow: 1,
     justifyContent: "center",
     marginHorizontal: 30,

@@ -1,32 +1,36 @@
-import { useNavigation } from "expo-router";
+import CozyDate from "@/components/cozy_date";
+import CozySwitch from "@/components/cozy_switch";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Dimensions, Text, View } from "react-native";
+import { calendarStyles } from "./styles";
 
-const Event = () => {
-  const navigation = useNavigation();
+const { height } = Dimensions.get("window");
+
+export default function Event() {
+  const dummyDescription: string =
+    "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore ";
+
+  const startDate: string = "10.04.2025-12:00";
+  const endDate: string = "10.04.2025-15:00";
+
+  const wholeday: boolean = false;
+  const switchTitle: string = "Ganztägig";
+
   return (
-    <View style={styles.container}>
-      <Text
-        style={{
-          fontSize: 30,
-          fontWeight: "bold",
-          textAlign: "center",
-          marginBottom: 20,
-        }}>
-        Event
-      </Text>
+    <View
+      style={{
+        alignContent: "center",
+        flexGrow: 1,
+        justifyContent: "center",
+        marginHorizontal: 30,
+        backgroundColor: "blue"
+      }}>
+      <Text style={calendarStyles.h1}>Title</Text>
+      <Text style={calendarStyles.text}>{dummyDescription}</Text>
+      <CozyDate startDate={startDate} endDate={endDate} />
+      <CozySwitch state={wholeday} title={switchTitle} />
+      <Text style={calendarStyles.text}>repeat</Text>
+      <Text style={calendarStyles.text}>Category</Text>
     </View>
   );
-};
-
-export default Event;
-
-const styles = StyleSheet.create({
-  container: {
-    alignContent: "center",
-    height: "80%",
-    flexGrow: 1,
-    justifyContent: "center",
-    marginHorizontal: 30,
-  },
-});
+}

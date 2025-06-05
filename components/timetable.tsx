@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { router } from "expo-router";
 import React from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
@@ -37,10 +37,8 @@ export function EventBlock(event: Event) {
   const width = DAY_WIDTH;
 
   return (
-    <Link
-      href='/(tabs)/calendar/event'
-      push
-      asChild
+    <Pressable
+      onPress={() => router.push("/calendar/event")}
       style={[
         styles.eventBlock,
         {
@@ -52,14 +50,12 @@ export function EventBlock(event: Event) {
           borderColor: event.borderColor,
         },
       ]}>
-      <Pressable>
-        <View>
-          <Text style={styles.eventText} numberOfLines={1} ellipsizeMode='tail'>
-            {event.name}
-          </Text>
-        </View>
-      </Pressable>
-    </Link>
+      <View>
+        <Text style={styles.eventText} numberOfLines={1} ellipsizeMode='tail'>
+          {event.name}
+        </Text>
+      </View>
+    </Pressable>
   );
 }
 
@@ -113,14 +109,14 @@ function SideTimes() {
 
 export default function Timetable() {
   return (
-    <View style={{ height: "100%"}}>
+    <View style={{ height: "100%" }}>
       <HeaderRow />
-      <ScrollView style={{ flex: 1, height: "100%"}}>
-        <View style={{ flexDirection: "row",  height: "100%"}}>
+      <ScrollView style={{ flex: 1, height: "100%" }}>
+        <View style={{ flexDirection: "row", height: "100%" }}>
           <View>
             <SideTimes />
           </View>
-          <View style={{ position: "relative", flex: 1 ,  height: "100%"}}>
+          <View style={{ position: "relative", flex: 1, height: "100%" }}>
             <DayGrid />
             <EventBlock
               name='G.Feier'
