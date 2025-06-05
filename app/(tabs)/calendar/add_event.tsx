@@ -1,11 +1,20 @@
 import CozyInput from "@/components/cozy_input";
 import { useNavigation } from "expo-router";
-import React from "react";
+import React, {useState} from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
-import { getKalender } from "../../../lib/appwrite/dbKalender"; //für db
+import { getCalender, getCategory, createNewEvent, createNewCategory, deleteEvent} from "../../../lib/appwrite/dbKalender";
+import {placeholder} from "@babel/types"; //für db
 
 const AddEvent = () => {
   const navigation = useNavigation();
+  const [name, setName] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [creator, setCreator] = useState('');
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('');
+  const [wholeday, setWholeDay] = useState(false);
+  const [repeat, setRepeat] = useState('');
   return (
     <View style={styles.container}>
       <Text
@@ -18,16 +27,54 @@ const AddEvent = () => {
         Add new Event
       </Text>
       {/* <Button onPress={() => navigation.goBack()} title='Dismiss' /> */}
-      <CozyInput placeholder='Name' placeholderTextColor={"black"} />
-      <CozyInput placeholder='Creator' placeholderTextColor={"black"} />
-      <CozyInput placeholder='Color' placeholderTextColor={"black"} />
-      <CozyInput placeholder='Date' placeholderTextColor={"black"} />
-      <CozyInput placeholder='Description' placeholderTextColor={"black"} />
+      <CozyInput placeholder='Name'
+                 placeholderTextColor={"black"}
+                 value={name}
+                 onChangeText={(text) => setName(text)}
+      />
+      <CozyInput placeholder='Creator'
+                 placeholderTextColor={"black"}
+                 value={creator}
+                 onChangeText={(text) => setCreator(text)}
+      />
+      <CozyInput placeholder='Category'
+                 placeholderTextColor={"black"}
+                 value={category}
+                 onChangeText={(text) => setCategory(text)}
+      />
+      <CozyInput placeholder='Startdate'
+                 placeholderTextColor={"black"}
+                 value={startDate}
+                 onChangeText={(text) => setStartDate(text)}
+      />
+      <CozyInput placeholder='Enddate'
+                 placeholderTextColor={"black"}
+                 value={endDate}
+                 onChangeText={(text) => setEndDate(text)}
+      />
+      <CozyInput placeholder='Description'
+                 placeholderTextColor={"black"}
+                 value={description}
+                 onChangeText={(text) => setDescription(text)}
+      />
+      <CozyInput placeholder='Whole Day'
+                 placeholderTextColor={"black"}
+                 value={wholeday}
+                 onChangeText={(boolean) => setDescription(boolean)}
+      />
       <Button
         title='Create'
          onPress={async () => {
-         const inhalt = await getKalender();
-         console.log("Kalenderinhalt: ", inhalt);
+          await createNewEvent({
+              name: name,
+              startDate: startDate,
+              endDate: endDate,
+              description: description,
+              category: category,
+              creator: creator,
+              repeat: false,
+              wholeday: wholeday,
+          })
         }}
       />
     </View>
