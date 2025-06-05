@@ -9,8 +9,9 @@ const categoryCollectionId = '682c34aa0009f5819539';
 
 export const getCalender = async function(): Promise<Models.DocumentList<any>> {
     try {
-        const result = await databases.listDocuments(databaseId, calenderCollectionId);
-        return result;
+        var test = await databases.listDocuments(databaseId, calenderCollectionId);
+        console.log(test.documents);
+        return test;
     } catch (error) {
         console.error("Error fetching documents:", error);
         throw error;

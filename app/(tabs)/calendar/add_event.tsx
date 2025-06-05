@@ -13,7 +13,7 @@ const AddEvent = () => {
   const [creator, setCreator] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
-  const [wholeday, setWholeDay] = useState('');
+  const [wholeday, setWholeDay] = useState(false);
   const [repeat, setRepeat] = useState('');
   return (
     <View style={styles.container}>
@@ -57,6 +57,11 @@ const AddEvent = () => {
                  value={description}
                  onChangeText={(text) => setDescription(text)}
       />
+      <CozyInput placeholder='Whole Day'
+                 placeholderTextColor={"black"}
+                 value={wholeday}
+                 onChangeText={(boolean) => setDescription(boolean)}
+      />
       <Button
         title='Create'
          onPress={async () => {
@@ -68,7 +73,7 @@ const AddEvent = () => {
               category: category,
               creator: creator,
               repeat: false,
-              wholeday: false,
+              wholeday: wholeday,
           })
         }}
       />
