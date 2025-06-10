@@ -273,7 +273,7 @@ const DatePickerField = ({ date, setDate }) => {
     return (
       <SafeAreaView style={styles.container_box}>
         <Text style={styles.heading}>Add new ToDo</Text>
-        <Box style={styles.box}> 
+        <Box style={styles.box}>
           <VStack>
             <Text> Title </Text>
             <TextInput
@@ -297,7 +297,7 @@ const DatePickerField = ({ date, setDate }) => {
             <DatePickerField date={date} setDate={setDate}/>
           </VStack>
         </Box>
-        <HStack style={styles.buttonsContainer}>
+        <HStack style={styles.buttonContainer}>
           <Button style={[styles.buttons, {backgroundColor: "grey"}]} onPress={cancel}>
             <Text style={styles.buttonText}>Cancel</Text>
           </Button>
