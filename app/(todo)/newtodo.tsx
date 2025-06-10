@@ -3,7 +3,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { router } from "expo-router";
 import { CalendarDays } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { Dimensions, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Dimensions, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { addTodo } from "../../lib/appwrite/dbTodo"; //für db
   
@@ -227,6 +227,7 @@ const DatePickerField = ({ date, setDate }) => {
     return (
       <SafeAreaView style={styles.container}>
         <Text style={styles.heading}>Add new ToDo</Text>
+        <ScrollView>
         <Box style={styles.box}>
           <VStack>
             <Text> Title </Text>
@@ -247,6 +248,7 @@ const DatePickerField = ({ date, setDate }) => {
             </View> 
           </VStack>
         </Box>
+        </ScrollView>
         <HStack style={styles.buttonContainer}>
           <Button style={[styles.buttons, {backgroundColor: "grey"}]} onPress={cancel}>
             <Text style={styles.buttonText}>Cancel</Text>
