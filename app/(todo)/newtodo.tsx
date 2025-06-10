@@ -3,12 +3,14 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { router } from "expo-router";
 import { CalendarDays } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { Dimensions, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Dimensions, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
+import styles from "../(todo)/styles";
 import { addTodo } from "../../lib/appwrite/dbTodo"; //für db
   
 const screenWidth = Dimensions.get("screen").width;
-const containerWidth = Math.min(screenWidth * 0.9, 400);  // max 400px, sonst 90% Breite
+const screenHeight = Dimensions.get("screen").height;
+const containerWidth = Math.min(screenWidth * 0.95, 400);  // max 400px, sonst 90% Breite
 
 interface ToDoItemProps {
   key: string;
@@ -50,7 +52,7 @@ interface ToDoItemProps {
       setOpen={setOpen}
       setValue={setValue}
       setItems={setItems}
-      zIndex={3000}
+      zIndex={4000}
       zIndexInverse={1000}
       placeholder="None"
       style={{
@@ -69,6 +71,48 @@ interface ToDoItemProps {
   );
 };
 
+  const DropDownLabel= ({ selectedLabel, setSelectedLabel }) => {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(selectedLabel || null);
+  const [items, setItems] = useState([
+    { label: 'None', value: 'None' },
+    { label: 'Tasks', value: 'Tasks' },
+    { label: 'Shopping', value: 'Shopping' },
+  ]);
+
+  useEffect(() => {
+    setSelectedLabel(value);
+  }, [value]);
+
+  return(
+    <DropDownPicker
+      open={open}
+      value={value}
+      items={items}
+      setOpen={setOpen}
+      setValue={setValue}
+      setItems={setItems}
+      zIndex={4000}
+      zIndexInverse={1000}
+      placeholder="None"
+      style={{
+        borderColor: '#ccc',
+        borderRadius: 8,
+      }}
+      textStyle={{
+        fontSize: 14,
+        color: '#000',
+      }}
+      dropDownContainerStyle={{
+        borderColor: '#ccc',
+        elevation: 10,
+        zIndex:2000,
+        position:"absolute",
+        top:"100%"
+      }}
+    />
+  );
+};
   const DropDownRepeat= ({ selectedRepeat, setSelectedRepeat }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(selectedRepeat || null);
@@ -105,7 +149,8 @@ interface ToDoItemProps {
       }}
       dropDownContainerStyle={{
         borderColor: '#ccc',
-        elevation: 10
+        elevation: 10,
+        
       }}
     />
   );
@@ -138,7 +183,7 @@ const DatePickerField = ({ date, setDate }) => {
   };
 
   return (
-    <View style={{ width: '100%', marginBottom: '15%' }}>
+    <View style={{ width: '100%', marginBottom: '10%' }}>
       <Text style={{ marginBottom: 6 }}>Date</Text>
       <View
         style={{
@@ -172,7 +217,7 @@ const DatePickerField = ({ date, setDate }) => {
         )}
       </View>
       {!isWeb && showPicker && (
-        <View style={{alignItems:"center"}}>
+        <View style={{alignItems:"center", bottom:-43, left:6, right: 12, position:"absolute"}}>
           <DateTimePicker
             mode="date"
             display="default"
@@ -188,6 +233,7 @@ const DatePickerField = ({ date, setDate }) => {
   export default function NewToDo() {
     const [selectedPerson, setSelectedPerson] = useState('');
     const [selectedRepeat, setSelectedRepeat] = useState('');
+    const [selectedLabel, setSelectedLabel] = useState('');
     const [todoName, setTodoName] = useState('');
     const [date, setDate] = useState<Date | null> (null);
     const [show, setShow] = useState(false);
@@ -225,10 +271,9 @@ const DatePickerField = ({ date, setDate }) => {
     }
     
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container_box}>
         <Text style={styles.heading}>Add new ToDo</Text>
-        <ScrollView>
-        <Box style={styles.box}>
+        <Box style={styles.box}> 
           <VStack>
             <Text> Title </Text>
             <TextInput
@@ -237,19 +282,22 @@ const DatePickerField = ({ date, setDate }) => {
               style={styles.textInput}
               placeholderTextColor="#000"
             />
-            <View style={{marginBottom: "15%", zIndex:3000}}>
+            <View style={{marginBottom: "10%", zIndex:4000}}>
               <Text style={{marginBottom: "2%"}}>Assignee</Text>
               <DropDownAssignee selectedPerson={selectedPerson} setSelectedPerson={setSelectedPerson}/>
             </View> 
-            <DatePickerField date={date} setDate={setDate}/>
-            <View style={{marginBottom: "15%"}}>
+            <View style={{marginBottom: "10%", zIndex:3000, position:"relative"}}>
               <Text style={{marginBottom: "2%"}}>Repeat</Text>
               <DropDownRepeat selectedRepeat={selectedRepeat} setSelectedRepeat={setSelectedRepeat}/>
+            </View>
+            <View style={{marginBottom: "10%", zIndex:2000}}>
+              <Text style={{marginBottom: "2%"}}>Label</Text>
+              <DropDownLabel selectedLabel={selectedLabel} setSelectedLabel={setSelectedLabel}/>
             </View> 
+            <DatePickerField date={date} setDate={setDate}/>
           </VStack>
         </Box>
-        </ScrollView>
-        <HStack style={styles.buttonContainer}>
+        <HStack style={styles.buttonsContainer}>
           <Button style={[styles.buttons, {backgroundColor: "grey"}]} onPress={cancel}>
             <Text style={styles.buttonText}>Cancel</Text>
           </Button>
@@ -260,68 +308,3 @@ const DatePickerField = ({ date, setDate }) => {
       </SafeAreaView>
     );
   }
-  
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "white",
-      alignItems: "center",
-      paddingVertical: 20,
-    },
-    box: {
-      width: containerWidth,
-      backgroundColor: "#fff",
-      borderRadius: 12,
-      padding: 16,
-      marginBottom: "15%",
-      shadowColor: "#000",
-      shadowOpacity: 0.1,
-      shadowRadius: 6,
-      shadowOffset: { width: 0, height: 3 },
-      elevation: 3, 
-      marginTop:"10%",
-      zIndex: 3000,
-      position: "relative"
-    },
-    heading: {
-      fontSize: 24,
-      fontWeight: "bold",
-      marginBottom: 12,
-      textAlign: "center",
-    },
-    textInput: {
-      width: "100%",
-      height: 44,
-      borderWidth: 1,
-      borderColor: "#ccc",
-      borderRadius: 8,
-      paddingHorizontal: 12,
-      marginBottom: "15%",
-      marginTop: "2%",
-      fontSize: 14,
-      color: "#000",
-    },
-    buttonContainer: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      marginBottom: "10%",
-      marginTop:"auto",
-      width: containerWidth,
-      gap:"25%",
-    },
-    buttons: {      
-      flex:1,            
-      paddingVertical: "1%",
-      paddingHorizontal: "8%",
-      marginBottom: "3%",
-      borderRadius: 10,
-      alignItems: "center",
-    },
-    buttonText: {
-      color: "white",
-      fontSize: 14,
-      fontWeight: "bold"
-    },
-  });
-  
-

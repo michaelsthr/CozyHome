@@ -1,13 +1,15 @@
 import { config } from "@gluestack-ui/config";
-import { Badge, Box, Button, ChevronDownIcon, ChevronUpIcon, GluestackUIProvider, HStack, RepeatIcon, VStack } from "@gluestack-ui/themed";
+import { Badge, Box, Button, GluestackUIProvider, HStack, RepeatIcon, VStack } from "@gluestack-ui/themed";
 import { useIsFocused } from '@react-navigation/native';
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Dimensions, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
-import { Checkbox, Menu } from 'react-native-paper';
+import { Dimensions, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Checkbox } from 'react-native-paper';
+import styles from "../(todo)/styles";
 import { getTodos, updateTodo } from "../../lib/appwrite/dbTodo"; //für db
-
 const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
+const containerWidth = Math.min(screenWidth * 0.95, 400);
 
 interface ToDoItemProps {
   key: string;
@@ -19,6 +21,42 @@ interface ToDoItemProps {
   responsible?: string;
   changeToDoStatus: (id: string, currentStatus: boolean) => void;
 }
+
+const tabs = ['All', 'Tasks', 'Shopping'];
+const Tabs = () => {
+  const [selectedTab, setSelectedTab] = useState('All');
+
+  return (
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={styles.tabsContainer}
+    >
+      {tabs.map((tab) => (
+        <TouchableOpacity
+          key={tab}
+          onPress={() => {
+            console.log(`${tab} selected`);
+            setSelectedTab(tab);
+          } }
+          style={[
+            styles.tabItem,
+            selectedTab === tab && styles.tabItemSelected,
+          ]}
+        >
+          <Text
+            style={[
+              styles.tabText,
+              selectedTab === tab && styles.tabTextSelected,
+            ]}
+          >
+            {tab}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </ScrollView>
+  );
+};
 
 const ToDoItem = ({
   id,
@@ -44,7 +82,8 @@ const ToDoItem = ({
           <View style={{borderWidth: 2, borderColor:'#ccc',borderRadius: 1, marginRight: "8%", transform:[{ scale: 0.7 }]}}>
             <Checkbox status={isChecked ? 'checked' : 'unchecked'}
                 onPress={() => changeToDoStatus(id, isChecked)}
-                color="blue">
+                color="blue"
+                uncheckedColor="#f9f9f9">
             </Checkbox>
           </View>
           {isChecked && (
@@ -67,40 +106,6 @@ const ToDoItem = ({
   </Box>
 ;
 
-const DropDown= ({ selected, setSelected }) => {
-  const [visible, setVisible] = useState(false);
-  const openMenu = () => setVisible(true);
-  const closeMenu = () => setVisible(false);
-
-  const handleSelect = (value: string) => {
-    setSelected(value);
-    closeMenu();
-  };
-  return(
-    <Menu
-      visible={visible}
-      onDismiss={closeMenu}
-      anchor={
-        <Button mode="outlined" onPress={openMenu}  contentStyle={{ flexDirection: 'row', justifyContent: 'space-between',  alignItems: 'center'}} style={{ width: "70%" }}>  
-          {selected || 'Auswählen'}
-          {visible ? (
-            <View style={{ justifyContent: 'center', marginTop:20 }}>
-              <ChevronUpIcon size="md"/> 
-            </View>) :
-            (
-              <View style={{ justifyContent: 'center', marginTop:20 }}>
-                <ChevronDownIcon size="md"/> 
-              </View> )
-          }
-        </Button>
-      }
-    >
-    <Menu.Item onPress={() => handleSelect('Bewohner 1')} title="Bewohner 1" />
-    <Menu.Item onPress={() => handleSelect('Bewohner 2')} title="Bewohner 2" />
-    <Menu.Item onPress={() => handleSelect('Bewohner 3')} title="Bewohner 3" />
-  </Menu>
-  )
-}
 
 
 
@@ -170,8 +175,11 @@ export default function Todo() {
             <Text style={styles.buttonText}>Edit ToDo</Text>
           </Button>
         </HStack>
+        <View style={{marginBottom:5, width: screenWidth}}>
+          <Tabs/>
+        </View>
         <View style={{ height: screenHeight / 1.5}}>
-          <ScrollView>
+          <ScrollView contentContainerStyle={{ paddingBottom: 120 }} >
             {todos?.documents?.map((item, index) => (
               <ToDoItem
                 key={index}
@@ -190,94 +198,3 @@ export default function Todo() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-    padding: 16
-  },
-  heading: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom:"5%"
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginBottom: "5%",
-    marginTop:"10%",
-    paddingHorizontal: 16,
-    gap:"25%"
-  },
-  button: {     
-    flex:1,               
-    paddingVertical: "1%",
-    paddingHorizontal: "5%",
-    marginBottom: "3%",
-    borderRadius: 8,
-    alignItems: "center",
-    backgroundColor: "blue"
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 14,
-    fontWeight: "bold"
-  },
-  todoItem: {
-    width: "100%",
-    padding: 16,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 12,
-    backgroundColor: "#f9f9f9"
-  },
-  titleRow: {
-    flexDirection: "row",
-    alignItems: "center"
-  },
-  titleText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    flexShrink: 1,
-    marginRight: 8
-  },
-  badge: {
-    backgroundColor: "#eee",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-    marginLeft: "10%"
-  },
-  badgeText: {
-    fontSize: 12
-  },
-  checkboxRow: {
-    justifyContent: "flex-end",
-    marginTop: 10,
-  },
-  dateRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 10
-  },
-  dateText: {
-    fontSize: 14,
-    color: "#555"
-  },
-  routineContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginLeft: "10%"
-  },
-  icon: {
-    width: 16,
-    height: 16,
-    marginRight: 6
-  },
-  routineText: {
-    fontSize: 12,
-    color: "#555"
-  }
-});
