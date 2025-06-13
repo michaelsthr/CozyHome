@@ -1,8 +1,9 @@
 import { Models } from 'appwrite';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { deleteKuehlschrankInhalt, getKuehlschrankInhalt, KuehlschrankItem, NewKuehlschrankItem, setKuehlschrankInhalt, updateKuehlschrankInhalt } from "../../lib/appwrite/dbKuehlschrank"; //für db
-import { FridgeCategories, FridgeCategoryType, getAllFridgeCategories } from "../../lib/constants/categories";
+import DatePickerField from "../../../../components/DatePickerField";
+import { deleteKuehlschrankInhalt, getKuehlschrankInhalt, KuehlschrankItem, NewKuehlschrankItem, setKuehlschrankInhalt, updateKuehlschrankInhalt } from "../../../../lib/appwrite/dbKuehlschrank"; //für db
+import { FridgeCategories, FridgeCategoryType, getAllFridgeCategories } from "../../../../lib/constants/categories";
 
 export default function Fridge() {
   // Helper function to get category display information (can be expanded to include icons, colors, etc.)
@@ -45,9 +46,7 @@ export default function Fridge() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeFilter, setActiveFilter] = useState<FridgeCategoryType | 'ALL'>('ALL');
   const [sortBy, setSortBy] = useState<'name' | 'category' | 'amount'>('name');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-  const [editingItem, setEditingItem] = useState<KuehlschrankItem | null>(null);
-    // New state variables for modal and date picker
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');  const [editingItem, setEditingItem] = useState<KuehlschrankItem | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [expDate, setExpDate] = useState<Date | null>(null);useEffect(() => {
     async function fetchData() {
@@ -80,7 +79,9 @@ export default function Fridge() {
     try {
       setIsSubmitting(true);
       
-      const formattedDate = expDate ? expDate.toISOString() : undefined;
+      const formattedDate = expDate ? 
+        new Date(expDate.getFullYear(), expDate.getMonth(), expDate.getDate()).toISOString() : 
+        undefined;
       
       if (editingItem) {
         const updatedItem = {
@@ -121,12 +122,11 @@ export default function Fridge() {
     } finally {
       setIsSubmitting(false);
     }
-  };const handleEditItem = (item: KuehlschrankItem) => {
+  };  const handleEditItem = (item: KuehlschrankItem) => {
     setEditingItem(item);
     setItemName(item.name);
     setItemAmount(item.anzahl.toString());
     
-
     const itemCategory = item.kategorie || '';
     const isValidCategory = Object.values(FridgeCategories).includes(itemCategory as FridgeCategoryType);
     
@@ -139,8 +139,7 @@ export default function Fridge() {
     }
     
     setModalVisible(true);
-  };
-    const cancelEdit = () => {
+  };  const cancelEdit = () => {
     setEditingItem(null);
     setItemName('');
     setItemAmount('1');
@@ -161,9 +160,6 @@ export default function Fridge() {
     }
   };
 
-  const filteredContents = activeFilter === 'ALL' 
-    ? contents?.documents 
-    : contents?.documents?.filter(item => item.kategorie === activeFilter);
   const getFilteredItems = () => {
     if (!contents || !contents.documents) return [];
     
@@ -234,31 +230,27 @@ export default function Fridge() {
       return sortDirection === 'desc' ? -comparison : comparison;
     });
   };
-  // Date picker helpers - no longer needed with text input approach
-  const onDateChange = (selectedDate: Date) => {
-    if (selectedDate) {
-      setExpDate(selectedDate);
-    }
-  };
-
-  const toggleDatePicker = () => {};
-
   const formatDate = (date: Date | null) => {
     if (!date) return '';
     return `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()}`;
   };
-
-  // Check if an item is expired
+  
   const isExpired = (date: string | undefined) => {
     if (!date) return false;
+    
+    
     const expireDate = new Date(date);
-    return expireDate < new Date();
+    const today = new Date();
+    
+    expireDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    
+    return expireDate < today;
   };
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Virtueller Kühlschrank</Text>
       
-      {/* Add Item Modal */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -277,7 +269,6 @@ export default function Fridge() {
               {editingItem ? 'Artikel bearbeiten' : 'Neuen Artikel hinzufügen'}
             </Text>
             
-            {/* Item Form Fields */}
             <View style={styles.formContainer}>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputLabel}>Name:</Text>
@@ -299,103 +290,13 @@ export default function Fridge() {
                   keyboardType="numeric"
                 />
               </View>
-                {/* Expiration Date Picker */}
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>mhd:</Text>
-                <View style={styles.dateInputGroup}>
-                  {/* Day input */}
-                  <TextInput
-                    style={styles.dateInputField}
-                    placeholder="TT"
-                    value={expDate ? expDate.getDate().toString().padStart(2, '0') : ''}
-                    onChangeText={(text) => {
-                      if (text === '') {
-                        if (expDate) {
-                          if (expDate.getDate() === 1 && expDate.getFullYear() === 2000) {
-                            setExpDate(null);
-                          }
-                        }
-                        return;
-                      }
-
-                      const day = parseInt(text);
-                      if (text.length <= 2 && !isNaN(day)) {
-                        const newDate = new Date(expDate || new Date());
-                        if (day >= 1 && day <= 31) {
-                          newDate.setDate(day);
-                          setExpDate(new Date(newDate));
-                        }
-                      }
-                    }}
-                    keyboardType="numeric"
-                    maxLength={2}
-                  />
-                  <Text style={styles.dateInputSeparator}>.</Text>
-                  <TextInput
-                    style={styles.dateInputField}
-                    placeholder="MM"
-                    value={expDate ? (expDate.getMonth() + 1).toString().padStart(2, '0') : ''}
-                    onChangeText={(text) => {
-                      if (text === '') {
-                        // If user clears the field, set expDate to null if other fields are also empty
-                        if (!expDate || (expDate.getDate() === 1 && expDate.getFullYear() === 2000)) {
-                          setExpDate(null);
-                        }
-                        return;
-                      }
-
-                      const month = parseInt(text);
-                      if (text.length <= 2 && !isNaN(month)) {
-                        if (month >= 1 && month <= 12) {
-                          const newDate = new Date(expDate || new Date());
-                          newDate.setMonth(month - 1);
-                          setExpDate(new Date(newDate));
-                        }
-                      }
-                    }}
-                    keyboardType="numeric"
-                    maxLength={2}
-                  />
-                  <Text style={styles.dateInputSeparator}>.</Text>
-                  <TextInput
-                    style={[styles.dateInputField, { flex: 1.5 }]}
-                    placeholder="JJJJ"
-                    value={expDate ? expDate.getFullYear().toString() : ''}
-                    onChangeText={(text) => {
-                      if (text === '') {
-                        // If user clears the field, set expDate to null if other fields are also empty
-                        if (!expDate || (expDate.getDate() === 1 && expDate.getMonth() === 0)) {
-                          setExpDate(null);
-                        }
-                        return;
-                      }
-
-                      const year = parseInt(text);
-                      if (text.length <= 4 && !isNaN(year)) {
-                        if (year >= 2000 && year <= 2100) {
-                          const newDate = new Date(expDate || new Date());
-                          newDate.setFullYear(year);
-                          setExpDate(new Date(newDate));
-                        }
-                      }
-                    }}
-                    keyboardType="numeric"
-                    maxLength={4}
-                  />
-                </View>
-                
-                {/* Clear date button */}
-                {expDate && (
-                  <TouchableOpacity 
-                    style={styles.clearDateButton}
-                    onPress={() => setExpDate(null)}
-                  >
-                    <Text style={styles.clearDateText}>×</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
+              <DatePickerField 
+                date={expDate} 
+                setDate={setExpDate} 
+                label="MHD:" 
+                minimumDate={new Date()}
+              />
               
-              {/* Category selector */}
               <View style={styles.categoryPickerContainer}>
                 <Text style={styles.inputLabel}>Kategorie:</Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
@@ -438,9 +339,20 @@ export default function Fridge() {
                 </ScrollView>
               </View>
             </View>
-            
-            {/* Modal Action Buttons */}
-            <View style={styles.modalButtonContainer}>
+            <View style={styles.modalButtonContainer}>              <TouchableOpacity 
+                style={[styles.addButton, isSubmitting && styles.disabledButton]} 
+                onPress={handleAddItem} 
+                disabled={isSubmitting}
+              >
+                <Text style={styles.buttonText}>
+                  {isSubmitting 
+                    ? "Speichern..." 
+                    : editingItem 
+                      ? "Aktualisieren" 
+                      : "Hinzufügen"
+                  }
+                </Text>
+              </TouchableOpacity>
               <TouchableOpacity 
                 style={styles.cancelButton} 
                 onPress={() => {
@@ -457,27 +369,11 @@ export default function Fridge() {
               >
                 <Text style={styles.buttonText}>Abbrechen</Text>
               </TouchableOpacity>
-              
-              <TouchableOpacity 
-                style={[styles.addButton, isSubmitting && styles.disabledButton]} 
-                onPress={handleAddItem} 
-                disabled={isSubmitting}
-              >
-                <Text style={styles.buttonText}>
-                  {isSubmitting 
-                    ? "Speichern..." 
-                    : editingItem 
-                      ? "Aktualisieren" 
-                      : "Hinzufügen"
-                  }
-                </Text>
-              </TouchableOpacity>
             </View>
           </View>
         </View>
       </Modal>
       
-      {/* Filter buttons */}      {/* Sort controls */}
       <View style={styles.sortSection}>
         <Text style={styles.sectionTitle}>Sortieren nach:</Text>
         <View style={styles.sortButtonRow}>
@@ -517,7 +413,6 @@ export default function Fridge() {
         </View>
       </View>
 
-      {/* Filter section */}
       <View style={styles.filterSection}>
         <View style={styles.filterHeaderRow}>
           <Text style={styles.sectionTitle}>Nach Kategorie filtern:</Text>
@@ -550,7 +445,6 @@ export default function Fridge() {
           </TouchableOpacity>
             {categories.map((categoryValue) => {
             const categoryInfo = getCategoryDisplayInfo(categoryValue);
-            // Count items in this category
             const itemCount = contents?.documents?.filter(item => item.kategorie === categoryValue).length || 0;
             
             return (
@@ -638,7 +532,6 @@ export default function Fridge() {
         </View>
       )}
       
-      {/* Floating Action Button */}
       <TouchableOpacity 
         style={styles.floatingButton} 
         onPress={() => setModalVisible(true)}
@@ -648,7 +541,7 @@ export default function Fridge() {
     </View>
   );
 }
-
+// beginn stylesheet
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -819,19 +712,33 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     flex: 2
-  },
-  addButton: {
+  },  addButton: {
     backgroundColor: '#2196F3',
     borderRadius: 4,
     padding: 10,
-    flex: 1
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 44,
+    elevation: 2, // Android shadow
+    shadowColor: '#000', // iOS shadow
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.5
   },
   cancelButton: {
     backgroundColor: '#f44336',
     borderRadius: 4,
     padding: 10,
-    marginLeft: 8,
-    flex: 1
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 44,
+    elevation: 2, // Android shadow
+    shadowColor: '#000', // iOS shadow
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.5
   },
   editButton: {
     backgroundColor: '#4CAF50',
@@ -943,8 +850,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 8
   },
-  
-  // Modal styles
+    // Modal styles
   modalOverlay: {
     flex: 1,
     justifyContent: 'center',
@@ -958,6 +864,7 @@ const styles = StyleSheet.create({
     padding: 20,
     width: '100%',
     maxWidth: 500,
+    maxHeight: '80%',
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -972,11 +879,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center'
-  },
-  modalButtonContainer: {
+  },  modalButtonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 20
+    marginTop: 20,
+    width: '100%',
+    gap: 10 // Add consistent spacing between buttons
   },
   
   // Input styles
@@ -985,16 +893,20 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     fontWeight: '500'
   },
-    // Date picker styles
+  // Date picker styles
   datePickerButton: {
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 4,
     padding: 10,
-    backgroundColor: '#f9f9f9'
+    backgroundColor: '#f9f9f9',
+    flex: 1,
+    minHeight: 42, // Consistent height
+    justifyContent: 'center' // Center text vertically
   },
   datePickerButtonText: {
-    color: '#333'
+    color: '#333',
+    fontSize: 14
   },
   dateInputGroup: {
     flexDirection: 'row',
@@ -1024,7 +936,12 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: '#f44336',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    elevation: 2, // For Android shadow
+    shadowColor: '#000', // For iOS shadow
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.5
   },
   clearDateText: {
     color: 'white',
