@@ -1,26 +1,13 @@
 import { config } from "@gluestack-ui/config";
-import { Badge, Box, Button, GluestackUIProvider, HStack, RepeatIcon, VStack } from "@gluestack-ui/themed";
+import { Button, GluestackUIProvider, HStack } from "@gluestack-ui/themed";
 import { useIsFocused } from '@react-navigation/native';
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Dimensions, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { Checkbox } from 'react-native-paper';
-import styles from "../(todo)/styles";
+import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import styles, { screenHeight, screenWidth } from "../(todo)/styles";
+import ToDoItem, { ToDoItemProps } from "../../components/todo_item";
 import { getTodos, updateTodo } from "../../lib/appwrite/dbTodo"; //für db
-const screenHeight = Dimensions.get('window').height;
-const screenWidth = Dimensions.get('window').width;
-const containerWidth = Math.min(screenWidth * 0.95, 400);
 
-interface ToDoItemProps {
-  key: string;
-  id: string;
-  title: string;
-  date?: string;
-  isChecked: boolean;
-  routine?: string;
-  responsible?: string;
-  changeToDoStatus: (id: string, currentStatus: boolean) => void;
-}
 
 const tabs = ['All', 'Tasks', 'Shopping'];
 const Tabs = () => {
@@ -58,53 +45,6 @@ const Tabs = () => {
   );
 };
 
-const ToDoItem = ({
-  id,
-  title,
-  date,
-  isChecked,
-  routine,
-  responsible,
-  changeToDoStatus,
-}: ToDoItemProps) => 
-  <Box style={styles.todoItem}>
-    <VStack space="xs">
-      <HStack style={styles.titleRow}>
-        <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
-        {responsible ? (
-          <Badge style={styles.badge}>
-            <Text style={styles.badgeText}>{responsible}</Text>
-          </Badge>
-        ) : null} 
-      </HStack>
-      <HStack style={styles.checkboxRow}>
-        <VStack alignItems="center">
-          <View style={{borderWidth: 2, borderColor:'#ccc',borderRadius: 1, marginRight: "8%", transform:[{ scale: 0.7 }]}}>
-            <Checkbox status={isChecked ? 'checked' : 'unchecked'}
-                onPress={() => changeToDoStatus(id, isChecked)}
-                color="blue"
-                uncheckedColor="#f9f9f9">
-            </Checkbox>
-          </View>
-          {isChecked && (
-            <Text style={{ opacity: isChecked ? 1 : 0 }}>Bewohner1</Text>
-          )}
-        </VStack>
-      </HStack>
-      <HStack style={styles.dateRow}>
-        {date ? (
-          <Text style={styles.dateText}>{date}</Text>
-        ) : null}
-        {routine ? (
-          <HStack style={styles.routineContainer}>
-            <RepeatIcon style={styles.icon} />
-            <Text style={styles.routineText}>{routine}</Text>
-          </HStack>
-        ) : null}
-      </HStack>
-    </VStack>
-  </Box>
-;
 
 
 
