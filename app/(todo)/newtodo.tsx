@@ -3,15 +3,11 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { router } from "expo-router";
 import { CalendarDays } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { Dimensions, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import styles from "../(todo)/styles";
 import { addTodo } from "../../lib/appwrite/dbTodo"; //für db
   
-const screenWidth = Dimensions.get("screen").width;
-const screenHeight = Dimensions.get("screen").height;
-const containerWidth = Math.min(screenWidth * 0.95, 400);  // max 400px, sonst 90% Breite
-
 interface ToDoItemProps {
   key: string;
   id: string;
