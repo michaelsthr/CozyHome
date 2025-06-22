@@ -174,8 +174,8 @@ export const fridgeItemsStyles = StyleSheet.create({
   },
 });
 
-// Styles for Fridge Fruits screen
-export const fridgeFruitsStyles = StyleSheet.create({
+// Styles for Fridge Category screens
+export const fridgeCategoryStyles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff", paddingHorizontal: 20 },
   header: { flexDirection: "row", alignItems: "center", marginTop: 10 },
   avatar: { width: 40, height: 40, borderRadius: 20 },
@@ -215,8 +215,24 @@ export const fridgeFruitsStyles = StyleSheet.create({
     fontWeight: "700",
     marginRight: 4,
   },
+  itemCount: {
+    fontSize: 14,
+    fontWeight: "700",
+  },
   fridgeIcon: { width: 50, height: 50 },
   separator: { height: 1, backgroundColor: "#eee" },
+  addButton: {
+    marginTop: 30,
+    backgroundColor: "#000",
+    borderRadius: 25,
+    paddingVertical: 14,
+    alignItems: "center",
+  },
+  addButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
+  },
 });
 
 // Styles for Fridge Add screen

@@ -1,52 +1,28 @@
 import { useRouter } from "expo-router";
 import React from "react";
 import {
-  FlatList,
-  Image,
-  SafeAreaView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    FlatList,
+    Image,
+    SafeAreaView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { fridgeCategoryStyles as styles } from "./styles";
 
 const data = [
   {
     id: "1",
-    name: "Banana",
-    img: require("../../../assets/images/fridge_icons/banana.png"),
-    statusIcon: require("../../../assets/images/fridge_icons/expired.png"),
-    days: 0,
-    count: 4,
-  },
-  {
-    id: "2",
-    name: "Kiwi",
-    img: require("../../../assets/images/fridge_icons/kiwi.png"),
+    name: "Orange Juice",
+    img: require("../../../assets/images/fridge_icons/drinks.png"),
     statusIcon: require("../../../assets/images/fridge_icons/eatable.png"),
-    days: 5,
-    count: 3,
-  },
-  {
-    id: "3",
-    name: "Apples",
-    img: require("../../../assets/images/fridge_icons/apple.png"),
-    statusIcon: require("../../../assets/images/fridge_icons/warning.png"),
-    days: 2,
-    count: 2,
-  },
-  {
-    id: "4",
-    name: "Avocado",
-    img: require("../../../assets/images/fridge_icons/avocado.png"),
-    statusIcon: require("../../../assets/images/fridge_icons/warning.png"),
-    days: 2,
-    count: 2,
+    days: 10,
+    count: 1,
   },
 ];
 
-export default function Fruits() {
+export default function Drinks() {
   const router = useRouter();
 
   return (
@@ -60,12 +36,12 @@ export default function Fruits() {
       </View>
 
       {/* Title */}
-      <Text style={styles.title}>Fruits</Text>
+      <Text style={styles.title}>Drinks</Text>
 
       {/* Search */}
       <View style={styles.searchContainer}>
         <TextInput
-          placeholder="Find fruits"
+          placeholder="Find drinks"
           placeholderTextColor="#999"
           style={styles.searchInput}
         />
@@ -73,7 +49,7 @@ export default function Fruits() {
 
       {/* Section Label */}
       <View style={styles.labelContainer}>
-        <Text style={styles.sectionLabel}>FRUITS</Text>
+        <Text style={styles.sectionLabel}>DRINKS</Text>
         <TouchableOpacity>
           <Text style={styles.filterText}>Filter</Text>
         </TouchableOpacity>
@@ -98,17 +74,19 @@ export default function Fruits() {
             </View>
 
             <View style={styles.countContainer}>
-              <Text style={styles.count}>{item.count}</Text>
-              <Image
-                source={require("../../../assets/images/fridge_icons/fridge.png")}
-                style={styles.fridgeIcon}
-              />
+              <Text style={styles.itemCount}>{item.count}</Text>
             </View>
           </View>
         )}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-        contentContainerStyle={{ paddingBottom: 20 }}
       />
+
+      {/* Add New Item Button */}
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => router.push("/fridge/fridge_add")}
+      >
+        <Text style={styles.addButtonText}>ADD NEW ITEM</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }

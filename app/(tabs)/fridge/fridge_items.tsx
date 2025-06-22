@@ -13,11 +13,11 @@ import { fridgeItemsStyles as styles } from "./styles";
 // add a `route` field matching your screen file names
 const categories = [
   { id: 1, name: "Fruits",    img: require("../../../assets/images/fridge_icons/fruits.png"),    route: "fridge_fruits" },
-  { id: 2, name: "Vegetable", img: require("../../../assets/images/fridge_icons/vegetables.png"), route: "" },
-  { id: 3, name: "Dairy",     img: require("../../../assets/images/fridge_icons/dairy.png") },
-  { id: 4, name: "Bread",     img: require("../../../assets/images/fridge_icons/bread.png") },
-  { id: 5, name: "Drinks",    img: require("../../../assets/images/fridge_icons/drinks.png") },
-  { id: 6, name: "Meat",      img: require("../../../assets/images/fridge_icons/meat-fish.png") },
+  { id: 2, name: "Vegetable", img: require("../../../assets/images/fridge_icons/vegetables.png"), route: "fridge_vegetables" },
+  { id: 3, name: "Dairy",     img: require("../../../assets/images/fridge_icons/dairy.png"), route: "fridge_dairy" },
+  { id: 4, name: "Bread",     img: require("../../../assets/images/fridge_icons/bread.png"), route: "fridge_bread" },
+  { id: 5, name: "Drinks",    img: require("../../../assets/images/fridge_icons/drinks.png"), route: "fridge_drinks" },
+  { id: 6, name: "Meat",      img: require("../../../assets/images/fridge_icons/meat-fish.png"), route: "fridge_meat" },
 ];
 
 export default function FridgeItems() {
@@ -57,7 +57,7 @@ export default function FridgeItems() {
             key={item.id}
             style={styles.itemCard}
             disabled={!item.route}
-            onPress={() => router.push("/fridge/fridge_fruits")}
+            onPress={() => router.push(`/fridge/${item.route}` as any)}
           >
             <Image source={item.img} style={styles.itemImage} />
             <Text style={styles.itemText}>{item.name}</Text>
