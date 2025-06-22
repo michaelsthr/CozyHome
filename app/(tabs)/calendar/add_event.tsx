@@ -1,5 +1,6 @@
 import CozyInput from "@/components/cozy_input";
 import { useUser } from "@/components/UserContext";
+import { createNewEvent, Event } from "@/lib/appwrite/dbKalender";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "expo-router";
 import React, { useState } from "react";
@@ -7,14 +8,17 @@ import { Button, StyleSheet, Switch, Text, TextInput, View } from "react-native"
 
 const AddEvent = () => {
     const { userId } = useUser();
+    const creator: string = userId || "";
+
     const navigation = useNavigation();
     const [name, setName] = useState("");
-    const creator: string = userId || "";
     const [description, setDescription] = useState("");
     const [category, setCategory] = useState("");
+
     const [wholeday, setWholeDay] = useState(false);
-    const [repeat, setRepeat] = useState("");
-    const toggleSwitch = () => setWholeDay((previousState) => !previousState);
+    const [repeat, setRepeat] = useState(false);
+    const toggleWholeDay = () => setWholeDay((previousState) => !previousState);
+    const toggleRepeat = () => setRepeat((previousState) => !previousState);
 
     const [date, setDate] = useState(new Date());
     const [startTime, setStartTime] = useState(new Date());
@@ -57,7 +61,7 @@ const AddEvent = () => {
                     marginVertical: 10,
                 }}
             />
-            <View style={{ }}>
+            <View style={{}}>
                 <View
                     style={{
                         flexDirection: "row",
@@ -98,12 +102,27 @@ const AddEvent = () => {
                         marginVertical: 10,
                         justifyContent: "space-between",
                     }}>
-                    <Text>Whole Day</Text>
+                    <Text>Wholeday</Text>
                     <Switch
                         trackColor={{ false: "#767577", true: "#81b0ff" }}
                         thumbColor={wholeday ? "#f4f3f4" : "#f4f3f4"}
-                        onValueChange={toggleSwitch}
+                        onValueChange={toggleWholeDay}
                         value={wholeday}
+                    />
+                </View>
+                <View
+                    style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginVertical: 10,
+                        justifyContent: "space-between",
+                    }}>
+                    <Text>Repeat</Text>
+                    <Switch
+                        trackColor={{ false: "#767577", true: "#81b0ff" }}
+                        thumbColor={repeat ? "#f4f3f4" : "#f4f3f4"}
+                        onValueChange={toggleRepeat}
+                        value={repeat}
                     />
                 </View>
                 <View
@@ -127,7 +146,17 @@ const AddEvent = () => {
                 <Button
                     title='Add Event'
                     onPress={async () => {
+                        await createNewEvent({
+                            name: name,
+                            date: date.toISOString(),
+                            description: description,
+                            category: category,
+                            creator: creator,
+                            repeat: false,
+                            wholeday: wholeday,
+                        });
                         console.log("Event created");
+                        navigation.goBack()
                     }}
                 />
             </View>
