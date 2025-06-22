@@ -18,7 +18,8 @@ export default function CozySwitch(props: Props) {
         alignContent: "center",
         alignItems: "center",
         gap: 10,
-        width: "100%"
+        width: "100%",
+        justifyContent: "space-between"
       }}>
       <Text style={{ color: "black" }}>{props.title}</Text>
       <Switch

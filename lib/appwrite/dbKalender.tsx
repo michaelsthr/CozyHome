@@ -1,5 +1,5 @@
-import {getDatabases } from './initializer'; //für db
-import { Databases, Models, Query } from 'react-native-appwrite';
+import { Models } from 'react-native-appwrite';
+import { getDatabases } from './initializer'; //für db
 
 
 const databases = getDatabases();
@@ -28,10 +28,10 @@ export const getCategory = async function(): Promise<Models.DocumentList<any>> {
     }
 }
 
-interface Event {
+export interface Event {
   name: string;
   startDate: string;
-  endDate: string;
+  endDate: string
   repeat: boolean;
   wholeday: boolean;
   creator: string;
