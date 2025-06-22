@@ -146,15 +146,33 @@ const AddEvent = () => {
                 <Button
                     title='Add Event'
                     onPress={async () => {
+                        
+                        const startDateTime = new Date(date);
+                        startDateTime.setHours(
+                            startTime.getHours(),
+                            startTime.getMinutes(),
+                            startTime.getSeconds()
+                        );
+                        
+                        const endDateTime = new Date(date);
+                        endDateTime.setHours(
+                            endTime.getHours(),
+                            endTime.getMinutes(),
+                            endTime.getSeconds()
+                        );
+                        
                         await createNewEvent({
-                            name: name,
-                            date: date.toISOString(),
+                            name: name || "new Event",
+                            startDate: startDateTime.toISOString(),
+                            endDate: endDateTime.toISOString(),
                             description: description,
                             category: category,
                             creator: creator,
-                            repeat: false,
+                            repeat: repeat,
                             wholeday: wholeday,
                         });
+                        console.log("startTime: ", startDateTime.toISOString())
+                        console.log("endTime: ", endDateTime.toISOString())
                         console.log("Event created");
                         navigation.goBack()
                     }}
