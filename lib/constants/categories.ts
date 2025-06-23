@@ -4,7 +4,6 @@ export const FridgeCategories = {
   VEGETABLES: 'Gemüse',
   FRUITS: 'Obst',
   DRINKS: 'Getränke',
-  SNACKS: 'Snacks',
   FROZEN: 'Tiefkühlkost',
   OTHER: 'Sonstige'
 } as const;

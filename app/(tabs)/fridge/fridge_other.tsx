@@ -13,30 +13,27 @@ import {
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { fridgeCategoryStyles as styles } from "./styles";
 
-export default function Bread() {
+export default function Other() {
   const router = useRouter();
-  const [breadItems, setBreadItems] = useState<KuehlschrankItem[]>([]);
+  const [otherItems, setOtherItems] = useState<KuehlschrankItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchBreadItems = async () => {
+    const fetchOtherItems = async () => {
       try {
-        const items = await getKuehlschrankInhalt();
-        // Map bread to "Sonstige" (Other) category since bread doesn't have a specific category
-        const breadProducts = items.documents.filter(item => 
+        const items = await getKuehlschrankInhalt();        const otherProducts = items.documents.filter(item => 
           item.kategorie === "Sonstige" || 
-          item.name?.toLowerCase().includes('bread') || 
-          item.name?.toLowerCase().includes('brot')
+          !item.kategorie
         );
-        setBreadItems(breadProducts);
+        setOtherItems(otherProducts);
       } catch (error) {
-        console.error("Error fetching bread items:", error);
+        console.error("Error fetching other items:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchBreadItems();
+    fetchOtherItems();
   }, []);
 
   const getStatusIcon = (mhd?: string) => {
@@ -82,12 +79,12 @@ export default function Bread() {
       </View>
 
       {/* Title */}
-      <Text style={styles.title}>Bread</Text>
+      <Text style={styles.title}>Other Items</Text>
 
       {/* Search */}
       <View style={styles.searchContainer}>
         <TextInput
-          placeholder="Find bread"
+          placeholder="Find other items"
           placeholderTextColor="#999"
           style={styles.searchInput}
         />
@@ -95,17 +92,19 @@ export default function Bread() {
 
       {/* Section Label */}
       <View style={styles.labelContainer}>
-        <Text style={styles.sectionLabel}>BREAD</Text>
+        <Text style={styles.sectionLabel}>OTHER ITEMS</Text>
         <TouchableOpacity>
           <Text style={styles.filterText}>Filter</Text>
         </TouchableOpacity>
-      </View>      {/* List */}
+      </View>
+
+      {/* List */}
       <FlatList
-        data={breadItems}
+        data={otherItems}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => (
           <View style={styles.row}>
-            <Image source={require("../../../assets/images/fridge_icons/bread.png")} style={styles.itemImage} />
+            <Image source={require("../../../assets/images/fridge_icons/fridge.png")} style={styles.itemImage} />
 
             <View style={styles.info}>
               <View style={styles.statusRow}>

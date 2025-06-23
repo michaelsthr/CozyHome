@@ -1,37 +1,37 @@
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
-  FlatList,
-  Image,
-  SafeAreaView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    FlatList,
+    Image,
+    SafeAreaView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { fridgeCategoryStyles as styles } from "./styles";
 
-export default function Meat() {
+export default function Frozen() {
   const router = useRouter();
-  const [meatItems, setMeatItems] = useState<KuehlschrankItem[]>([]);
+  const [frozenItems, setFrozenItems] = useState<KuehlschrankItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchMeatItems = async () => {
+    const fetchFrozenItems = async () => {
       try {
         const items = await getKuehlschrankInhalt();
-        const meatProducts = items.documents.filter(item => item.kategorie === "Fleisch");
-        setMeatItems(meatProducts);
+        const frozenProducts = items.documents.filter(item => item.kategorie === "Tiefkühlkost");
+        setFrozenItems(frozenProducts);
       } catch (error) {
-        console.error("Error fetching meat items:", error);
+        console.error("Error fetching frozen items:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchMeatItems();
+    fetchFrozenItems();
   }, []);
 
   const getStatusIcon = (mhd?: string) => {
@@ -77,12 +77,12 @@ export default function Meat() {
       </View>
 
       {/* Title */}
-      <Text style={styles.title}>Meat & Fish</Text>
+      <Text style={styles.title}>Frozen Foods</Text>
 
       {/* Search */}
       <View style={styles.searchContainer}>
         <TextInput
-          placeholder="Find meat & fish"
+          placeholder="Find frozen foods"
           placeholderTextColor="#999"
           style={styles.searchInput}
         />
@@ -90,17 +90,19 @@ export default function Meat() {
 
       {/* Section Label */}
       <View style={styles.labelContainer}>
-        <Text style={styles.sectionLabel}>MEAT & FISH</Text>
+        <Text style={styles.sectionLabel}>FROZEN FOODS</Text>
         <TouchableOpacity>
           <Text style={styles.filterText}>Filter</Text>
         </TouchableOpacity>
-      </View>      {/* List */}
+      </View>
+
+      {/* List */}
       <FlatList
-        data={meatItems}
+        data={frozenItems}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => (
           <View style={styles.row}>
-            <Image source={require("../../../assets/images/fridge_icons/meat-fish.png")} style={styles.itemImage} />
+            <Image source={require("../../../assets/images/fridge_icons/freezer.png")} style={styles.itemImage} />
 
             <View style={styles.info}>
               <View style={styles.statusRow}>

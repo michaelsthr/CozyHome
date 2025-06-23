@@ -1,14 +1,14 @@
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Image,
-    SafeAreaView,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { fridgeStyles as styles } from "./styles";
@@ -60,9 +60,9 @@ export default function Fridge() {
     } else {
       return { days: diffDays, label: "Days left" };
     }
-  };
-  const getCategoryImage = (category?: string) => {
-    switch (category) {      case "Obst":
+  };  const getCategoryImage = (category?: string) => {
+    switch (category) {
+      case "Obst":
         return require("../../../assets/images/fridge_icons/fruits.png");
       case "Gemüse":
         return require("../../../assets/images/fridge_icons/vegetables.png");
@@ -73,7 +73,9 @@ export default function Fridge() {
       case "Getränke":
         return require("../../../assets/images/fridge_icons/drinks.png");
       case "Tiefkühlkost":
-        return require("../../../assets/images/fridge_icons/bread.png"); // Using bread as placeholder for frozen
+        return require("../../../assets/images/fridge_icons/freezer.png");
+      case "Sonstige":
+        return require("../../../assets/images/fridge_icons/fridge.png");
       default:
         return require("../../../assets/images/placeholder_icon.png");
     }

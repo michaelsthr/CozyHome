@@ -30,12 +30,10 @@ export default function FridgeStack() {
       <Stack.Screen 
         name="fridge_dairy" 
         options={{ headerTitle: "Dairy" }} 
-      />
-
-      {/* screen for Meat detail */}
+      />      {/* screen for Meat & Fish detail */}
       <Stack.Screen 
         name="fridge_meat" 
-        options={{ headerTitle: "Meat" }} 
+        options={{ headerTitle: "Meat & Fish" }} 
       />
 
       {/* screen for Drinks detail */}
@@ -44,10 +42,16 @@ export default function FridgeStack() {
         options={{ headerTitle: "Drinks" }} 
       />
 
-      {/* screen for Bread detail */}
+      {/* screen for Frozen Foods detail */}
       <Stack.Screen 
-        name="fridge_bread" 
-        options={{ headerTitle: "Bread" }} 
+        name="fridge_frozen" 
+        options={{ headerTitle: "Frozen Foods" }} 
+      />
+
+      {/* screen for Other Items detail */}
+      <Stack.Screen 
+        name="fridge_other" 
+        options={{ headerTitle: "Other Items" }} 
       />
 
       {/* screen for adding new item */}
