@@ -215,5 +215,32 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     marginTop: 10
   },
+  badgeErrorMessage: {
+    backgroundColor:"rgba(255,0,0,0.1)", 
+    borderColor:"red", 
+    borderWidth: 1, 
+    width: containerWidth, 
+    borderRadius:6 
+  },
+  badgeErrorMessageText:{
+    color:"red", 
+    justifyContent:"center", 
+    alignItems:"flex-start", 
+    paddingLeft:10
+  },
+  badgeSuccessMessage: {
+    backgroundColor:"rgba(0,128,0,0.1)", 
+    borderColor:"green", 
+    borderWidth: 1, 
+    width: containerWidth, 
+    borderRadius:6 
+  },
+  badgeSuccessMessageText: {
+    color:"green", 
+    justifyContent:"center", 
+    alignItems:"flex-start", 
+    paddingLeft:10,
+    textTransform:"none"
+  }
 });
 export default styles;

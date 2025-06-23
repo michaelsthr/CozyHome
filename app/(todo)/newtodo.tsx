@@ -1,11 +1,11 @@
-import { Box, Button, HStack, VStack } from "@gluestack-ui/themed";
+import { Badge, BadgeText, Box, Button, HStack, VStack } from "@gluestack-ui/themed";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { router } from "expo-router";
 import { CalendarDays } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import { Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
-import styles from "../(todo)/styles";
+import styles, { containerWidth } from "../(todo)/styles";
 import { addTodo } from "../../lib/appwrite/dbTodo"; //für db
   
 interface ToDoItemProps {
@@ -241,6 +241,7 @@ const DatePickerField = ({ date, setDate }) => {
   
     const showDatepicker = () => setShow(true);
     const cancel = () => {console.log("Abbrechen"); router.back();};
+    const [errorMessage, setErrorMessage] = useState("");
     const saveNewTodo = (
       tile: string,
       responsible: string, 
@@ -248,9 +249,10 @@ const DatePickerField = ({ date, setDate }) => {
       regularity: string
     ) => {
       if (!tile) {
-        console.log("Please fill in the name of the ToDo"); // ToDo: Implement error handling
+        setErrorMessage("Please fill in the title")
         return;
       }
+      setErrorMessage("");
 
       const newTodo = {
         name: tile,
@@ -259,8 +261,9 @@ const DatePickerField = ({ date, setDate }) => {
         regularity: (regularity ? regularity : null),
         done: false,
       }
-
+      const [successMessage, setSuccessMessage]  = useState("");
       addTodo(newTodo)
+      setSuccessMessage("New To-Do added")
       console.log("Speichern");
       router.back();
   
@@ -269,6 +272,11 @@ const DatePickerField = ({ date, setDate }) => {
     return (
       <SafeAreaView style={styles.container_box}>
         <Text style={styles.heading}>Add new ToDo</Text>
+        {errorMessage !== "" && (
+          <View style={{position:"absolute", alignItems:"center", zIndex: 2000, marginTop:"20%", width: containerWidth}}>
+          <Badge style={styles.badgeErrorMessage}><BadgeText style={styles.badgeErrorMessageText}>{errorMessage}</BadgeText></Badge>
+          </View>
+        )}
         <Box style={styles.box}>
           <VStack>
             <Text> Title </Text>

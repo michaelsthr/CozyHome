@@ -1,11 +1,9 @@
 import { config } from "@gluestack-ui/config";
-import { Badge, Box, Button, GluestackUIProvider, HStack, RepeatIcon, TrashIcon, VStack } from "@gluestack-ui/themed";
+import { Badge, BadgeText, Box, Button, GluestackUIProvider, HStack, RepeatIcon, TrashIcon, VStack } from "@gluestack-ui/themed";
 import { router, useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Dimensions, Modal, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import styles from "../(todo)/styles";
-const screenWidth = Dimensions.get("screen").width;
-const containerWidth = Math.min(screenWidth * 0.95, 400);
+import { Modal, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import styles, { containerWidth } from "../(todo)/styles";
 
 const ToDoItem = ({ title, date, responsible, isChecked, routine, onTrashPress }) => (
   <Box style={styles.todoItem}>
@@ -43,11 +41,17 @@ export default function Edit() {
   const handleDeletePress = () => {
     setModalVisible(true);
   };
+  const [successMessage, setSuccessMessage] = useState("");
 
   return (
     <GluestackUIProvider config={config}>
       <SafeAreaView style={styles.container}>
         <Text style={styles.heading}>Edit ToDo</Text>
+        {successMessage !== "" && (
+          <View style={{position:"absolute", alignItems:"center", zIndex: 2000, marginTop:"20%", width: containerWidth, alignSelf:"center"}}>
+          <Badge style={styles.badgeSuccessMessage}><BadgeText style={styles.badgeSuccessMessageText}>{successMessage}</BadgeText></Badge>
+          </View>
+        )}
         <View style={{ flex: 1, marginTop:"10%"}}>
           <ScrollView>
             <ToDoItem
@@ -68,8 +72,6 @@ export default function Edit() {
             />
           </ScrollView>
         </View>
-
-        {/* Popup Modal */}
         <Modal
           animationType="fade"
           transparent={true}
@@ -85,9 +87,8 @@ export default function Edit() {
                   <Text style={styles.buttonText}>Cancel</Text>
                 </Button>
                 <Button style={[styles.buttons,{backgroundColor: "blue"}]} onPress={() => {
-                  console.log("ToDo gelöscht");
-                  setModalVisible(false);
-                }}>
+                  {setModalVisible(false); setSuccessMessage("To-Do deleted"); setTimeout(() => setSuccessMessage(""), 9000);}}
+                }>
                   <Text style={styles.buttonText}>Delete</Text>
                 </Button>
               </HStack>
