@@ -17,6 +17,7 @@ export default function Meat() {
   const router = useRouter();
   const [meatItems, setMeatItems] = useState<KuehlschrankItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchMeatItems = async () => {
@@ -33,6 +34,10 @@ export default function Meat() {
 
     fetchMeatItems();
   }, []);
+
+  const filteredItems = meatItems.filter(item =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const getStatusIcon = (mhd?: string) => {
     if (!mhd) return require("../../../assets/images/fridge_icons/eatable.png");
@@ -61,11 +66,13 @@ export default function Meat() {
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#8B5CF6" />
+          <Text style={styles.loadingText}>Loading meat & fish...</Text>
+        </View>
       </SafeAreaView>
     );
   }
-
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -76,15 +83,19 @@ export default function Meat() {
         />
       </View>
 
-      {/* Title */}
-      <Text style={styles.title}>Meat & Fish</Text>
+      {/* Title Section */}
+      <View style={styles.titleSection}>
+        <Text style={styles.title}>Meat & Fish</Text>
+      </View>
 
       {/* Search */}
       <View style={styles.searchContainer}>
         <TextInput
-          placeholder="Find meat & fish"
-          placeholderTextColor="#999"
+          placeholder="Find meat & fish items..."
+          placeholderTextColor="#94a3b8"
           style={styles.searchInput}
+          value={searchTerm}
+          onChangeText={setSearchTerm}
         />
       </View>
 
@@ -94,32 +105,50 @@ export default function Meat() {
         <TouchableOpacity>
           <Text style={styles.filterText}>Filter</Text>
         </TouchableOpacity>
-      </View>      {/* List */}
-      <FlatList
-        data={meatItems}
-        keyExtractor={(item) => item.$id}
-        renderItem={({ item }) => (
-          <View style={styles.row}>
-            <Image source={require("../../../assets/images/fridge_icons/meat-fish.png")} style={styles.itemImage} />
+      </View>
 
-            <View style={styles.info}>
-              <View style={styles.statusRow}>
-                <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
-                <Text style={styles.statusText}>
-                  {getDaysLeft(item.mhd)} {getDaysLeft(item.mhd) === 1 ? "Day" : "Days"} Remaining
-                </Text>
+      {/* Content */}
+      {filteredItems.length === 0 ? (
+        <View style={styles.emptyState}>
+          <Image
+            source={require("../../../assets/images/fridge_icons/meat-fish.png")}
+            style={styles.emptyIcon}
+          />
+          <Text style={styles.emptyText}>No meat & fish items</Text>
+          <Text style={styles.emptySubtext}>
+            Add some meat or fish items to keep track of freshness
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={filteredItems}
+          keyExtractor={(item) => item.$id}
+          renderItem={({ item }) => (
+            <View style={styles.row}>
+              <Image 
+                source={require("../../../assets/images/fridge_icons/meat-fish.png")} 
+                style={styles.itemImage} 
+              />
+
+              <View style={styles.info}>
+                <View style={styles.statusRow}>
+                  <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
+                  <Text style={styles.statusText}>
+                    {getDaysLeft(item.mhd)} {getDaysLeft(item.mhd) === 1 ? "Day" : "Days"} Remaining
+                  </Text>
+                </View>
+                <Text style={styles.itemName}>{item.name}</Text>
               </View>
-              <Text style={styles.itemName}>{item.name}</Text>
-            </View>
 
-            <View style={styles.countContainer}>
-              <Text style={styles.itemCount}>{item.anzahl}</Text>
+              <View style={styles.countContainer}>
+                <Text style={styles.itemCount}>{item.anzahl}</Text>
+              </View>
             </View>
-          </View>
-        )}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-        contentContainerStyle={{ paddingBottom: 20 }}
-      />
+          )}
+          contentContainerStyle={styles.itemsList}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
 
       {/* Add New Item Button */}
       <TouchableOpacity

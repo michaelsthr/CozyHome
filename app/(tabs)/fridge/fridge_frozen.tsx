@@ -2,9 +2,9 @@ import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
     ActivityIndicator,
-    FlatList,
     Image,
     SafeAreaView,
+    ScrollView,
     Text,
     TextInput,
     TouchableOpacity,
@@ -17,6 +17,7 @@ export default function Frozen() {
   const router = useRouter();
   const [frozenItems, setFrozenItems] = useState<KuehlschrankItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchFrozenItems = async () => {
@@ -33,6 +34,10 @@ export default function Frozen() {
 
     fetchFrozenItems();
   }, []);
+
+  const filteredItems = frozenItems.filter(item =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const getStatusIcon = (mhd?: string) => {
     if (!mhd) return require("../../../assets/images/fridge_icons/eatable.png");
@@ -61,75 +66,93 @@ export default function Frozen() {
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#8B5CF6" />
+          <Text style={styles.loadingText}>Loading frozen foods...</Text>
+        </View>
       </SafeAreaView>
     );
   }
-
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Image
-          source={require("../../../assets/images/fridge_icons/profile-picture.png")}
-          style={styles.avatar}
-        />
-      </View>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContainer}
+      >
+        {/* Header */}
+        <View style={styles.header}>
+          <Image
+            source={require("../../../assets/images/fridge_icons/profile-picture.png")}
+            style={styles.avatar}
+          />
+        </View>
 
-      {/* Title */}
-      <Text style={styles.title}>Frozen Foods</Text>
+        {/* Title Section */}
+        <View style={styles.titleSection}>
+          <Text style={styles.title}>Frozen Foods</Text>
+        </View>
 
-      {/* Search */}
-      <View style={styles.searchContainer}>
-        <TextInput
-          placeholder="Find frozen foods"
-          placeholderTextColor="#999"
-          style={styles.searchInput}
-        />
-      </View>
+        {/* Search */}
+        <View style={styles.searchContainer}>
+          <TextInput
+            placeholder="Find frozen foods..."
+            placeholderTextColor="#9ca3af"
+            style={styles.searchInput}
+            value={searchTerm}
+            onChangeText={setSearchTerm}
+          />
+        </View>
 
-      {/* Section Label */}
-      <View style={styles.labelContainer}>
-        <Text style={styles.sectionLabel}>FROZEN FOODS</Text>
-        <TouchableOpacity>
-          <Text style={styles.filterText}>Filter</Text>
-        </TouchableOpacity>
-      </View>
+        {/* Section Label */}
+        <View style={styles.labelContainer}>
+          <Text style={styles.sectionLabel}>Your Frozen Items</Text>
+          <TouchableOpacity>
+            <Text style={styles.filterText}>Filter</Text>
+          </TouchableOpacity>
+        </View>
 
-      {/* List */}
-      <FlatList
-        data={frozenItems}
-        keyExtractor={(item) => item.$id}
-        renderItem={({ item }) => (
-          <View style={styles.row}>
-            <Image source={require("../../../assets/images/fridge_icons/freezer.png")} style={styles.itemImage} />
-
-            <View style={styles.info}>
-              <View style={styles.statusRow}>
-                <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
-                <Text style={styles.statusText}>
-                  {getDaysLeft(item.mhd)} {getDaysLeft(item.mhd) === 1 ? "Day" : "Days"} Remaining
-                </Text>
+        {/* List */}
+        {filteredItems.length === 0 ? (
+          <View style={styles.emptyState}>
+            <Image
+              source={require("../../../assets/images/fridge_icons/freezer.png")}
+              style={styles.emptyIcon}
+            />
+            <Text style={styles.emptyText}>No frozen foods</Text>
+            <Text style={styles.emptySubtext}>
+              Add some frozen items to keep your freezer stocked
+            </Text>
+          </View>
+        ) : (
+          <View style={styles.itemsList}>
+            {filteredItems.map((item) => (
+              <View key={item.$id} style={styles.row}>
+                <Image source={require("../../../assets/images/fridge_icons/freezer.png")} style={styles.itemImage} />
+                <View style={styles.info}>
+                  <View style={styles.statusRow}>
+                    <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
+                    <Text style={styles.statusText}>
+                      {getDaysLeft(item.mhd)} {getDaysLeft(item.mhd) === 1 ? "Day" : "Days"} Remaining
+                    </Text>
+                  </View>
+                  <Text style={styles.itemName}>{item.name}</Text>
+                </View>
+                <View style={styles.countContainer}>
+                  <Text style={styles.itemCount}>{item.anzahl}</Text>
+                </View>
               </View>
-              <Text style={styles.itemName}>{item.name}</Text>
-            </View>
-
-            <View style={styles.countContainer}>
-              <Text style={styles.itemCount}>{item.anzahl}</Text>
-            </View>
+            ))}
           </View>
         )}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-        contentContainerStyle={{ paddingBottom: 20 }}
-      />
 
-      {/* Add New Item Button */}
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => router.push("/(tabs)/fridge/fridge_add")}
-      >
-        <Text style={styles.addButtonText}>ADD NEW ITEM</Text>
-      </TouchableOpacity>
+        {/* Add New Item Button */}
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => router.push("/(tabs)/fridge/fridge_add")}
+        >
+          <Text style={styles.addButtonText}>ADD FROZEN ITEM</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 }

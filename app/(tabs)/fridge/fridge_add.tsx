@@ -1,13 +1,15 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-    Alert,
-    Image,
-    SafeAreaView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Alert,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { FridgeCategoryType } from "../../../lib/constants/categories";
 import { setKuehlschrankInhalt } from "./fridgeBack/components/dbKuehlschrank";
@@ -52,65 +54,105 @@ export default function AddItem() {
       setIsSubmitting(false);
     }
   };
-
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>        <Image
-          source={require("../../../assets/images/fridge_icons/profile-picture.png")}
-          style={styles.avatar}
-        />
-      </View>
-
-      {/* Title */}
-      <Text style={styles.title}>Add</Text>
-
-      {/* Form Fields */}
-      <TextInput
-        placeholder="Product name"
-        placeholderTextColor="#999"
-        style={styles.input}
-        value={name}
-        onChangeText={setName}
-      />
-      <TextInput
-        placeholder="Weight/Volume"
-        placeholderTextColor="#999"
-        style={styles.input}
-        value={weight}
-        onChangeText={setWeight}
-      />
-      <TextInput
-        placeholder="Quantity"
-        placeholderTextColor="#999"
-        style={styles.input}
-        value={quantity}
-        onChangeText={setQuantity}
-      />      <TextInput
-        placeholder="Category"
-        placeholderTextColor="#999"
-        style={styles.input}
-        value={category}
-        onChangeText={setCategory}
-      />
-      <TextInput
-        placeholder="Expiration Date (YYYY-MM-DD)"
-        placeholderTextColor="#999"
-        style={styles.input}
-        value={expDate}
-        onChangeText={setExpDate}
-      />
-
-      {/* Add Button */}
-      <TouchableOpacity
-        style={[styles.addButton, isSubmitting && { opacity: 0.5 }]}
-        onPress={handleSave}
-        disabled={isSubmitting}
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContainer}
       >
-        <Text style={styles.addButtonText}>
-          {isSubmitting ? "ADDING..." : "ADD"}
-        </Text>
-      </TouchableOpacity>
+        {/* Header */}
+        <View style={styles.header}>
+          <Image
+            source={require("../../../assets/images/fridge_icons/profile-picture.png")}
+            style={styles.avatar}
+          />
+        </View>
+
+        {/* Title Section */}
+        <View style={styles.titleSection}>
+          <Text style={styles.title}>Add New Item</Text>
+        </View>
+
+        {/* Form Container */}
+        <View style={styles.formContainer}>
+          {/* Product Name */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Product Name *</Text>
+            <TextInput
+              placeholder="Enter product name..."
+              placeholderTextColor="#9ca3af"
+              style={styles.input}
+              value={name}
+              onChangeText={setName}
+            />
+          </View>
+
+          {/* Weight/Volume */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Weight/Volume</Text>
+            <TextInput
+              placeholder="e.g., 500g, 1L..."
+              placeholderTextColor="#9ca3af"
+              style={styles.input}
+              value={weight}
+              onChangeText={setWeight}
+            />
+          </View>
+
+          {/* Quantity */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Quantity *</Text>
+            <TextInput
+              placeholder="Enter quantity..."
+              placeholderTextColor="#9ca3af"
+              style={styles.input}
+              value={quantity}
+              onChangeText={setQuantity}
+              keyboardType="numeric"
+            />
+          </View>
+
+          {/* Category */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Category</Text>
+            <TextInput
+              placeholder="e.g., Obst, Gemüse, Milchprodukte..."
+              placeholderTextColor="#9ca3af"
+              style={styles.input}
+              value={category}
+              onChangeText={setCategory}
+            />
+          </View>
+
+          {/* Expiration Date */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Expiration Date</Text>
+            <TextInput
+              placeholder="YYYY-MM-DD"
+              placeholderTextColor="#9ca3af"
+              style={styles.input}
+              value={expDate}
+              onChangeText={setExpDate}
+            />
+          </View>
+        </View>
+
+        {/* Add Button */}
+        <TouchableOpacity
+          style={[styles.addButton, isSubmitting && { opacity: 0.5 }]}
+          onPress={handleSave}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <View style={styles.buttonContent}>
+              <ActivityIndicator size="small" color="#ffffff" style={{ marginRight: 10 }} />
+              <Text style={styles.addButtonText}>ADDING...</Text>
+            </View>
+          ) : (
+            <Text style={styles.addButtonText}>ADD TO FRIDGE</Text>
+          )}
+        </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 }

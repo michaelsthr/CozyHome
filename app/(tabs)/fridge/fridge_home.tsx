@@ -88,69 +88,109 @@ export default function Fridge() {
       </SafeAreaView>
     );
   }
-
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>        <Image
-          source={require("../../../assets/images/fridge_icons/profile-picture.png")}
-          style={styles.avatar}
-        />
-        <Image
-          source={require("../../../assets/images/fridge_icons/logo-2.png")}
-          style={styles.logo}
-        />
-      </View>
-
-      {/* Greeting */}
-      <Text style={styles.greeting}>Hey!</Text>
-      <Text style={styles.username}>Max Mustermann</Text>
-
-      {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <TextInput
-          placeholder="Search"
-          placeholderTextColor="#999"
-          style={styles.searchInput}
-        />
-      </View>
-
-      {/* Fridge Title */}
-      <Text style={styles.title}>FRIDGE</Text>
-      <Text style={styles.subtitle}>Found {fridgeItems.length} new items</Text>
-
-      {/* Items Carousel */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.itemsList}
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContainer}
       >
-        {fridgeItems.map((item) => {
-          const { days, label } = getDaysLeft(item.mhd);
-          return (
-            <View key={item.$id} style={styles.itemCard}>
-              <Image source={getCategoryImage(item.kategorie)} style={styles.itemImage} />
-              <View style={styles.statusRow}>
-                <Image
-                  source={getStatusIcon(item.mhd)}
-                  style={styles.statusIcon}
-                />
-                <Text style={styles.statusText}>
-                  {days} {label}
-                </Text>
-              </View>
+        {/* Header */}
+        <View style={styles.header}>
+          <Image
+            source={require("../../../assets/images/fridge_icons/profile-picture.png")}
+            style={styles.avatar}
+          />
+          <Image
+            source={require("../../../assets/images/fridge_icons/logo-2.png")}
+            style={styles.logo}
+          />
+        </View>
+
+        {/* Greeting Section */}
+        <View style={styles.greetingSection}>
+          <Text style={styles.greeting}>Good morning!</Text>
+          <Text style={styles.username}>Max Mustermann</Text>
+        </View>
+
+        {/* Search Bar */}
+        <View style={styles.searchContainer}>
+          <TextInput
+            placeholder="Search items in your fridge..."
+            placeholderTextColor="#9ca3af"
+            style={styles.searchInput}
+          />
+        </View>
+
+        {/* Fridge Section */}
+        <View style={styles.fridgeSection}>
+          <View style={styles.titleContainer}>
+            <Image
+              source={require("../../../assets/images/fridge_icons/fridge.png")}
+              style={styles.fridgeIcon}
+            />
+            <Text style={styles.title}>Your Fridge</Text>
+          </View>
+          <Text style={styles.subtitle}>
+            {fridgeItems.length > 0 
+              ? `${fridgeItems.length} items in your fridge` 
+              : "Your fridge is empty"}
+          </Text>
+
+          {/* Items Carousel */}
+          {fridgeItems.length > 0 ? (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.itemsCarousel}
+            >
+              {fridgeItems.map((item) => {
+                const { days, label } = getDaysLeft(item.mhd);
+                return (
+                  <View key={item.$id} style={styles.itemCard}>
+                    <Image 
+                      source={getCategoryImage(item.kategorie)} 
+                      style={styles.itemImage} 
+                    />
+                    <View style={styles.statusRow}>
+                      <View style={styles.statusIconContainer}>
+                        <Image
+                          source={getStatusIcon(item.mhd)}
+                          style={styles.statusIcon}
+                        />
+                        <Text style={styles.statusText}>
+                          {days} {label}
+                        </Text>
+                      </View>
+                      <Text style={styles.itemName} numberOfLines={2}>
+                        {item.name}
+                      </Text>
+                    </View>
+                  </View>
+                );
+              })}
+            </ScrollView>
+          ) : (
+            <View style={styles.emptyState}>
+              <Image
+                source={require("../../../assets/images/fridge_icons/fridge.png")}
+                style={styles.emptyIcon}
+              />
+              <Text style={styles.emptyText}>Your fridge is empty!</Text>
+              <Text style={styles.emptySubtext}>
+                Start adding items to keep track of{'\n'}your food and expiration dates
+              </Text>
             </View>
-          );
-        })}
-      </ScrollView>
+          )}
+        </View>
 
-      {/* Check Fridge Button */}
-      <TouchableOpacity
-        style={styles.checkButton}
-        onPress={() => router.push("/(tabs)/fridge/fridge_items")}
-      >
-        <Text style={styles.checkButtonText}>CHECK FRIDGE</Text>
-      </TouchableOpacity>
+        {/* Check Fridge Button */}
+        <TouchableOpacity
+          style={styles.checkButton}
+          onPress={() => router.push("/(tabs)/fridge/fridge_items")}
+        >
+          <Text style={styles.checkButtonText}>EXPLORE CATEGORIES</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 }

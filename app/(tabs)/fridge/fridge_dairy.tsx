@@ -1,14 +1,14 @@
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    FlatList,
-    Image,
-    SafeAreaView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { fridgeCategoryStyles as styles } from "./styles";
@@ -65,69 +65,71 @@ export default function Dairy() {
       </SafeAreaView>
     );
   }
-
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Image
-          source={require("../../../assets/images/fridge_icons/profile-picture.png")}
-          style={styles.avatar}
-        />
-      </View>
-
-      {/* Title */}
-      <Text style={styles.title}>Dairy</Text>
-
-      {/* Search */}
-      <View style={styles.searchContainer}>
-        <TextInput
-          placeholder="Find dairy products"
-          placeholderTextColor="#999"
-          style={styles.searchInput}
-        />
-      </View>
-
-      {/* Section Label */}
-      <View style={styles.labelContainer}>
-        <Text style={styles.sectionLabel}>DAIRY</Text>
-        <TouchableOpacity>
-          <Text style={styles.filterText}>Filter</Text>
-        </TouchableOpacity>
-      </View>      {/* List */}
-      <FlatList
-        data={dairyItems}
-        keyExtractor={(item) => item.$id}
-        renderItem={({ item }) => (
-          <View style={styles.row}>
-            <Image source={require("../../../assets/images/fridge_icons/dairy.png")} style={styles.itemImage} />
-
-            <View style={styles.info}>
-              <View style={styles.statusRow}>
-                <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
-                <Text style={styles.statusText}>
-                  {getDaysLeft(item.mhd)} {getDaysLeft(item.mhd) === 1 ? "Day" : "Days"} Remaining
-                </Text>
-              </View>
-              <Text style={styles.itemName}>{item.name}</Text>
-            </View>
-
-            <View style={styles.countContainer}>
-              <Text style={styles.itemCount}>{item.anzahl}</Text>
-            </View>
-          </View>
-        )}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-        contentContainerStyle={{ paddingBottom: 20 }}
-      />
-
-      {/* Add New Item Button */}
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => router.push("/(tabs)/fridge/fridge_add")}
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContainer}
       >
-        <Text style={styles.addButtonText}>ADD NEW ITEM</Text>
-      </TouchableOpacity>
+        {/* Header */}
+        <View style={styles.header}>
+          <Image
+            source={require("../../../assets/images/fridge_icons/profile-picture.png")}
+            style={styles.avatar}
+          />
+        </View>
+
+        {/* Title Section */}
+        <View style={styles.titleSection}>
+          <Text style={styles.title}>Dairy Products</Text>
+        </View>
+
+        {/* Search */}
+        <View style={styles.searchContainer}>
+          <TextInput
+            placeholder="Find dairy products..."
+            placeholderTextColor="#9ca3af"
+            style={styles.searchInput}
+          />
+        </View>
+
+        {/* Section Label */}
+        <View style={styles.labelContainer}>
+          <Text style={styles.sectionLabel}>Your Dairy</Text>
+          <TouchableOpacity>
+            <Text style={styles.filterText}>Filter</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* List */}
+        <View style={styles.itemsList}>
+          {dairyItems.map((item) => (
+            <View key={item.$id} style={styles.row}>
+              <Image source={require("../../../assets/images/fridge_icons/dairy.png")} style={styles.itemImage} />
+              <View style={styles.info}>
+                <View style={styles.statusRow}>
+                  <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
+                  <Text style={styles.statusText}>
+                    {getDaysLeft(item.mhd)} {getDaysLeft(item.mhd) === 1 ? "Day" : "Days"} Remaining
+                  </Text>
+                </View>
+                <Text style={styles.itemName}>{item.name}</Text>
+              </View>
+              <View style={styles.countContainer}>
+                <Text style={styles.itemCount}>{item.anzahl}</Text>
+              </View>
+            </View>
+          ))}
+        </View>
+
+        {/* Add New Item Button */}
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => router.push("/(tabs)/fridge/fridge_add")}
+        >
+          <Text style={styles.addButtonText}>ADD DAIRY PRODUCT</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 }

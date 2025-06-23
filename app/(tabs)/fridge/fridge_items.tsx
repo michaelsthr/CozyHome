@@ -3,6 +3,7 @@ import React from "react";
 import {
   Image,
   SafeAreaView,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -23,55 +24,65 @@ const categories = [
 
 export default function FridgeItems() {
   const router = useRouter();
-
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>        <Image
-          source={require("../../../assets/images/fridge_icons/profile-picture.png")}
-          style={styles.avatar}/>
-      </View>
-      <Text style={styles.title}>Fridge</Text>
-
-      {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <TextInput
-          placeholder="Find products"
-          placeholderTextColor="#999"
-          style={styles.searchInput}
-        />
-      </View>
-
-      {/* Items Label */}
-      <View style={styles.labelContainer}>
-        <Text style={styles.itemsLabel}>ITEMS</Text>
-        <TouchableOpacity>
-          <Text style={styles.filterText}>Filter</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Categories Grid */}
-      <View style={styles.itemsContainer}>
-        {categories.map((item) => (
-          <TouchableOpacity
-            key={item.id}
-            style={styles.itemCard}
-            disabled={!item.route}
-            onPress={() => router.push(item.route as any)}
-          >
-            <Image source={item.img} style={styles.itemImage} />
-            <Text style={styles.itemText}>{item.name}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      {/* Add New Item Button */}
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => router.push("/(tabs)/fridge/fridge_add")}
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContainer}
       >
-        <Text style={styles.addButtonText}>ADD NEW ITEM</Text>
-      </TouchableOpacity>
+        {/* Header */}
+        <View style={styles.header}>
+          <Image
+            source={require("../../../assets/images/fridge_icons/profile-picture.png")}
+            style={styles.avatar}
+          />
+        </View>
+
+        {/* Title Section */}
+        <View style={styles.titleSection}>
+          <Text style={styles.title}>Categories</Text>
+        </View>
+
+        {/* Search Bar */}
+        <View style={styles.searchContainer}>
+          <TextInput
+            placeholder="Find products by category..."
+            placeholderTextColor="#9ca3af"
+            style={styles.searchInput}
+          />
+        </View>
+
+        {/* Items Label */}
+        <View style={styles.labelContainer}>
+          <Text style={styles.itemsLabel}>Food Categories</Text>
+          <TouchableOpacity>
+            <Text style={styles.filterText}>Filter</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Categories Grid */}
+        <View style={styles.itemsContainer}>
+          {categories.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              style={styles.itemCard}
+              disabled={!item.route}
+              onPress={() => router.push(item.route as any)}
+            >
+              <Image source={item.img} style={styles.itemImage} />
+              <Text style={styles.itemText}>{item.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* Add New Item Button */}
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => router.push("/(tabs)/fridge/fridge_add")}
+        >
+          <Text style={styles.addButtonText}>ADD NEW ITEM</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 }
