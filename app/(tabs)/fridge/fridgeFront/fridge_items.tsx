@@ -8,16 +8,16 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { fridgeItemsStyles as styles } from "./styles";
+import { fridgeItemsStyles as styles } from "../styles";
 
 // add a `route` field matching your screen file names
 const categories = [
-  { id: 1, name: "Fruits",    img: require("../../../assets/images/fridge_icons/fruits.png"),    route: "fridge_fruits" },
-  { id: 2, name: "Vegetable", img: require("../../../assets/images/fridge_icons/vegetables.png"), route: "fridge_vegetables" },
-  { id: 3, name: "Dairy",     img: require("../../../assets/images/fridge_icons/dairy.png"), route: "fridge_dairy" },
-  { id: 4, name: "Bread",     img: require("../../../assets/images/fridge_icons/bread.png"), route: "fridge_bread" },
-  { id: 5, name: "Drinks",    img: require("../../../assets/images/fridge_icons/drinks.png"), route: "fridge_drinks" },
-  { id: 6, name: "Meat",      img: require("../../../assets/images/fridge_icons/meat-fish.png"), route: "fridge_meat" },
+  { id: 1, name: "Fruits",    img: require("../../../../assets/images/fridge_icons/fruits.png"),    route: "fridgeFront/fridge_fruits" },
+  { id: 2, name: "Vegetable", img: require("../../../../assets/images/fridge_icons/vegetables.png"), route: "fridgeFront/fridge_vegetables" },
+  { id: 3, name: "Dairy",     img: require("../../../../assets/images/fridge_icons/dairy.png"), route: "fridgeFront/fridge_dairy" },
+  { id: 4, name: "Bread",     img: require("../../../../assets/images/fridge_icons/bread.png"), route: "fridgeFront/fridge_bread" },
+  { id: 5, name: "Drinks",    img: require("../../../../assets/images/fridge_icons/drinks.png"), route: "fridgeFront/fridge_drinks" },
+  { id: 6, name: "Meat",      img: require("../../../../assets/images/fridge_icons/meat-fish.png"), route: "fridgeFront/fridge_meat" },
 ];
 
 export default function FridgeItems() {
@@ -28,7 +28,7 @@ export default function FridgeItems() {
       {/* Header */}
       <View style={styles.header}>
         <Image
-          source={require("../../../assets/images/fridge_icons/profile-picture.png")}
+          source={require("../../../../assets/images/fridge_icons/profile-picture.png")}
           style={styles.avatar}/>
       </View>
       <Text style={styles.title}>Fridge</Text>
@@ -68,7 +68,7 @@ export default function FridgeItems() {
       {/* Add New Item Button */}
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => router.push("/fridge/fridge_add")}
+        onPress={() => router.push("/fridge/fridgeFront/fridge_add")}
       >
         <Text style={styles.addButtonText}>ADD NEW ITEM</Text>
       </TouchableOpacity>

@@ -10,8 +10,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
-import { fridgeStyles as styles } from "./styles";
+import { getKuehlschrankInhalt, KuehlschrankItem } from "../fridgeBack/components/dbKuehlschrank";
+import { fridgeStyles as styles } from "../styles";
 
 export default function Fridge() {
   const router = useRouter();
@@ -34,18 +34,18 @@ export default function Fridge() {
   }, []);
 
   const getStatusIcon = (mhd?: string) => {
-    if (!mhd) return require("../../../assets/images/fridge_icons/eatable.png");
+    if (!mhd) return require("../../../../assets/images/fridge_icons/eatable.png");
     const today = new Date();
     const expDate = new Date(mhd);
     const diffTime = expDate.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0) {
-      return require("../../../assets/images/fridge_icons/expired.png");
+      return require("../../../../assets/images/fridge_icons/expired.png");
     } else if (diffDays <= 2) {
-      return require("../../../assets/images/fridge_icons/warning.png");
+      return require("../../../../assets/images/fridge_icons/warning.png");
     } else {
-      return require("../../../assets/images/fridge_icons/eatable.png");
+      return require("../../../../assets/images/fridge_icons/eatable.png");
     }
   };
 
@@ -66,15 +66,15 @@ export default function Fridge() {
   const getCategoryImage = (category?: string) => {
     switch (category) {
       case "Obst":
-        return require("../../../assets/images/fridge_icons/fruits.png");
+        return require("../../../../assets/images/fridge_icons/fruits.png");
       case "Gemüse":
-        return require("../../../assets/images/fridge_icons/vegetables.png");
+        return require("../../../../assets/images/fridge_icons/vegetables.png");
       case "Milchprodukte":
-        return require("../../../assets/images/fridge_icons/dairy.png");
+        return require("../../../../assets/images/fridge_icons/dairy.png");
       case "Fleisch & Fisch":
-        return require("../../../assets/images/fridge_icons/meat-fish.png");
+        return require("../../../../assets/images/fridge_icons/meat-fish.png");
       default:
-        return require("../../../assets/images/placeholder_icon.png");
+        return require("../../../../assets/images/placeholder_icon.png");
     }
   };
 
@@ -91,11 +91,11 @@ export default function Fridge() {
       {/* Header */}
       <View style={styles.header}>
         <Image
-          source={require("../../../assets/images/fridge_icons/profile-picture.png")}
+          source={require("../../../../assets/images/fridge_icons/profile-picture.png")}
           style={styles.avatar}
         />
         <Image
-          source={require("../../../assets/images/fridge_icons/logo-2.png")}
+          source={require("../../../../assets/images/fridge_icons/logo-2.png")}
           style={styles.logo}
         />
       </View>
@@ -145,7 +145,7 @@ export default function Fridge() {
       {/* Check Fridge Button */}
       <TouchableOpacity
         style={styles.checkButton}
-        onPress={() => router.push("/fridge/fridge_items")}
+        onPress={() => router.push("/(tabs)/fridge/fridgeFront/fridge_items")}
       >
         <Text style={styles.checkButtonText}>CHECK FRIDGE</Text>
       </TouchableOpacity>

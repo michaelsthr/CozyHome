@@ -1,22 +1,22 @@
 import { useRouter } from "expo-router";
 import React from "react";
 import {
-    FlatList,
-    Image,
-    SafeAreaView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  FlatList,
+  Image,
+  SafeAreaView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { fridgeCategoryStyles as styles } from "./styles";
+import { fridgeCategoryStyles as styles } from "../styles";
 
 const data = [
   {
     id: "1",
     name: "Chicken Breast",
-    img: require("../../../assets/images/fridge_icons/meat-fish.png"),
-    statusIcon: require("../../../assets/images/fridge_icons/warning.png"),
+    img: require("../../../../assets/images/fridge_icons/meat-fish.png"),
+    statusIcon: require("../../../../assets/images/fridge_icons/warning.png"),
     days: 2,
     count: 2,
   },
@@ -30,7 +30,7 @@ export default function Meat() {
       {/* Header */}
       <View style={styles.header}>
         <Image
-          source={require("../../../assets/images/fridge_icons/profile-picture.png")}
+          source={require("../../../../assets/images/fridge_icons/profile-picture.png")}
           style={styles.avatar}
         />
       </View>
@@ -83,7 +83,7 @@ export default function Meat() {
       {/* Add New Item Button */}
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => router.push("/fridge/fridge_add")}
+        onPress={() => router.push("/fridge/fridgeFront/fridge_add")}
       >
         <Text style={styles.addButtonText}>ADD NEW ITEM</Text>
       </TouchableOpacity>

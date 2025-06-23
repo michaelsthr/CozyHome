@@ -1,28 +1,28 @@
 import { useRouter } from "expo-router";
 import React from "react";
 import {
-    FlatList,
-    Image,
-    SafeAreaView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  FlatList,
+  Image,
+  SafeAreaView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { fridgeCategoryStyles as styles } from "./styles";
+import { fridgeCategoryStyles as styles } from "../styles";
 
 const data = [
   {
     id: "1",
-    name: "Whole Wheat",
-    img: require("../../../assets/images/fridge_icons/bread.png"),
-    statusIcon: require("../../../assets/images/fridge_icons/eatable.png"),
-    days: 3,
+    name: "Orange Juice",
+    img: require("../../../../assets/images/fridge_icons/drinks.png"),
+    statusIcon: require("../../../../assets/images/fridge_icons/eatable.png"),
+    days: 10,
     count: 1,
   },
 ];
 
-export default function Bread() {
+export default function Drinks() {
   const router = useRouter();
 
   return (
@@ -30,18 +30,18 @@ export default function Bread() {
       {/* Header */}
       <View style={styles.header}>
         <Image
-          source={require("../../../assets/images/fridge_icons/profile-picture.png")}
+          source={require("../../../../assets/images/fridge_icons/profile-picture.png")}
           style={styles.avatar}
         />
       </View>
 
       {/* Title */}
-      <Text style={styles.title}>Bread</Text>
+      <Text style={styles.title}>Drinks</Text>
 
       {/* Search */}
       <View style={styles.searchContainer}>
         <TextInput
-          placeholder="Find bread"
+          placeholder="Find drinks"
           placeholderTextColor="#999"
           style={styles.searchInput}
         />
@@ -49,7 +49,7 @@ export default function Bread() {
 
       {/* Section Label */}
       <View style={styles.labelContainer}>
-        <Text style={styles.sectionLabel}>BREAD</Text>
+        <Text style={styles.sectionLabel}>DRINKS</Text>
         <TouchableOpacity>
           <Text style={styles.filterText}>Filter</Text>
         </TouchableOpacity>
@@ -83,7 +83,7 @@ export default function Bread() {
       {/* Add New Item Button */}
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => router.push("/fridge/fridge_add")}
+        onPress={() => router.push("/fridge/fridgeFront/fridge_add")}
       >
         <Text style={styles.addButtonText}>ADD NEW ITEM</Text>
       </TouchableOpacity>

@@ -1,28 +1,28 @@
 import { useRouter } from "expo-router";
 import React from "react";
 import {
-    FlatList,
-    Image,
-    SafeAreaView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  FlatList,
+  Image,
+  SafeAreaView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { fridgeCategoryStyles as styles } from "./styles";
+import { fridgeCategoryStyles as styles } from "../styles";
 
 const data = [
   {
     id: "1",
-    name: "Milk",
-    img: require("../../../assets/images/fridge_icons/dairy.png"),
-    statusIcon: require("../../../assets/images/fridge_icons/eatable.png"),
-    days: 7,
+    name: "Broccoli",
+    img: require("../../../../assets/images/fridge_icons/vegetables.png"),
+    statusIcon: require("../../../../assets/images/fridge_icons/eatable.png"),
+    days: 5,
     count: 1,
   },
 ];
 
-export default function Dairy() {
+export default function Vegetables() {
   const router = useRouter();
 
   return (
@@ -30,18 +30,18 @@ export default function Dairy() {
       {/* Header */}
       <View style={styles.header}>
         <Image
-          source={require("../../../assets/images/fridge_icons/profile-picture.png")}
+          source={require("../../../../assets/images/fridge_icons/profile-picture.png")}
           style={styles.avatar}
         />
       </View>
 
       {/* Title */}
-      <Text style={styles.title}>Dairy</Text>
+      <Text style={styles.title}>Vegetables</Text>
 
       {/* Search */}
       <View style={styles.searchContainer}>
         <TextInput
-          placeholder="Find dairy products"
+          placeholder="Find vegetables"
           placeholderTextColor="#999"
           style={styles.searchInput}
         />
@@ -49,7 +49,7 @@ export default function Dairy() {
 
       {/* Section Label */}
       <View style={styles.labelContainer}>
-        <Text style={styles.sectionLabel}>DAIRY</Text>
+        <Text style={styles.sectionLabel}>VEGETABLES</Text>
         <TouchableOpacity>
           <Text style={styles.filterText}>Filter</Text>
         </TouchableOpacity>
@@ -83,7 +83,7 @@ export default function Dairy() {
       {/* Add New Item Button */}
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => router.push("/fridge/fridge_add")}
+        onPress={() => router.push("/fridge/fridgeFront/fridge_add")}
       >
         <Text style={styles.addButtonText}>ADD NEW ITEM</Text>
       </TouchableOpacity>

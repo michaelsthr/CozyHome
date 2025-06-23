@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { fridgeAddStyles as styles } from "./styles";
+import { fridgeAddStyles as styles } from "../styles";
 
 export default function AddItem() {
   const router = useRouter();
@@ -22,7 +22,7 @@ export default function AddItem() {
       {/* Header */}
       <View style={styles.header}>
         <Image
-          source={require("../../../assets/images/fridge_icons/profile-picture.png")}
+          source={require("../../../../assets/images/fridge_icons/profile-picture.png")}
           style={styles.avatar}
         />
       </View>
