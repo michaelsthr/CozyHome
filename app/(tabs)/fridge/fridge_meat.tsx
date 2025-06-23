@@ -155,7 +155,7 @@ export default function Meat() {
         style={styles.addButton}
         onPress={() => router.push("/(tabs)/fridge/fridge_add")}
       >
-        <Text style={styles.addButtonText}>ADD NEW ITEM</Text>
+        <Text style={styles.addButtonText}>ADD NEW MEAT/FISH</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

@@ -127,7 +127,7 @@ export default function Dairy() {
           style={styles.addButton}
           onPress={() => router.push("/(tabs)/fridge/fridge_add")}
         >
-          <Text style={styles.addButtonText}>ADD DAIRY PRODUCT</Text>
+          <Text style={styles.addButtonText}>ADD NEW DAIRY PRODUCT</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

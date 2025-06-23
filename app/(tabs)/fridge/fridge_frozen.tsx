@@ -150,7 +150,7 @@ export default function Frozen() {
           style={styles.addButton}
           onPress={() => router.push("/(tabs)/fridge/fridge_add")}
         >
-          <Text style={styles.addButtonText}>ADD FROZEN ITEM</Text>
+          <Text style={styles.addButtonText}>ADD NEW FROZEN ITEM</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

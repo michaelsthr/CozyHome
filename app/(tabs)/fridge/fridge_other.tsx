@@ -152,7 +152,7 @@ export default function Other() {
           style={styles.addButton}
           onPress={() => router.push("/(tabs)/fridge/fridge_add")}
         >
-          <Text style={styles.addButtonText}>ADD OTHER ITEM</Text>
+          <Text style={styles.addButtonText}>ADD NEW OTHER ITEM</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
