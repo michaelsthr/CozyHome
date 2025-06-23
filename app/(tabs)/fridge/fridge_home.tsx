@@ -1,17 +1,17 @@
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    Image,
+    SafeAreaView,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
-import { getKuehlschrankInhalt, KuehlschrankItem } from "../fridgeBack/components/dbKuehlschrank";
-import { fridgeStyles as styles } from "../styles";
+import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
+import { fridgeStyles as styles } from "./styles";
 
 export default function Fridge() {
   const router = useRouter();
@@ -32,20 +32,19 @@ export default function Fridge() {
 
     fetchFridgeItems();
   }, []);
-
   const getStatusIcon = (mhd?: string) => {
-    if (!mhd) return require("../../../../assets/images/fridge_icons/eatable.png");
+    if (!mhd) return require("../../../assets/images/fridge_icons/eatable.png");
     const today = new Date();
     const expDate = new Date(mhd);
     const diffTime = expDate.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0) {
-      return require("../../../../assets/images/fridge_icons/expired.png");
+      return require("../../../assets/images/fridge_icons/expired.png");
     } else if (diffDays <= 2) {
-      return require("../../../../assets/images/fridge_icons/warning.png");
+      return require("../../../assets/images/fridge_icons/warning.png");
     } else {
-      return require("../../../../assets/images/fridge_icons/eatable.png");
+      return require("../../../assets/images/fridge_icons/eatable.png");
     }
   };
 
@@ -62,19 +61,21 @@ export default function Fridge() {
       return { days: diffDays, label: "Days left" };
     }
   };
-
   const getCategoryImage = (category?: string) => {
-    switch (category) {
-      case "Obst":
-        return require("../../../../assets/images/fridge_icons/fruits.png");
+    switch (category) {      case "Obst":
+        return require("../../../assets/images/fridge_icons/fruits.png");
       case "Gemüse":
-        return require("../../../../assets/images/fridge_icons/vegetables.png");
+        return require("../../../assets/images/fridge_icons/vegetables.png");
       case "Milchprodukte":
-        return require("../../../../assets/images/fridge_icons/dairy.png");
-      case "Fleisch & Fisch":
-        return require("../../../../assets/images/fridge_icons/meat-fish.png");
+        return require("../../../assets/images/fridge_icons/dairy.png");
+      case "Fleisch":
+        return require("../../../assets/images/fridge_icons/meat-fish.png");
+      case "Getränke":
+        return require("../../../assets/images/fridge_icons/drinks.png");
+      case "Tiefkühlkost":
+        return require("../../../assets/images/fridge_icons/bread.png"); // Using bread as placeholder for frozen
       default:
-        return require("../../../../assets/images/placeholder_icon.png");
+        return require("../../../assets/images/placeholder_icon.png");
     }
   };
 
@@ -89,13 +90,12 @@ export default function Fridge() {
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
-        <Image
-          source={require("../../../../assets/images/fridge_icons/profile-picture.png")}
+      <View style={styles.header}>        <Image
+          source={require("../../../assets/images/fridge_icons/profile-picture.png")}
           style={styles.avatar}
         />
         <Image
-          source={require("../../../../assets/images/fridge_icons/logo-2.png")}
+          source={require("../../../assets/images/fridge_icons/logo-2.png")}
           style={styles.logo}
         />
       </View>
@@ -145,7 +145,7 @@ export default function Fridge() {
       {/* Check Fridge Button */}
       <TouchableOpacity
         style={styles.checkButton}
-        onPress={() => router.push("/(tabs)/fridge/fridgeFront/fridge_items")}
+        onPress={() => router.push("/(tabs)/fridge/fridge_items")}
       >
         <Text style={styles.checkButtonText}>CHECK FRIDGE</Text>
       </TouchableOpacity>

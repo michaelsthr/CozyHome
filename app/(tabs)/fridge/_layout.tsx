@@ -14,18 +14,46 @@ export default function FridgeStack() {
       <Stack.Screen 
         name="fridge_items" 
         options={{ headerTitle: "Fridge" }} 
-      />
-
-      {/* screen for Fruits detail */}
+      />      {/* screen for Fruits detail */}
       <Stack.Screen 
         name="fridge_fruits" 
         options={{ headerTitle: "Fruits" }} 
       />
 
-      {/* screen for adding new item, no header shown */}
+      {/* screen for Vegetables detail */}
+      <Stack.Screen 
+        name="fridge_vegetables" 
+        options={{ headerTitle: "Vegetables" }} 
+      />
+
+      {/* screen for Dairy detail */}
+      <Stack.Screen 
+        name="fridge_dairy" 
+        options={{ headerTitle: "Dairy" }} 
+      />
+
+      {/* screen for Meat detail */}
+      <Stack.Screen 
+        name="fridge_meat" 
+        options={{ headerTitle: "Meat" }} 
+      />
+
+      {/* screen for Drinks detail */}
+      <Stack.Screen 
+        name="fridge_drinks" 
+        options={{ headerTitle: "Drinks" }} 
+      />
+
+      {/* screen for Bread detail */}
+      <Stack.Screen 
+        name="fridge_bread" 
+        options={{ headerTitle: "Bread" }} 
+      />
+
+      {/* screen for adding new item */}
       <Stack.Screen 
         name="fridge_add" 
-        options={{ headerTitle: "New Item" }} 
+        options={{ headerTitle: "Add Item" }} 
       />
     </Stack>
   );

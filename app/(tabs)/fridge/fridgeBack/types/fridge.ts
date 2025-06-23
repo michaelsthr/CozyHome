@@ -1,9 +1,11 @@
+import { FridgeCategoryType } from '../../../../../lib/constants/categories';
+
 // Base item structure that comes from the database
 export interface KuehlschrankItem {
   $id: string;
   name: string;
   anzahl: number;
-  kategorie?: string;
+  kategorie?: FridgeCategoryType;
   mhd?: string; // MHD = Mindesthaltbarkeitsdatum (expiration date)
   $createdAt?: string;
   $updatedAt?: string;
@@ -13,28 +15,12 @@ export interface KuehlschrankItem {
 export interface NewKuehlschrankItem {
   name: string;
   anzahl: number;
-  kategorie?: string;
+  kategorie?: FridgeCategoryType;
   mhd?: string;
 }
 
-// Enum for predefined fridge categories
-export enum FridgeCategories {
-  DAIRY = 'Milchprodukte',
-  MEAT = 'Fleisch',
-  VEGETABLES = 'Gemüse',
-  FRUITS = 'Obst',
-  DRINKS = 'Getränke',
-  SNACKS = 'Snacks',
-  FROZEN = 'Tiefgefroren'
-}
-
-// Type for fridge category values
-export type FridgeCategoryType = `${FridgeCategories}`;
-
-// Helper function to get all available categories
-export const getAllFridgeCategories = (): FridgeCategoryType[] => {
-  return Object.values(FridgeCategories);
-};
+// Re-export the categories from the constants
+export { FridgeCategories, FridgeCategoryType, getAllFridgeCategories } from '../../../../../lib/constants/categories';
 
 // Optional: Interface for category display information
 export interface CategoryDisplayInfo {
