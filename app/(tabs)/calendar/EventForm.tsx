@@ -1,9 +1,20 @@
 import CozyInput from "@/components/cozy_input";
 import { useUser } from "@/components/UserContext";
-import { Event } from "@/lib/appwrite/dbKalender";
+import { Event, getCategory } from "@/lib/appwrite/dbKalender";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import React, { useState } from "react";
-import { Button, StyleSheet, Switch, Text, TextInput, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+    Button,
+    FlatList,
+    Modal,
+    Pressable,
+    StyleSheet,
+    Switch,
+    Text,
+    TextInput,
+    View,
+} from "react-native";
+import { Models } from "react-native-appwrite";
 
 interface EventFormProps {
     event?: Event;
@@ -27,6 +38,20 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
     const [date, setDate] = useState(event ? new Date(event.startDate) : new Date());
     const [startTime, setStartTime] = useState(event ? new Date(event.startDate) : new Date());
     const [endTime, setEndTime] = useState(event ? new Date(event.endDate) : new Date());
+
+    const [categoryModalVisible, setCategoryModalVisible] = useState(false);
+    const [categories, setCategories] = useState<Models.Document[]>([]);
+
+    useEffect(() => {
+        getCategory()
+            .then((res) => {
+                setCategories(res.documents);
+                if (!category && res.documents.length > 0) {
+                    setCategory(res.documents[0].name);
+                }
+            })
+            .catch(() => {});
+    }, []);
 
     const onDateChange = (event: any, selectedDate?: Date) => {
         const currentDate = selectedDate || date;
@@ -157,12 +182,119 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
                         marginVertical: 10,
                     }}
                 />
-                <CozyInput
-                    placeholder='Category'
-                    placeholderTextColor={"black"}
-                    onChangeText={setCategory}
-                    value={category}
-                />
+                <Pressable
+                    onPress={() => setCategoryModalVisible(true)}
+                    style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        padding: 12,
+                        borderWidth: 1,
+                        borderColor: "#eee",
+                        borderRadius: 8,
+                        marginBottom: 10,
+                    }}>
+                    <Text style={{ fontSize: 16, marginRight: 8 }}>Category:</Text>
+                    {category ? (
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                marginLeft: "auto",
+                            }}>
+                            {categories.find((c) => c.name === category) && (
+                                <View
+                                    style={{
+                                        width: 20,
+                                        height: 20,
+                                        marginRight: 10,
+                                        borderRadius: 4,
+                                        backgroundColor:
+                                            categories.find((c) => c.name === category)?.color ||
+                                            "#ccc",
+                                    }}
+                                />
+                            )}
+                            <Text style={{ fontSize: 16 }}>{category}</Text>
+                        </View>
+                    ) : categories.length > 0 ? (
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                marginLeft: "auto",
+                            }}>
+                            <View
+                                style={{
+                                    width: 20,
+                                    height: 20,
+                                    marginRight: 15,
+                                    borderRadius: 4,
+                                    backgroundColor: categories[0].color,
+                                }}
+                            />
+                            <Text style={{ fontSize: 18 }}>{categories[0].name}</Text>
+                        </View>
+                    ) : (
+                        <Text style={{ color: "#888", marginLeft: "auto" }}>
+                            No categories available
+                        </Text>
+                    )}
+                </Pressable>
+                <Modal
+                    visible={categoryModalVisible}
+                    animationType='fade'
+                    transparent={true}
+                    onRequestClose={() => setCategoryModalVisible(false)}>
+                    <View
+                        style={{
+                            flex: 1,
+                            backgroundColor: "rgba(0,0,0,0.2)",
+                            justifyContent: "center",
+                        }}>
+                        <View
+                            style={{
+                                backgroundColor: "white",
+                                margin: 30,
+                                borderRadius: 12,
+                                padding: 20,
+                                maxHeight: 400,
+                            }}>
+                            <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 10 }}>
+                                Choose category
+                            </Text>
+                            <FlatList
+                                data={categories}
+                                keyExtractor={(item) => item.$id}
+                                renderItem={({ item }) => (
+                                    <Pressable
+                                        style={{
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            padding: 12,
+                                            borderBottomWidth: 1,
+                                            borderBottomColor: "#eee",
+                                        }}
+                                        onPress={() => {
+                                            setCategory(item.name);
+                                            setCategoryModalVisible(false);
+                                        }}>
+                                        <View
+                                            style={{
+                                                width: 20,
+                                                height: 20,
+                                                marginRight: 15,
+                                                borderRadius: 4,
+                                                backgroundColor: item.color,
+                                            }}
+                                        />
+                                        <Text style={{ fontSize: 18 }}>{item.name}</Text>
+                                    </Pressable>
+                                )}
+                            />
+                            <Button title='Cancel' onPress={() => setCategoryModalVisible(false)} />
+                        </View>
+                    </View>
+                </Modal>
                 <View
                     style={{
                         borderBottomColor: "grey",

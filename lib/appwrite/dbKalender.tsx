@@ -128,9 +128,9 @@ export const deleteEvent = async function (documentId: string): Promise<void> {
     }
 };
 
-export const deleteCategory = async function (categoryInfo: any): Promise<void> {
+export const deleteCategory = async function (documentId: string): Promise<void> {
     try {
-        await databases.deleteDocument(databaseId, categoryCollectionId, categoryInfo.$id);
+        await databases.deleteDocument(databaseId, categoryCollectionId, documentId);
         return;
     } catch (error) {
         console.error("Error deleting document:", error);

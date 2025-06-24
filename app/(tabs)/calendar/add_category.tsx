@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import {
     Button,
     FlatList,
+    Modal as RNModal,
     StyleSheet,
     Text,
     TextInput,
@@ -33,11 +34,20 @@ const AddCategory = () => {
     ];
 
     const [name, setName] = useState(
-        typeof params.name === 'string' ? params.name : Array.isArray(params.name) ? params.name[0] : ""
+        typeof params.name === "string"
+            ? params.name
+            : Array.isArray(params.name)
+            ? params.name[0]
+            : ""
     );
     const [selectedColor, setSelectedColor] = useState(
-        typeof params.color === 'string' ? params.color : Array.isArray(params.color) ? params.color[0] : "tomato"
+        typeof params.color === "string"
+            ? params.color
+            : Array.isArray(params.color)
+            ? params.color[0]
+            : "tomato"
     );
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const handleAddOrUpdateCategory = async () => {
         if (isEdit) {
@@ -120,7 +130,62 @@ const AddCategory = () => {
                 onPress={handleAddOrUpdateCategory}
             />
             {isEdit && (
-                <Button title='Delete category' color='red' onPress={handleDeleteCategory} />
+                <>
+                    <Button
+                        title='Delete category'
+                        color='red'
+                        onPress={() => setShowDeleteModal(true)}
+                    />
+                    <RNModal
+                        visible={showDeleteModal}
+                        animationType='fade'
+                        transparent={true}
+                        onRequestClose={() => setShowDeleteModal(false)}>
+                        <View
+                            style={{
+                                flex: 1,
+                                justifyContent: "flex-end",
+                                backgroundColor: "rgba(0,0,0,0.2)",
+                            }}>
+                            <View
+                                style={{
+                                    backgroundColor: "white",
+                                    padding: 24,
+                                    borderTopLeftRadius: 16,
+                                    borderTopRightRadius: 16,
+                                    marginBottom: 0,
+                                    shadowColor: "#000",
+                                    shadowOffset: { width: 0, height: -2 },
+                                    shadowOpacity: 0.1,
+                                    shadowRadius: 8,
+                                    elevation: 5,
+                                }}>
+                                <Text
+                                    style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>
+                                    Are you sure to delete this category?
+                                </Text>
+                                <Text style={{ marginBottom: 20 }}>
+                                    All events with this category are going to be deleted.
+                                </Text>
+                                <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 20 }}>
+                                    <Button
+                                        title='Cancel'
+                                        onPress={() => setShowDeleteModal(false)}
+                                    />
+                                    <View style={{ width: 16 }} />
+                                    <Button
+                                        title='Delete'
+                                        color='red'
+                                        onPress={async () => {
+                                            await handleDeleteCategory();
+                                            setShowDeleteModal(false);
+                                        }}
+                                    />
+                                </View>
+                            </View>
+                        </View>
+                    </RNModal>
+                </>
             )}
         </SafeAreaView>
     );
