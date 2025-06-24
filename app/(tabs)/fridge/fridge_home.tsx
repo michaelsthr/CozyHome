@@ -226,7 +226,7 @@ export default function Fridge() {
               />
               <Text style={styles.emptyText}>Your fridge is empty!</Text>
               <Text style={styles.emptySubtext}>
-                {'Start adding items to keep track of\nyour food and expiration dates'}
+                Start adding items to keep track of{'\n'}your food and expiration dates
               </Text>
             </View>
           )}
