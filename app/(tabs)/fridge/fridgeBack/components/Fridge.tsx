@@ -7,6 +7,38 @@ import { FridgeItemModal } from './FridgeItemModal';
 import { FridgeFilters } from './FridgeFilters';
 import { FridgeItemList } from './FridgeItem';
 import { KuehlschrankItem } from '../types/fridge';
+import { StyleSheet } from 'react-native';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  floatingButton: {
+    position: 'absolute',
+    right: 20,
+    bottom: 20,
+    backgroundColor: '#007AFF',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 5,
+  },
+  floatingButtonText: {
+    color: '#fff',
+    fontSize: 32,
+    fontWeight: 'bold',
+  },
+});
 
 export default function Fridge() {
   const { contents, loading, addItem, updateItem, deleteItem } = useFridgeData();
