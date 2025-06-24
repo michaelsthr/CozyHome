@@ -103,15 +103,7 @@ export default function Drinks() {
             onChangeText={setSearchTerm}
           />
         </View>
-
-        {/* Section Label */}
-        <View style={styles.labelContainer}>
-          <Text style={styles.sectionLabel}>Your Drinks</Text>
-          <TouchableOpacity>
-            <Text style={styles.filterText}>Filter</Text>
-          </TouchableOpacity>
-        </View>
-
+       
         {/* List */}
         {filteredItems.length === 0 ? (
           <View style={styles.emptyState}>

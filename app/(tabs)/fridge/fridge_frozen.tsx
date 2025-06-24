@@ -1,14 +1,14 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Image,
-    SafeAreaView,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { fridgeCategoryStyles as styles } from "./styles";
@@ -102,14 +102,6 @@ export default function Frozen() {
             value={searchTerm}
             onChangeText={setSearchTerm}
           />
-        </View>
-
-        {/* Section Label */}
-        <View style={styles.labelContainer}>
-          <Text style={styles.sectionLabel}>Your Frozen Items</Text>
-          <TouchableOpacity>
-            <Text style={styles.filterText}>Filter</Text>
-          </TouchableOpacity>
         </View>
 
         {/* List */}

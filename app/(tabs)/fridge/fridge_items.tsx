@@ -35,17 +35,11 @@ export default function FridgeItems() {
             source={require("../../../assets/images/fridge_icons/profile-picture.png")}
             style={styles.avatar}
           />
-        </View>        {/* Title Section */}
+        </View>        
+        
+        {/* Title Section */}
         <View style={styles.titleSection}>
-          <Text style={styles.title}>Categories</Text>
-        </View>
-
-        {/* Items Label */}
-        <View style={styles.labelContainer}>
-          <Text style={styles.itemsLabel}>Food Categories</Text>
-          <TouchableOpacity>
-            <Text style={styles.filterText}>Filter</Text>
-          </TouchableOpacity>
+          <Text style={styles.title}>Food Categories</Text>
         </View>
 
         {/* Categories Grid */}

@@ -97,14 +97,6 @@ export default function Dairy() {
           />
         </View>
 
-        {/* Section Label */}
-        <View style={styles.labelContainer}>
-          <Text style={styles.sectionLabel}>Your Dairy</Text>
-          <TouchableOpacity>
-            <Text style={styles.filterText}>Filter</Text>
-          </TouchableOpacity>
-        </View>
-
         {/* List */}
         <View style={styles.itemsList}>
           {filteredItems.map((item) => (

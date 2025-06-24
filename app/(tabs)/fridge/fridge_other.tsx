@@ -106,14 +106,6 @@ export default function Other() {
           />
         </View>
 
-        {/* Section Label */}
-        <View style={styles.labelContainer}>
-          <Text style={styles.sectionLabel}>Your Other Items</Text>
-          <TouchableOpacity>
-            <Text style={styles.filterText}>Filter</Text>
-          </TouchableOpacity>
-        </View>
-
         {/* List */}
         {filteredItems.length === 0 ? (
           <View style={styles.emptyState}>

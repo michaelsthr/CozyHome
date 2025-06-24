@@ -100,15 +100,7 @@ export default function Meat() {
         />
       </View>
 
-      {/* Section Label */}
-      <View style={styles.labelContainer}>
-        <Text style={styles.sectionLabel}>MEAT & FISH</Text>
-        <TouchableOpacity>
-          <Text style={styles.filterText}>Filter</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Content */}
+      {/* List */}
       {filteredItems.length === 0 ? (
         <View style={styles.emptyState}>
           <Image
