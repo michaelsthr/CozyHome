@@ -750,6 +750,11 @@ export const fridgeAddStyles = StyleSheet.create({
     fontSize: 16,
     color: "#374151",
   },
+  modalItemSubtext: {
+    fontSize: 14,
+    color: "#64748b",
+    marginTop: 2,
+  },
   selectedItemText: {
     color: "#0369a1",
     fontWeight: "600",
@@ -766,10 +771,149 @@ export const fridgeAddStyles = StyleSheet.create({
     paddingHorizontal: 12,
     backgroundColor: "#f87171",
     borderRadius: 6,
-  },
-  clearButtonText: {
+  },  clearButtonText: {
     color: "#ffffff",
     fontSize: 12,
     fontWeight: "600",
+  },
+  separatorContainer: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    alignItems: "center",
+  },  separatorText: {
+    fontSize: 14,
+    color: "#94a3b8",
+    fontWeight: "500",
+  },  
+  // Calendar Modal Styles
+  calendarModalContent: {
+    backgroundColor: "#ffffff",
+    borderRadius: 20,
+    paddingVertical: 25,
+    paddingHorizontal: 20,
+    marginHorizontal: 20,
+    maxHeight: "95%",
+    minHeight: 500,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4.65,
+    elevation: 8,
+  },
+  calendarHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 15,
+    paddingHorizontal: 10,
+  },
+  navButton: {
+    backgroundColor: "#f8fafc",
+    borderRadius: 12,
+    width: 45,
+    height: 45,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
+  },
+  navButtonText: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#374151",
+  },
+  monthYearButton: {
+    backgroundColor: "#059669",
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    minWidth: 200,
+    alignItems: "center",
+  },
+  monthYearText: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#ffffff",
+  },
+  yearJump: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 15,
+    marginBottom: 20,
+  },
+  yearButton: {
+    backgroundColor: "#f1f5f9",
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
+  },
+  yearButtonText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#64748b",
+  },
+  weekHeader: {
+    flexDirection: "row",
+    marginBottom: 10,
+    paddingBottom: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: "#e0f2fe",
+  },
+  weekDay: {
+    flex: 1,
+    textAlign: "center",
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#059669",
+    paddingVertical: 5,
+  },
+  calendarGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginBottom: 20,
+  },
+  emptyDay: {
+    width: "14.28%",
+    height: 45,
+  },
+  calendarDay: {
+    width: "14.28%",
+    height: 45,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 8,
+    marginVertical: 2,
+  },
+  pastDay: {
+    opacity: 0.3,
+  },
+  todayDay: {
+    backgroundColor: "#e0f2fe",
+    borderWidth: 2,
+    borderColor: "#0891b2",
+  },
+  selectedDay: {
+    backgroundColor: "#059669",
+    borderWidth: 0,
+  },
+  calendarDayText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#374151",
+  },
+  pastDayText: {
+    color: "#9ca3af",
+  },
+  todayDayText: {
+    color: "#0891b2",
+    fontWeight: "700",
+  },  selectedDayText: {
+    color: "#ffffff",
+    fontWeight: "700",
   },
 });
