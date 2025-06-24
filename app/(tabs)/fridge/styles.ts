@@ -746,8 +746,7 @@ export const fridgeAddStyles = StyleSheet.create({
   },
   selectedItem: {
     backgroundColor: "#f0f9ff",
-  },
-  modalItemText: {
+  },  modalItemText: {
     fontSize: 16,
     color: "#374151",
   },
@@ -759,5 +758,18 @@ export const fridgeAddStyles = StyleSheet.create({
     fontSize: 16,
     color: "#059669",
     fontWeight: "700",
+  },
+  clearButton: {
+    marginTop: 8,
+    alignSelf: "flex-end",
+    paddingVertical: 4,
+    paddingHorizontal: 12,
+    backgroundColor: "#f87171",
+    borderRadius: 6,
+  },
+  clearButtonText: {
+    color: "#ffffff",
+    fontSize: 12,
+    fontWeight: "600",
   },
 });
