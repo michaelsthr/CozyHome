@@ -27,7 +27,7 @@ const EditEvent = () => {
         title='Create'
          onPress={async () => {
          const inhalt = await getKalender();
-         console.log("Kalenderinhalt: ", inhalt);
+        //  console.log("Kalenderinhalt: ", inhalt);
         }}
       />
     </View>
