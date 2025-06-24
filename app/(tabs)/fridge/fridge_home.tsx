@@ -156,7 +156,8 @@ export default function Fridge() {
         <View style={styles.greetingSection}>
           <Text style={styles.greeting}>Good morning!</Text>
           <Text style={styles.username}>Max Mustermann</Text>
-        </View>        {/* Search Bar */}
+        </View>
+        {/* Search Bar */}
         <View style={styles.searchContainer}>
           <TextInput
             placeholder="Search items in your fridge..."
@@ -206,7 +207,7 @@ export default function Fridge() {
                           style={styles.statusIcon}
                         />
                         <Text style={styles.statusText}>
-                          {days} {label}
+                          {`${days} ${label}`}
                         </Text>
                       </View>
                       <Text style={styles.itemName} numberOfLines={2}>
@@ -225,7 +226,7 @@ export default function Fridge() {
               />
               <Text style={styles.emptyText}>Your fridge is empty!</Text>
               <Text style={styles.emptySubtext}>
-                Start adding items to keep track of{'\n'}your food and expiration dates
+                {'Start adding items to keep track of\nyour food and expiration dates'}
               </Text>
             </View>
           )}

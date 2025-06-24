@@ -123,11 +123,10 @@ export default function Meat() {
                 style={styles.itemImage} 
               />
 
-              <View style={styles.info}>
-                <View style={styles.statusRow}>
+              <View style={styles.info}>                <View style={styles.statusRow}>
                   <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
                   <Text style={styles.statusText}>
-                    {getDaysLeft(item.mhd)} {getDaysLeft(item.mhd) === 1 ? "Day" : "Days"} Remaining
+                    {`${getDaysLeft(item.mhd)} ${getDaysLeft(item.mhd) === 1 ? "Day" : "Days"} Remaining`}
                   </Text>
                 </View>
                 <Text style={styles.itemName}>{item.name}</Text>

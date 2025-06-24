@@ -1,14 +1,14 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    Image,
+    SafeAreaView,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { fridgeCategoryStyles as styles } from "./styles";
@@ -121,11 +121,10 @@ export default function Frozen() {
             {filteredItems.map((item) => (
               <View key={item.$id} style={styles.row}>
                 <Image source={require("../../../assets/images/fridge_icons/freezer.png")} style={styles.itemImage} />
-                <View style={styles.info}>
-                  <View style={styles.statusRow}>
+                <View style={styles.info}>                  <View style={styles.statusRow}>
                     <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
                     <Text style={styles.statusText}>
-                      {getDaysLeft(item.mhd)} {getDaysLeft(item.mhd) === 1 ? "Day" : "Days"} Remaining
+                      {`${getDaysLeft(item.mhd)} ${getDaysLeft(item.mhd) === 1 ? "Day" : "Days"} Remaining`}
                     </Text>
                   </View>
                   <Text style={styles.itemName}>{item.name}</Text>

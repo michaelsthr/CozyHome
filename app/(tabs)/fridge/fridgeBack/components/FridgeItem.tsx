@@ -1,6 +1,6 @@
 import React from 'react';
-import { FlatList, View, Text, TouchableOpacity } from 'react-native';
-import { KuehlschrankItem, FridgeCategoryType } from '../types/fridge';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { FridgeCategoryType, KuehlschrankItem } from '../types/fridge';
 import { getCategoryDisplayInfo } from '../utils/categoryUtils';
 import { isExpired } from '../utils/dateUtils';
 
@@ -55,12 +55,10 @@ export const FridgeItemList: React.FC<FridgeItemListProps> = ({
             itemIsExpired && { borderColor: '#f44336', borderWidth: 1 }
           ]}>
             <View style={styles.itemInfo}>
-              <Text style={styles.itemName}>{item.name}</Text>
-              <Text>Anzahl: {item.anzahl}</Text>
+              <Text style={styles.itemName}>{item.name}</Text>              <Text>Anzahl: {item.anzahl}</Text>
               {item.mhd && (
                 <Text style={itemIsExpired ? styles.expiredText : {}}>
-                  Haltbar bis: {new Date(item.mhd).toLocaleDateString('de-DE')}
-                  {itemIsExpired && ' (abgelaufen)'}
+                  {`Haltbar bis: ${new Date(item.mhd).toLocaleDateString('de-DE')}${itemIsExpired ? ' (abgelaufen)' : ''}`}
                 </Text>
               )}
               {item.kategorie && (
