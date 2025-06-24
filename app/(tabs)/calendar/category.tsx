@@ -23,10 +23,17 @@ const Category = () => {
     );
 
     const renderItem = ({ item }: { item: Models.Document }) => (
-        <View style={styles.itemContainer}>
-            <View style={[styles.colorBox, { backgroundColor: item.color }]} />
-            <Text style={styles.itemText}>{item.name}</Text>
-        </View>
+        <Link
+            href={{
+                pathname: "/(tabs)/calendar/add_category",
+                params: { id: item.$id, name: item.name, color: item.color },
+            }}
+            asChild>
+            <Pressable style={styles.itemContainer}>
+                <View style={[styles.colorBox, { backgroundColor: item.color }]} />
+                <Text style={styles.itemText}>{item.name}</Text>
+            </Pressable>
+        </Link>
     );
 
     return (
