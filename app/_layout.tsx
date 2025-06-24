@@ -1,10 +1,10 @@
-import { Stack } from "expo-router";
+import { Redirect, Stack } from "expo-router";
 import React from "react";
 
+export const unstable_settings = {
+  initialRouteName: "(group)/index",
+};
+
 export default function RootLayout() {
-  return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-    </Stack>
-  );
+  return <Stack initialRouteName="(group)/index" />;
 }

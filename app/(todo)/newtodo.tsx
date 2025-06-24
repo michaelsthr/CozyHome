@@ -200,18 +200,18 @@ const DatePickerField = ({ date, setDate }) => {
     const showDatepicker = () => setShow(true);
     const cancel = () => {console.log("Abbrechen"); router.back();};
     const saveNewTodo = (
-      tile: string,
+      title: string,
       responsible: string, 
       date: string, 
       regularity: string
     ) => {
-      if (!tile) {
+      if (!title) {
         console.log("Please fill in the name of the ToDo"); // ToDo: Implement error handling
         return;
       }
 
       const newTodo = {
-        name: tile,
+        name: title,
         // Todo: responsible: (responsible ? responsible : null),
         date: (date ? date.toISOString() : null),
         regularity: (regularity ? regularity : null),
