@@ -109,7 +109,7 @@ export function EventBlock({ event, startOfWeek }: { event: EventInterface; star
 
     return (
         <Pressable
-            onPress={() => router.push("/calendar/event")}
+            onPress={() => router.push("/calendar/edit_event")}
             style={[
                 styles.eventBlock,
                 {
