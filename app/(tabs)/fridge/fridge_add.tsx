@@ -259,6 +259,12 @@ export default function AddItem() {
                   {/* Year Quick Jump */}
                   <View style={styles.yearJump}>
                     <TouchableOpacity 
+                      onPress={() => setSelectedYear(selectedYear - 1)} 
+                      style={styles.yearButton}
+                    >
+                      <Text style={styles.yearButtonText}>{selectedYear - 1}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
                       onPress={() => setSelectedYear(selectedYear + 1)} 
                       style={styles.yearButton}
                     >
