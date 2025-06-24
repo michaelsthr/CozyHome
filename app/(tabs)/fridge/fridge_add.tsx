@@ -48,7 +48,10 @@ export default function AddItem() {
     const firstDay = new Date(currentYear, currentMonth, 1);
     const lastDay = new Date(currentYear, currentMonth + 1, 0);
     const daysInMonth = lastDay.getDate();
-    const startingDay = firstDay.getDay(); // 0 = Sunday, 1 = Monday, etc.
+    const startingDayOfWeek = firstDay.getDay(); // 0 = Sunday, 1 = Monday, etc.
+    
+    // Convert to Monday = 0, Tuesday = 1, ..., Sunday = 6
+    const startingDay = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1;
     
     const days = [];
     
@@ -71,7 +74,7 @@ export default function AddItem() {
     }
     
     return days;
-  };  const selectDate = (day: number) => {
+  };const selectDate = (day: number) => {
     const selectedDate = new Date(selectedYear, selectedMonth, day);
     setExpDate(selectedDate);
     // Auto-close after a short delay to show selection
@@ -132,7 +135,7 @@ export default function AddItem() {
         </View>        {/* Form Container */}
         <View style={styles.formContainer}>{/* Product Name */}
           <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Product Name *</Text>
+            <Text style={styles.inputLabel}>Product Name</Text>
             <TextInput
               placeholder="Enter product name..."
               placeholderTextColor="#9ca3af"
@@ -144,7 +147,7 @@ export default function AddItem() {
 
           {/* Quantity */}
           <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Quantity *</Text>
+            <Text style={styles.inputLabel}>Quantity </Text>
             <TextInput
               placeholder="Enter quantity..."
               placeholderTextColor="#9ca3af"
@@ -153,12 +156,13 @@ export default function AddItem() {
               onChangeText={setQuantity}
               keyboardType="numeric"
             />
-          </View>          {/* Category */}
+          </View>
+
+          {/* Category */}
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>Category</Text><TouchableOpacity
               style={styles.dropdownInput}
-              onPress={() => setShowCategoryDropdown(!showCategoryDropdown)}
-            >
+              onPress={() => setShowCategoryDropdown(!showCategoryDropdown)}>
               <Text style={styles.dropdownText}>
                 {category}
               </Text>
@@ -166,9 +170,11 @@ export default function AddItem() {
                 {showCategoryDropdown ? "▲" : "▼"}
               </Text>
             </TouchableOpacity>
-          </View>          {/* Expiration Date */}
+          </View>
+
+          {/* Expiration Date */}
           <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Expiration Date</Text>            <TouchableOpacity
+            <Text style={styles.inputLabel}>Expiration Date</Text><TouchableOpacity
               style={styles.input}
               onPress={() => {
                 console.log('Date picker button pressed');
@@ -177,8 +183,7 @@ export default function AddItem() {
                 setSelectedMonth(now.getMonth());
                 setSelectedYear(now.getFullYear());
                 setShowDatePicker(true);
-              }}
-            >
+              }}>
               <Text style={[styles.dropdownText, !expDate && { color: "#9ca3af" }]}>
                 {formatDate(expDate)}
               </Text>
@@ -186,8 +191,7 @@ export default function AddItem() {
             {expDate && (
               <TouchableOpacity
                 style={styles.clearButton}
-                onPress={() => setExpDate(null)}
-              >
+                onPress={() => setExpDate(null)}>
                 <Text style={styles.clearButtonText}>Clear</Text>
               </TouchableOpacity>            )}
           </View>
@@ -203,9 +207,8 @@ export default function AddItem() {
             <View style={styles.buttonContent}>
               <ActivityIndicator size="small" color="#ffffff" style={{ marginRight: 10 }} />
               <Text style={styles.addButtonText}>ADDING...</Text>
-            </View>
-          ) : (            <Text style={styles.addButtonText}>ADD TO FRIDGE</Text>
-          )}        </TouchableOpacity>        {/* Date Picker */}
+            </View>):(<Text style={styles.addButtonText}>ADD TO FRIDGE</Text>
+          )}</TouchableOpacity>
         {showDatePicker && (
           <Modal
             visible={showDatePicker}
@@ -220,15 +223,15 @@ export default function AddItem() {
                 setShowYearPicker(false);
               }}
             >
-              <TouchableOpacity activeOpacity={1}>                <View style={[styles.modalContent, { 
+              <TouchableOpacity activeOpacity={1}><View style={[styles.modalContent, { 
                   alignItems: 'center', 
                   maxHeight: '90%', 
-                  minHeight: Platform.OS === 'web' ? 550 : 580, // Slightly taller on mobile
+                  minHeight: Platform.OS === 'web' ? 550 : 580,
                   paddingBottom: 15,
-                  width: Platform.OS === 'web' ? '100%' : '95%' // Slightly narrower on mobile for better margins
-                }]}>                  <Text style={[styles.modalTitle, { marginBottom: 25, fontSize: 20, color: '#059669' }]}>Select Expiration Date</Text>                  <View style={{ width: '100%', alignItems: 'center' }}>
-                    {/* Always show custom calendar - it works great on mobile too! */}
-                    <View style={{ width: '100%', maxWidth: Platform.OS === 'web' ? 320 : 300 }}>{/* Year/Month Navigation Header */}
+                  width: Platform.OS === 'web' ? '100%' : '95%'
+                }]}><Text style={[styles.modalTitle, { marginBottom: 25, fontSize: 20, color: '#059669' }]}>Select Expiration Date</Text>
+                <View style={{ width: '100%', alignItems: 'center' }}>
+                    <View style={{ width: '100%', maxWidth: Platform.OS === 'web' ? 380 : 360 }}>
                         <View style={{ 
                           backgroundColor: '#f8fafc',
                           borderRadius: 12,
@@ -271,7 +274,7 @@ export default function AddItem() {
                               <TouchableOpacity
                                 style={{
                                   backgroundColor: '#ffffff',
-                                  padding: Platform.OS === 'web' ? 8 : 12, // Larger touch targets on mobile
+                                  padding: Platform.OS === 'web' ? 8 : 12,
                                   borderRadius: 8,
                                   borderWidth: 1,
                                   borderColor: '#e2e8f0',
@@ -294,7 +297,7 @@ export default function AddItem() {
                               </TouchableOpacity>                              <TouchableOpacity
                                 style={{
                                   backgroundColor: '#ffffff',
-                                  padding: Platform.OS === 'web' ? 8 : 12, // Larger touch targets on mobile
+                                  padding: Platform.OS === 'web' ? 8 : 12,
                                   borderRadius: 8,
                                   borderWidth: 1,
                                   borderColor: '#e2e8f0',
@@ -360,7 +363,7 @@ export default function AddItem() {
                           borderBottomWidth: 2,
                           borderBottomColor: '#e0f2fe'
                         }}>
-                          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                          {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
                             <Text key={day} style={{
                               flex: 1,
                               textAlign: 'center',
@@ -377,11 +380,11 @@ export default function AddItem() {
                         <View style={{ 
                           flexDirection: 'row', 
                           flexWrap: 'wrap',
-                          height: Platform.OS === 'web' ? 250 : 280, // Slightly taller on mobile for better touch targets
+                          height: Platform.OS === 'web' ? 250 : 280,
                           overflow: 'visible',
                           backgroundColor: '#ffffff',
                           borderRadius: 8,
-                          padding: Platform.OS === 'web' ? 5 : 8 // More padding on mobile
+                          padding: Platform.OS === 'web' ? 5 : 8
                         }}>
                           {generateCalendarDays().map((day, index) => {
                             const isSelected = day && day > 0 && expDate && 
@@ -391,22 +394,20 @@ export default function AddItem() {
                             const isPastDate = day && day < 0;
                             const actualDay = Math.abs(day || 0);
                             const isClickable = day && day > 0;                            
-                            return (
-                              <View
+                            return (<View
                                 key={index}
                                 style={{
-                                  width: '14.28%',
-                                  height: Platform.OS === 'web' ? 40 : 44, // Larger touch targets on mobile
+                                  width: `${100/7}%`,
+                                  height: Platform.OS === 'web' ? 40 : 44,
                                   justifyContent: 'center',
                                   alignItems: 'center',
-                                  margin: Platform.OS === 'web' ? 1.5 : 2, // More spacing on mobile
+                                  paddingHorizontal: 1,
+                                  paddingVertical: 1,
                                 }}
                               >
-                                {day !== null && (
-                                  <TouchableOpacity
+                                {day !== null && (<TouchableOpacity
                                     style={{
-                                      width: '100%',
-                                      height: '100%',
+                                      flex: 1,
                                       justifyContent: 'center',
                                       alignItems: 'center',
                                       backgroundColor: isSelected ? '#059669' : isClickable ? '#ffffff' : 'transparent',
@@ -426,7 +427,7 @@ export default function AddItem() {
                                     <Text style={{
                                       color: isSelected ? '#ffffff' : isPastDate ? '#9ca3af' : '#1e293b',
                                       fontWeight: isSelected ? '700' : (isClickable ? '600' : '400'),
-                                      fontSize: Platform.OS === 'web' ? 15 : 16 // Slightly larger on mobile
+                                      fontSize: Platform.OS === 'web' ? 15 : 16
                                     }}>
                                       {actualDay}
                                     </Text>
