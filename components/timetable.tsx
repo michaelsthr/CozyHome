@@ -1,6 +1,6 @@
 import { getCalender } from "@/lib/appwrite/dbKalender";
-import { router } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import { router, useFocusEffect } from "expo-router";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 // Hours from 0:00 to 23:00
@@ -12,6 +12,7 @@ const WEEKDAYS = ["M", "D", "M", "D", "F", "S", "S"];
 const DAY_WIDTH = 50;
 
 interface EventInterface {
+    id: string;
     name: string;
     startDate: string;
     endDate: string;
@@ -109,7 +110,22 @@ export function EventBlock({ event, startOfWeek }: { event: EventInterface; star
 
     return (
         <Pressable
-            onPress={() => router.push("/calendar/edit_event")}
+            onPress={() =>
+                router.push({
+                    pathname: "/calendar/add_event",
+                    params: {
+                        id: event.id,
+                        name: event.name,
+                        startDate: event.startDate,
+                        endDate: event.endDate,
+                        repeat: String(event.repeat),
+                        creator: event.creator,
+                        description: event.description,
+                        color: event.color,
+                        borderColor: event.borderColor,
+                    },
+                })
+            }
             style={[
                 styles.eventBlock,
                 {
@@ -192,23 +208,23 @@ export default function Timetable() {
         return d;
     };
 
-    useEffect(() => {
-        const fetchEvents = async () => {
+ const fetchEvents = async () => {
             try {
                 const response = await getCalender();
 
                 if (response) {
                     const mappedEvents = response.documents.map((document) => ({
+                        id: document.$id,
                         name: document.name,
                         startDate: document.startDate,
                         endDate: document.endDate,
-                        repeat: document.repeat,
+                        repeat: Boolean(document.repeat),
                         creator: document.creator,
                         description: document.description,
-                        color: document.color || '#1E88E5', 
-                        borderColor: document.borderColor || '#0D47A1',
+                        color: document.color || "#1E88E5",
+                        borderColor: document.borderColor || "#0D47A1",
                     }));
-                    
+
                     setEvents(mappedEvents as EventInterface[]);
                 }
             } catch (error) {
@@ -216,8 +232,12 @@ export default function Timetable() {
             }
         };
 
-        fetchEvents();
-    }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchEvents();
+        }, [])
+    );
 
     const handleMomentumScrollEnd = (e: any) => {
         const contentOffsetX = e.nativeEvent.contentOffset.x;
