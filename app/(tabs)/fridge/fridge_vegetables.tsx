@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -15,8 +15,10 @@ import { fridgeCategoryStyles as styles } from "./styles";
 
 export default function Vegetables() {
   const router = useRouter();
+  const { search } = useLocalSearchParams();
   const [vegetables, setVegetables] = useState<KuehlschrankItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState((search as string) || "");
 
   useEffect(() => {
     const fetchVegetables = async () => {
@@ -29,10 +31,12 @@ export default function Vegetables() {
       } finally {
         setLoading(false);
       }
-    };
-
-    fetchVegetables();
+    };    fetchVegetables();
   }, []);
+
+  const filteredItems = vegetables.filter(item =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const getStatusIcon = (mhd?: string) => {
     if (!mhd) return require("../../../assets/images/fridge_icons/eatable.png");
@@ -82,14 +86,14 @@ export default function Vegetables() {
         {/* Title Section */}
         <View style={styles.titleSection}>
           <Text style={styles.title}>Fresh Vegetables</Text>
-        </View>
-
-        {/* Search */}
+        </View>        {/* Search */}
         <View style={styles.searchContainer}>
           <TextInput
             placeholder="Find fresh vegetables..."
             placeholderTextColor="#9ca3af"
             style={styles.searchInput}
+            value={searchTerm}
+            onChangeText={setSearchTerm}
           />
         </View>
 
@@ -99,11 +103,9 @@ export default function Vegetables() {
           <TouchableOpacity>
             <Text style={styles.filterText}>Filter</Text>
           </TouchableOpacity>
-        </View>
-
-        {/* List */}
+        </View>        {/* List */}
         <View style={styles.itemsList}>
-          {vegetables.map((item) => (
+          {filteredItems.map((item) => (
             <View key={item.$id} style={styles.row}>
               <Image source={require("../../../assets/images/fridge_icons/vegetables.png")} style={styles.itemImage} />
               <View style={styles.info}>

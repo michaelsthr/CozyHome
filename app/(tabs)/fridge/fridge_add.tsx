@@ -4,6 +4,7 @@ import {
   ActivityIndicator,
   Alert,
   Image,
+  Modal,
   SafeAreaView,
   ScrollView,
   Text,
@@ -11,18 +12,19 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { FridgeCategoryType } from "../../../lib/constants/categories";
+import { FridgeCategories, FridgeCategoryType, getAllFridgeCategories } from "../../../lib/constants/categories";
 import { setKuehlschrankInhalt } from "./fridgeBack/components/dbKuehlschrank";
 import { fridgeAddStyles as styles } from "./styles";
 
 export default function AddItem() {
   const router = useRouter();
   const [name, setName] = useState("");
-  const [weight, setWeight] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState<FridgeCategoryType>(FridgeCategories.OTHER);
   const [expDate, setExpDate] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+  const categories = getAllFridgeCategories();
 
   const handleSave = async () => {
     if (!name.trim()) {
@@ -40,7 +42,7 @@ export default function AddItem() {
     try {      await setKuehlschrankInhalt({
         name: name.trim(),
         anzahl: Number(quantity),
-        kategorie: (category.trim() as FridgeCategoryType) || undefined,
+        kategorie: category,
         mhd: expDate.trim() || undefined,
       });
       
@@ -53,8 +55,7 @@ export default function AddItem() {
     } finally {
       setIsSubmitting(false);
     }
-  };
-  return (
+  };  return (
     <SafeAreaView style={styles.container}>
       <ScrollView 
         showsVerticalScrollIndicator={false}
@@ -71,11 +72,8 @@ export default function AddItem() {
         {/* Title Section */}
         <View style={styles.titleSection}>
           <Text style={styles.title}>Add New Item</Text>
-        </View>
-
-        {/* Form Container */}
-        <View style={styles.formContainer}>
-          {/* Product Name */}
+        </View>        {/* Form Container */}
+        <View style={styles.formContainer}>{/* Product Name */}
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>Product Name *</Text>
             <TextInput
@@ -84,18 +82,6 @@ export default function AddItem() {
               style={styles.input}
               value={name}
               onChangeText={setName}
-            />
-          </View>
-
-          {/* Weight/Volume */}
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Weight/Volume</Text>
-            <TextInput
-              placeholder="e.g., 500g, 1L..."
-              placeholderTextColor="#9ca3af"
-              style={styles.input}
-              value={weight}
-              onChangeText={setWeight}
             />
           </View>
 
@@ -110,18 +96,19 @@ export default function AddItem() {
               onChangeText={setQuantity}
               keyboardType="numeric"
             />
-          </View>
-
-          {/* Category */}
+          </View>          {/* Category */}
           <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Category</Text>
-            <TextInput
-              placeholder="e.g., Obst, Gemüse, Milchprodukte..."
-              placeholderTextColor="#9ca3af"
-              style={styles.input}
-              value={category}
-              onChangeText={setCategory}
-            />
+            <Text style={styles.inputLabel}>Category</Text><TouchableOpacity
+              style={styles.dropdownInput}
+              onPress={() => setShowCategoryDropdown(!showCategoryDropdown)}
+            >
+              <Text style={styles.dropdownText}>
+                {category}
+              </Text>
+              <Text style={styles.dropdownArrow}>
+                {showCategoryDropdown ? "▲" : "▼"}
+              </Text>
+            </TouchableOpacity>
           </View>
 
           {/* Expiration Date */}
@@ -131,8 +118,7 @@ export default function AddItem() {
               placeholder="YYYY-MM-DD"
               placeholderTextColor="#9ca3af"
               style={styles.input}
-              value={expDate}
-              onChangeText={setExpDate}
+              value={expDate}              onChangeText={setExpDate}
             />
           </View>
         </View>
@@ -148,10 +134,51 @@ export default function AddItem() {
               <ActivityIndicator size="small" color="#ffffff" style={{ marginRight: 10 }} />
               <Text style={styles.addButtonText}>ADDING...</Text>
             </View>
-          ) : (
-            <Text style={styles.addButtonText}>ADD TO FRIDGE</Text>
-          )}
-        </TouchableOpacity>
+          ) : (            <Text style={styles.addButtonText}>ADD TO FRIDGE</Text>
+          )}        </TouchableOpacity>
+        
+        {/* Category Selection Modal */}
+        <Modal
+          visible={showCategoryDropdown}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => setShowCategoryDropdown(false)}
+        >
+          <TouchableOpacity 
+            style={styles.modalOverlay}
+            activeOpacity={1}
+            onPress={() => setShowCategoryDropdown(false)}
+          >
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Select Category</Text>
+              <ScrollView showsVerticalScrollIndicator={false}>
+                {categories.map((cat, index) => (
+                  <TouchableOpacity
+                    key={cat}
+                    style={[
+                      styles.modalItem,
+                      category === cat && styles.selectedItem
+                    ]}
+                    onPress={() => {
+                      setCategory(cat);
+                      setShowCategoryDropdown(false);
+                    }}
+                  >
+                    <Text style={[
+                      styles.modalItemText,
+                      category === cat && styles.selectedItemText
+                    ]}>
+                      {cat}
+                    </Text>
+                    {category === cat && (
+                      <Text style={styles.checkmark}>✓</Text>
+                    )}
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+          </TouchableOpacity>
+        </Modal>
       </ScrollView>
     </SafeAreaView>
   );

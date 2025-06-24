@@ -600,9 +600,9 @@ export const fridgeAddStyles = StyleSheet.create({
   formContainer: {
     paddingHorizontal: 20,
     paddingBottom: 20,
-  },
-  inputGroup: {
+  },  inputGroup: {
     marginBottom: 20,
+    position: "relative",
   },
   inputLabel: {
     fontSize: 16,
@@ -646,10 +646,118 @@ export const fridgeAddStyles = StyleSheet.create({
     fontSize: 18, 
     fontWeight: "700",
     letterSpacing: 0.5,
-  },
-  buttonContent: {
+  },  buttonContent: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+  },
+  dropdownText: {
+    fontSize: 16,
+    color: "#374151",
+  },
+  placeholderText: {
+    color: "#9ca3af",
+  },  dropdown: {
+    position: "absolute",
+    top: "100%",
+    left: 0,
+    right: 0,
+    backgroundColor: "#ffffff",
+    borderRadius: 12,
+    marginTop: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 5.84,
+    elevation: 10,
+    maxHeight: 200,
+    zIndex: 9999,
+  },dropdownItem: {
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f1f5f9",
+  },dropdownItemText: {
+    fontSize: 16,
+    color: "#374151",
+  },  dropdownInput: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#ffffff",
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    fontSize: 16,
+    color: "#374151",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2.22,
+    elevation: 3,
+  },  dropdownArrow: {
+    fontSize: 12,
+    color: "#9ca3af",
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  modalContent: {
+    backgroundColor: "#ffffff",
+    borderRadius: 16,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    maxHeight: "70%",
+    width: "100%",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4.65,
+    elevation: 8,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#1e293b",
+    marginBottom: 16,
+    textAlign: "center",
+  },
+  modalItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f1f5f9",
+  },
+  selectedItem: {
+    backgroundColor: "#f0f9ff",
+  },
+  modalItemText: {
+    fontSize: 16,
+    color: "#374151",
+  },
+  selectedItemText: {
+    color: "#0369a1",
+    fontWeight: "600",
+  },
+  checkmark: {
+    fontSize: 16,
+    color: "#059669",
+    fontWeight: "700",
   },
 });

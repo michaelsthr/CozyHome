@@ -1,22 +1,24 @@
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    Image,
+    SafeAreaView,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { fridgeCategoryStyles as styles } from "./styles";
 
 export default function Dairy() {
   const router = useRouter();
+  const { search } = useLocalSearchParams();
   const [dairyItems, setDairyItems] = useState<KuehlschrankItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState((search as string) || "");
 
   useEffect(() => {
     const fetchDairyItems = async () => {
@@ -29,10 +31,12 @@ export default function Dairy() {
       } finally {
         setLoading(false);
       }
-    };
-
-    fetchDairyItems();
+    };    fetchDairyItems();
   }, []);
+
+  const filteredItems = dairyItems.filter(item =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const getStatusIcon = (mhd?: string) => {
     if (!mhd) return require("../../../assets/images/fridge_icons/eatable.png");
@@ -82,14 +86,14 @@ export default function Dairy() {
         {/* Title Section */}
         <View style={styles.titleSection}>
           <Text style={styles.title}>Dairy Products</Text>
-        </View>
-
-        {/* Search */}
+        </View>        {/* Search */}
         <View style={styles.searchContainer}>
           <TextInput
             placeholder="Find dairy products..."
             placeholderTextColor="#9ca3af"
             style={styles.searchInput}
+            value={searchTerm}
+            onChangeText={setSearchTerm}
           />
         </View>
 
@@ -103,7 +107,7 @@ export default function Dairy() {
 
         {/* List */}
         <View style={styles.itemsList}>
-          {dairyItems.map((item) => (
+          {filteredItems.map((item) => (
             <View key={item.$id} style={styles.row}>
               <Image source={require("../../../assets/images/fridge_icons/dairy.png")} style={styles.itemImage} />
               <View style={styles.info}>

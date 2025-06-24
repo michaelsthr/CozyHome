@@ -1,23 +1,24 @@
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
-  FlatList,
-  Image,
-  SafeAreaView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    FlatList,
+    Image,
+    SafeAreaView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { fridgeCategoryStyles as styles } from "./styles";
 
 export default function Meat() {
   const router = useRouter();
+  const { search } = useLocalSearchParams();
   const [meatItems, setMeatItems] = useState<KuehlschrankItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState((search as string) || "");
 
   useEffect(() => {
     const fetchMeatItems = async () => {

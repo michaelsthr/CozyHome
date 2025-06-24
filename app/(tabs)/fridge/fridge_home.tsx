@@ -17,6 +17,7 @@ export default function Fridge() {
   const router = useRouter();
   const [fridgeItems, setFridgeItems] = useState<KuehlschrankItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchFridgeItems = async () => {
@@ -28,10 +29,55 @@ export default function Fridge() {
       } finally {
         setLoading(false);
       }
-    };
-
-    fetchFridgeItems();
+    };    fetchFridgeItems();
   }, []);
+
+  // Map German categories to route names
+  const getCategoryRoute = (category: string) => {
+    switch (category) {
+      case "Obst":
+        return "/(tabs)/fridge/fridge_fruits";
+      case "Gemüse":
+        return "/(tabs)/fridge/fridge_vegetables";
+      case "Milchprodukte":
+        return "/(tabs)/fridge/fridge_dairy";
+      case "Fleisch":
+        return "/(tabs)/fridge/fridge_meat";
+      case "Getränke":
+        return "/(tabs)/fridge/fridge_drinks";
+      case "Tiefkühlkost":
+        return "/(tabs)/fridge/fridge_frozen";
+      case "Sonstige":
+        return "/(tabs)/fridge/fridge_other";
+      default:
+        return "/(tabs)/fridge/fridge_items";
+    }
+  };
+
+  const handleSearch = () => {
+    if (!searchTerm.trim()) return;
+
+    // Find items that match the search term
+    const matchingItems = fridgeItems.filter(item => 
+      item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    if (matchingItems.length === 0) {
+      // If no items found, go to general fridge items page
+      router.push("/(tabs)/fridge/fridge_items");
+      return;
+    }    // Get the category of the first matching item
+    const firstMatch = matchingItems[0];
+    const categoryRoute = getCategoryRoute(firstMatch.kategorie || "Sonstige");
+      // Navigate to the category page with search parameter
+    router.push({
+      pathname: categoryRoute as any,
+      params: { search: searchTerm }
+    });
+    
+    // Clear search after navigation
+    setSearchTerm("");
+  };
   const getStatusIcon = (mhd?: string) => {
     if (!mhd) return require("../../../assets/images/fridge_icons/eatable.png");
     const today = new Date();
@@ -110,14 +156,16 @@ export default function Fridge() {
         <View style={styles.greetingSection}>
           <Text style={styles.greeting}>Good morning!</Text>
           <Text style={styles.username}>Max Mustermann</Text>
-        </View>
-
-        {/* Search Bar */}
+        </View>        {/* Search Bar */}
         <View style={styles.searchContainer}>
           <TextInput
             placeholder="Search items in your fridge..."
             placeholderTextColor="#9ca3af"
             style={styles.searchInput}
+            value={searchTerm}
+            onChangeText={setSearchTerm}
+            onSubmitEditing={handleSearch}
+            returnKeyType="search"
           />
         </View>
 

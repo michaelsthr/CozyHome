@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
     ActivityIndicator,
@@ -15,9 +15,10 @@ import { fridgeCategoryStyles as styles } from "./styles";
 
 export default function Frozen() {
   const router = useRouter();
+  const { search } = useLocalSearchParams();
   const [frozenItems, setFrozenItems] = useState<KuehlschrankItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState((search as string) || "");
 
   useEffect(() => {
     const fetchFrozenItems = async () => {

@@ -5,9 +5,8 @@ import {
   SafeAreaView,
   ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { fridgeItemsStyles as styles } from "./styles";
 
@@ -36,20 +35,9 @@ export default function FridgeItems() {
             source={require("../../../assets/images/fridge_icons/profile-picture.png")}
             style={styles.avatar}
           />
-        </View>
-
-        {/* Title Section */}
+        </View>        {/* Title Section */}
         <View style={styles.titleSection}>
           <Text style={styles.title}>Categories</Text>
-        </View>
-
-        {/* Search Bar */}
-        <View style={styles.searchContainer}>
-          <TextInput
-            placeholder="Find products by category..."
-            placeholderTextColor="#9ca3af"
-            style={styles.searchInput}
-          />
         </View>
 
         {/* Items Label */}
