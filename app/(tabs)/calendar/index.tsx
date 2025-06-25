@@ -3,6 +3,9 @@ import { Link } from "expo-router";
 import React from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import {containerStyles } from "@/styles/container_styles"
+import { fontStyles } from "@/styles/font_styles";
+import { iconStyles } from "@/styles/icon_styles";
 
 const MONTH_NAMES = [
     "January",
@@ -22,33 +25,16 @@ const CURRENT_MONTH = MONTH_NAMES[new Date().getMonth()];
 
 export default function calendar() {
     return (
-        <SafeAreaView
-            style={{
-                flex: 1,
-                height: "100%",
-                backgroundColor: "white",
-                marginBottom: 10,
-            }}>
-            <View style={styles.container}>
+        <SafeAreaView style={{height: "100%"}}>
+            <View style={containerStyles.container}>
                 <View
-                    style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-around",
-                        gap: 5,
-                        marginRight: "auto",
-                    }}>
+                    style={containerStyles.container_header}>
                     <Image
                         source={require("../../../assets/calendar.png")}
-                        style={{ width: 24, height: 24, marginRight: "auto" }}
+                        style={iconStyles.icon1}
                     />
                     <Text
-                        style={{
-                            fontSize: 30,
-                            fontWeight: "bold",
-                            textAlign: "center",
-                            marginRight: "auto",
-                        }}>
+                        style={fontStyles.h1}>
                         {CURRENT_MONTH}
                     </Text>
                 </View>
@@ -56,7 +42,7 @@ export default function calendar() {
                     <Pressable>
                         <Image
                             source={require("../../../assets/inbox.png")}
-                            style={{ width: 24, height: 24 }}
+                            style={iconStyles.icon1}
                         />
                     </Pressable>
                 </Link>
@@ -64,7 +50,7 @@ export default function calendar() {
                     <Pressable>
                         <Image
                             source={require("../../../assets/symbol-plus.png")}
-                            style={{ width: 17, height: 17 }}
+                            style={iconStyles.icon2}
                         />
                     </Pressable>
                 </Link>
@@ -73,14 +59,3 @@ export default function calendar() {
         </SafeAreaView>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flexDirection: "row",
-        justifyContent: "flex-end",
-        gap: 20,
-        alignItems: "center",
-        paddingHorizontal: 30,
-        backgroundColor: "white",
-    },
-});
