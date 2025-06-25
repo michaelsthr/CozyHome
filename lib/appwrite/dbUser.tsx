@@ -16,11 +16,10 @@ export const createNewUser = async function(userInfo: User): Promise<Models.Docu
     try {
         const existingUsers = await databases.listDocuments(databaseId, userCollectionId, [
             Query.equal("username", userInfo.username),
-            Query.equal("password", userInfo.password)
         ]);
 
         if (existingUsers.total > 0) {
-            throw new Error("Benutzername und Passwort-Kombination existiert bereits.");
+            throw new Error("Benutzername existiert bereits.");
         }
 
         return await databases.createDocument(databaseId, userCollectionId, 'unique()', userInfo);
