@@ -1,24 +1,12 @@
+
 import { Box, Button, HStack, VStack } from "@gluestack-ui/themed";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { router } from "expo-router";
-import { CalendarDays } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { Dimensions, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Dimensions, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
-import { addTodo } from "../../lib/appwrite/dbTodo"; //für db
   
-const screenWidth = Dimensions.get("screen").width;
-const containerWidth = Math.min(screenWidth * 0.9, 400);  // max 400px, sonst 90% Breite
-
-interface ToDoItemProps {
-  key: string;
-  id: string;
-  name: string;
-  date?: string;
-  done: boolean;
-  regularity?: string;
-  responsible?: string;
-}
+  const screenWidth = Dimensions.get("screen").width;
+  const containerWidth = Math.min(screenWidth * 0.9, 400);  // max 400px, sonst 90% Breite
   
   const dataWH = [
     { key: "1", value: "täglich" },
@@ -27,19 +15,17 @@ interface ToDoItemProps {
     { key: "4", value: "jährlich" }
   ];
 
-
-  const DropDownAssignee= ({ selectedPerson, setSelectedPerson }) => {
+  const DropDownResponsible= ({ selected, setSelected }) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(selectedPerson || null);
+  const [value, setValue] = useState(selected || null);
   const [items, setItems] = useState([
-    { label: 'Keiner', value: 'Keiner' },
     { label: 'Bewohner 1', value: 'Bewohner 1' },
     { label: 'Bewohner 2', value: 'Bewohner 2' },
     { label: 'Bewohner 3', value: 'Bewohner 3' },
   ]);
 
   useEffect(() => {
-    setSelectedPerson(value);
+    setSelected(value);
   }, [value]);
 
   return(
@@ -50,9 +36,7 @@ interface ToDoItemProps {
       setOpen={setOpen}
       setValue={setValue}
       setItems={setItems}
-      zIndex={3000}
-      zIndexInverse={1000}
-      placeholder="None"
+      placeholder="Verantwortlichen auswählen"
       style={{
         borderColor: '#ccc',
         borderRadius: 8,
@@ -63,25 +47,23 @@ interface ToDoItemProps {
       }}
       dropDownContainerStyle={{
         borderColor: '#ccc',
-        backgroundColor:"white",
       }}
     />
   );
 };
 
-  const DropDownRepeat= ({ selectedRepeat, setSelectedRepeat }) => {
+  const DropDownRoutine= ({ selected, setSelected }) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(selectedRepeat || null);
+  const [value, setValue] = useState(selected || null);
   const [items, setItems] = useState([
-    { label: 'None', value: 'None' },
-    { label: 'daily', value: 'daily' },
-    { label: 'weekly', value: 'weekly' },
-    { label: 'monthly', value: 'monthly' },
-    { label: 'yearly', value: 'yearly' },
+    { label: 'täglich', value: 'täglich' },
+    { label: 'wöchentlich', value: 'wöchentlich' },
+    { label: 'monatlich', value: 'monatlich' },
+    { label: 'jährlich', value: 'jährlich' },
   ]);
 
   useEffect(() => {
-    setSelectedRepeat(value);
+    setSelected(value);
   }, [value]);
 
   return(
@@ -92,9 +74,7 @@ interface ToDoItemProps {
       setOpen={setOpen}
       setValue={setValue}
       setItems={setItems}
-      zIndex={3000}
-      zIndexInverse={1000}
-      placeholder="None"
+      placeholder="Wiederholung"
       style={{
         borderColor: '#ccc',
         borderRadius: 8,
@@ -105,25 +85,16 @@ interface ToDoItemProps {
       }}
       dropDownContainerStyle={{
         borderColor: '#ccc',
-        elevation: 10
       }}
     />
   );
 };
 
 const DatePickerField = ({ date, setDate }) => {
-  
   const [showPicker, setShowPicker] = useState(false);
   const [hasSelected, setHasSelected] = useState(false);
-  const isWeb= Platform.OS =="web";
 
-   useEffect(() => {
-    if (date) {
-      setHasSelected(true);
-    }
-  }, [date]);
-
-   const handleChange = (event, selectedDate) => {
+  const handleChange = (event, selectedDate) => {
     if (selectedDate) {
       setDate(selectedDate);
       setHasSelected(true);
@@ -131,65 +102,44 @@ const DatePickerField = ({ date, setDate }) => {
     setShowPicker(false);
   };
 
-  const handleWebChange = (e) => {
-    const selectedDate = new Date(e.target.value);
-    setDate(selectedDate);
-    setHasSelected(true);
-  };
-
   return (
     <View style={{ width: '100%', marginBottom: '15%' }}>
-      <Text style={{ marginBottom: 6 }}>Date</Text>
-      <View
+      <Text style={{ marginBottom: 6 }}>Datum</Text>
+      <TouchableOpacity
+        onPress={() => setShowPicker(true)}
         style={{
           borderWidth: 1,
           borderColor: '#ccc',
           borderRadius: 8,
           paddingVertical: 12,
           paddingHorizontal: 16,
-          justifyContent: 'space-between',
-          height: 44,
-          flexDirection:"row",
-          
+          justifyContent: 'center',
+          height: 44
         }}
       >
-        {isWeb ? (
-          <TextInput
-            style={{ flex: 1, color: '#000', fontSize: 14 }}
-            type="date"
-            value={date ? date.toISOString().split('T')[0] : ''}
-            onChange={handleWebChange}
-          />
-        ) : (
-          <>
-            <Text style={{ color: hasSelected ? '#000' : '#999' }}>
-              {hasSelected && date ? date.toLocaleDateString() : ''}
-            </Text>
-            <TouchableOpacity onPress={() => setShowPicker(prev => !prev)}>
-              <CalendarDays size={20} color="black" />
-            </TouchableOpacity>
-          </>
-        )}
-      </View>
-      {!isWeb && showPicker && (
-        <View style={{alignItems:"center"}}>
+        <Text style={{ color: hasSelected ? '#000' : '#999' }}>
+          {hasSelected ? date.toLocaleDateString() : ''}
+          {/* <Icon as ={CalendarDaysIcon}/> */}
+        </Text>
+      </TouchableOpacity>
+        {showPicker && (
+          <View style={{alignItems:"center"}}>
           <DateTimePicker
             mode="date"
             display="default"
             value={date || new Date()}
             onChange={handleChange}
           />
-        </View>
+          </View>
       )}
-    </View>
+     </View>
   );
 };
 
   export default function NewToDo() {
     const [selectedPerson, setSelectedPerson] = useState('');
     const [selectedRepeat, setSelectedRepeat] = useState('');
-    const [todoName, setTodoName] = useState('');
-    const [date, setDate] = useState<Date | null> (null);
+    const [date, setDate] = useState(new Date());
     const [show, setShow] = useState(false);
   
     const onChange = (event, selectedDate) => {
@@ -198,65 +148,36 @@ const DatePickerField = ({ date, setDate }) => {
     };
   
     const showDatepicker = () => setShow(true);
-    const cancel = () => {console.log("Abbrechen"); router.back();};
-    const saveNewTodo = (
-      tile: string,
-      responsible: string, 
-      date: string, 
-      regularity: string
-    ) => {
-      if (!tile) {
-        console.log("Please fill in the name of the ToDo"); // ToDo: Implement error handling
-        return;
-      }
-
-      const newTodo = {
-        name: tile,
-        // Todo: responsible: (responsible ? responsible : null),
-        date: (date ? date.toISOString() : null),
-        regularity: (regularity ? regularity : null),
-        done: false,
-      }
-
-      addTodo(newTodo)
-      console.log("Speichern");
-      router.back();
-  
-    }
+    const cancel = () => console.log("Abbrechen");
+    const save = () => console.log("Speichern");
     
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.heading}>Add new ToDo</Text>
-        <ScrollView>
+          <Text style={styles.heading}>Neues To Do erstellen</Text>
         <Box style={styles.box}>
           <VStack>
-            <Text> Title </Text>
-            <TextInput
-              value={todoName}
-              onChangeText={setTodoName}
-              style={styles.textInput}
-              placeholderTextColor="#000"
-            />
-            <View style={{marginBottom: "15%", zIndex:3000}}>
-              <Text style={{marginBottom: "2%"}}>Assignee</Text>
-              <DropDownAssignee selectedPerson={selectedPerson} setSelectedPerson={setSelectedPerson}/>
-            </View> 
-            <DatePickerField date={date} setDate={setDate}/>
-            <View style={{marginBottom: "15%"}}>
-              <Text style={{marginBottom: "2%"}}>Repeat</Text>
-              <DropDownRepeat selectedRepeat={selectedRepeat} setSelectedRepeat={setSelectedRepeat}/>
-            </View> 
+            <Text> Name des ToDos </Text>
+          <TextInput
+            style={styles.textInput}
+            placeholderTextColor="#000"
+          />
+          <View style={{marginBottom: "15%"}}>
+          <DropDownResponsible selected={selectedPerson} setSelected={setSelectedPerson}/>
+          </View> 
+          <DatePickerField date={date} setDate={setDate}/>
+           <View style={{marginBottom: "15%"}}>
+          <DropDownRoutine selected={selectedPerson} setSelected={setSelectedPerson}/>
+          </View> 
           </VStack>
         </Box>
-        </ScrollView>
         <HStack style={styles.buttonContainer}>
-          <Button style={[styles.buttons, {backgroundColor: "grey"}]} onPress={cancel}>
-            <Text style={styles.buttonText}>Cancel</Text>
-          </Button>
-          <Button style={[styles.buttons, {backgroundColor: "blue"}]} onPress={() => saveNewTodo(todoName, selectedPerson, date, selectedRepeat)}>
-            <Text style={styles.buttonText}>Add</Text>
-          </Button>
-        </HStack>
+                 <Button style={styles.buttons} onPress={cancel}>
+                   <Text style={styles.buttonText}>Abbrechen</Text>
+                 </Button>
+                 <Button style={styles.buttons} onPress={save}>
+                   <Text style={styles.buttonText}>Speichern</Text>
+                 </Button>
+               </HStack>
       </SafeAreaView>
     );
   }
@@ -274,14 +195,13 @@ const DatePickerField = ({ date, setDate }) => {
       borderRadius: 12,
       padding: 16,
       marginBottom: "15%",
+      
       shadowColor: "#000",
       shadowOpacity: 0.1,
       shadowRadius: 6,
       shadowOffset: { width: 0, height: 3 },
       elevation: 3, 
-      marginTop:"10%",
-      zIndex: 3000,
-      position: "relative"
+      marginTop:"10%"
     },
     heading: {
       fontSize: 24,
@@ -301,21 +221,61 @@ const DatePickerField = ({ date, setDate }) => {
       fontSize: 14,
       color: "#000",
     },
-    buttonContainer: {
+    selectBox: {
+      width: "100%",
+      borderRadius: 8,
+      marginBottom: 16,
+      borderWidth: 1,
+      borderColor: "#ccc",
+    },
+    dropdown: {
+      maxHeight: "45%",
+    },
+    dateArea: {
+      height: 50,
+      width: "100%",
+      paddingHorizontal: 10,
+      justifyContent: "center",
+      borderWidth: 1,
+      borderColor: "#ccc",
+      borderRadius: 12,
+      marginBottom: "15%"
+    },
+    dateText: {
+      color:"#000",
+      fontSize:14
+    },
+    datePicker: {
+      width: "100%",
+    },
+    buttonRow: {
       flexDirection: "row",
       justifyContent: "space-between",
+      width: "100%",
+    },
+    button: {
+      flex: 1,
+      maxWidth: 160,
+      marginHorizontal: 8,
+      borderRadius: 8,
+      paddingVertical: 12,
+    },
+    buttonContainer: {
+      flexDirection: "row",
+      justifyContent: "space-around",
       marginBottom: "10%",
       marginTop:"auto",
-      width: containerWidth,
-      gap:"25%",
+      paddingHorizontal: 16,
+      width: containerWidth
     },
-    buttons: {      
-      flex:1,            
-      paddingVertical: "1%",
-      paddingHorizontal: "8%",
-      marginBottom: "3%",
-      borderRadius: 10,
-      alignItems: "center",
+    buttons: {                    
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    marginBottom: "3%",
+    borderRadius: 8,
+    alignItems: "center",
+    alignSelf: "center", 
+    backgroundColor: "blue"
     },
     buttonText: {
       color: "white",
@@ -324,4 +284,3 @@ const DatePickerField = ({ date, setDate }) => {
     },
   });
   
-

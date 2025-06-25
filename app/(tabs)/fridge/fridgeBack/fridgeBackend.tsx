@@ -1,9 +1,9 @@
 import { Models } from 'appwrite';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import DatePickerField from "../../../../components/DatePickerField";
-import { deleteKuehlschrankInhalt, getKuehlschrankInhalt, KuehlschrankItem, NewKuehlschrankItem, setKuehlschrankInhalt, updateKuehlschrankInhalt } from "../../../../lib/appwrite/dbKuehlschrank"; //für db
 import { FridgeCategories, FridgeCategoryType, getAllFridgeCategories } from "../../../../lib/constants/categories";
+import DatePickerField from "./components/DatePickerField";
+import { deleteKuehlschrankInhalt, getKuehlschrankInhalt, KuehlschrankItem, NewKuehlschrankItem, setKuehlschrankInhalt, updateKuehlschrankInhalt } from "./components/dbKuehlschrank"; //für db
 
 export default function Fridge() {
   // Helper function to get category display information (can be expanded to include icons, colors, etc.)

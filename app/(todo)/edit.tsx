@@ -1,42 +1,37 @@
 import { config } from "@gluestack-ui/config";
 import { Badge, Box, Button, GluestackUIProvider, HStack, RepeatIcon, TrashIcon, VStack } from "@gluestack-ui/themed";
-import { router, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Dimensions, Modal, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
-const screenWidth = Dimensions.get("screen").width;
-
+import { Modal, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const ToDoItem = ({ title, date, responsible, isChecked, routine, onTrashPress }) => (
   <Box style={styles.todoItem}>
-    <VStack space="xs">
-      <TouchableOpacity onPress={() => router.push("../(todo)/edit_todo")}>
-        <HStack style={styles.titleRow}>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
-          <Badge style={styles.badge}>
-            <Text style={styles.badgeText}>{responsible}</Text>
-          </Badge>
-        </HStack>
-        <HStack style={styles.IconRow}>
-          <TouchableOpacity onPress={onTrashPress} style={{marginRight:"8%"}}>
-            <TrashIcon size="lg" />
-          </TouchableOpacity>
-        </HStack>
-        <HStack style={styles.dateRow}>
-          <Text style={styles.dateText}>{date}</Text>
-          {routine ? (
-            <HStack style={styles.routineContainer}>
-              <RepeatIcon />
-              <Text style={styles.routineText}>{routine}</Text>
-            </HStack>
-          ) : null}
-        </HStack>
-      </TouchableOpacity>
+    <VStack space={2}>
+      <HStack style={styles.titleRow}>
+        <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
+        <Badge style={styles.badge}>
+          <Text style={styles.badgeText}>{responsible}</Text>
+        </Badge>
+      </HStack>
+      <HStack style={styles.IconRow}>
+        <TouchableOpacity onPress={onTrashPress}>
+          <TrashIcon size="md" />
+        </TouchableOpacity>
+      </HStack>
+      <HStack style={styles.dateRow}>
+        <Text style={styles.dateText}>{date}</Text>
+        {routine ? (
+          <HStack style={styles.routineContainer}>
+            <RepeatIcon style={styles.icon} />
+            <Text style={styles.routineText}>{routine}</Text>
+          </HStack>
+        ) : null}
+      </HStack>
     </VStack>
   </Box>
 );
 
-export default function Edit() {
+export default function EditTodo() {
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
 
@@ -47,49 +42,47 @@ export default function Edit() {
   return (
     <GluestackUIProvider config={config}>
       <SafeAreaView style={styles.container}>
-        <Text style={styles.heading}>Edit ToDo</Text>
-        <View style={{ flex: 1}}>
-          <ScrollView>
-            <ToDoItem
-              title="ToDo1"
-              date="21.05.2025"
-              responsible="Bewohner1"
-              isChecked={true}
-              routine="täglich"
-              onTrashPress={handleDeletePress}
-            />
-            <ToDoItem
-              title="ToDo2"
-              date="21.05.2025"
-              responsible="Bewohner2"
-              isChecked={false}
-              routine=""
-              onTrashPress={handleDeletePress}
-            />
-          </ScrollView>
-        </View>
+        <Text style={styles.heading}>Bearbeiten</Text>
+
+        <ScrollView contentContainerStyle={styles.todoList}>
+          <ToDoItem
+            title="ToDo1"
+            date="21.05.2025"
+            responsible="Bewohner1"
+            isChecked={true}
+            routine="täglich"
+            onTrashPress={handleDeletePress}
+          />
+          <ToDoItem
+            title="ToDo2"
+            date="21.05.2025"
+            responsible="Bewohner2"
+            isChecked={false}
+            routine=""
+            onTrashPress={handleDeletePress}
+          />
+        </ScrollView>
 
         {/* Popup Modal */}
         <Modal
-          animationType="fade"
+          animationType="slide"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => setModalVisible(false)}
         >
           <SafeAreaView style={styles.modalOverlay}>
             <View style={styles.modalContent}>
-              <Text style={styles.modalText}>Delete this ToDo?:</Text>
-              <Text style={styles.modalText}>title</Text>
+              <Text style={styles.modalText}>Wollen Sie dieses To Do löschen?: title </Text>
               <HStack style={styles.buttonContainer}>
-                <Button style={[styles.buttons,{backgroundColor: "grey"}]} onPress={() => setModalVisible(false)}>
-                  <Text style={styles.buttonText}>Cancel</Text>
-                </Button>
-                <Button style={[styles.buttons,{backgroundColor: "blue"}]} onPress={() => {
-                  console.log("ToDo gelöscht");
-                  setModalVisible(false);
-                }}>
-                  <Text style={styles.buttonText}>Delete</Text>
-                </Button>
+              <Button onPress={() => setModalVisible(false)}>
+                <Text style={styles.buttonText}>Abbrechen</Text>
+              </Button>
+              <Button onPress={() => {
+                console.log("ToDo gelöscht");
+                setModalVisible(false);
+              }}>
+                <Text style={styles.buttonText}>Löschen</Text>
+              </Button>
               </HStack>
             </View>
           </SafeAreaView>
@@ -108,27 +101,31 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom:"15%"
+    marginBottom:"8%"
   },
   buttonContainer: {
     flexDirection: "row",
-      justifyContent: "space-between",
-      marginBottom: "3%",
-      marginTop:"10%",
-      gap:"25%",
+    justifyContent: "space-around",
+    marginBottom: "5%",
+    marginTop:"10%",
+    paddingHorizontal: "2%"
   },
-  buttons: {      
-      flex:1,            
-      paddingVertical: "1%",
-      paddingHorizontal: "8%",
-      marginBottom: "3%",
-      borderRadius: 10,
-      alignItems: "center", 
-    },
+  button: {                    
+    paddingVertical: "1%",
+    paddingHorizontal: "5%",
+    marginBottom: "3%",
+    borderRadius: 8,
+    alignItems: "center",
+    alignSelf: "center", 
+    backgroundColor: "blue"
+  },
   buttonText: {
     color: "white",
     fontSize: 14,
     fontWeight: "bold"
+  },
+  todoList: {
+    paddingBottom: 100
   },
   todoItem: {
     width: "100%",
@@ -177,6 +174,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: "10%"
   },
+  icon: {
+    width: 16,
+    height: 16,
+    marginRight: 6
+  },
   routineText: {
     fontSize: 12,
     color: "#555"
@@ -200,7 +202,7 @@ const styles = StyleSheet.create({
   },
   modalText: {
     fontSize: 16,
-    marginBottom: "2%",
+    marginBottom: 20,
     textAlign: "center"
   }
 });

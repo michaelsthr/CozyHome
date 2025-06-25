@@ -1,6 +1,6 @@
 import { Models } from 'react-native-appwrite';
-import { FridgeCategoryType } from '../constants/categories';
-import { getDatabases } from './initializer'; //für db
+import { getDatabases } from '../../../../../lib/appwrite/initializer'; //für db
+import { FridgeCategoryType } from '../../../../../lib/constants/categories';
 
 export interface NewKuehlschrankItem {
   name: string;
@@ -58,3 +58,4 @@ const deleteKuehlschrankInhalt = async function(kuehlschrankInhalt: { $id: strin
 }
 
 export { deleteKuehlschrankInhalt, getKuehlschrankInhalt, setKuehlschrankInhalt, updateKuehlschrankInhalt };
+
