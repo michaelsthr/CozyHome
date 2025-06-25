@@ -154,8 +154,8 @@ export default function Fridge() {
 
         {/* Greeting Section */}
         <View style={styles.greetingSection}>
-          <Text style={styles.greeting}>Good morning!</Text>
-          <Text style={styles.username}>Max Mustermann</Text>
+          <Text style={styles.greeting}>{"Good morning!"}</Text>
+          <Text style={styles.username}>{"Max Mustermann"}</Text>
         </View>
         {/* Search Bar */}
         <View style={styles.searchContainer}>
@@ -177,7 +177,7 @@ export default function Fridge() {
               source={require("../../../assets/images/fridge_icons/fridge.png")}
               style={styles.fridgeIcon}
             />
-            <Text style={styles.title}>Your Fridge</Text>
+            <Text style={styles.title}>{"Your Fridge"}</Text>
           </View>
           <Text style={styles.subtitle}>
             {fridgeItems.length > 0 
@@ -224,9 +224,9 @@ export default function Fridge() {
                 source={require("../../../assets/images/fridge_icons/fridge.png")}
                 style={styles.emptyIcon}
               />
-              <Text style={styles.emptyText}>Your fridge is empty!</Text>
+              <Text style={styles.emptyText}>{"Your fridge is empty!"}</Text>
               <Text style={styles.emptySubtext}>
-                Start adding items to keep track of{'\n'}your food and expiration dates
+                {"Start adding items to keep track of\nyour food and expiration dates"}
               </Text>
             </View>
           )}
@@ -237,7 +237,7 @@ export default function Fridge() {
           style={styles.checkButton}
           onPress={() => router.push("/(tabs)/fridge/fridge_items")}
         >
-          <Text style={styles.checkButtonText}>EXPLORE CATEGORIES</Text>
+          <Text style={styles.checkButtonText}>{"EXPLORE CATEGORIES"}</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

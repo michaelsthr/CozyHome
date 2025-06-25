@@ -39,7 +39,7 @@ export default function FridgeItems() {
         
         {/* Title Section */}
         <View style={styles.titleSection}>
-          <Text style={styles.title}>Food Categories</Text>
+          <Text style={styles.title}>{"Food Categories"}</Text>
         </View>
 
         {/* Categories Grid */}
@@ -62,7 +62,7 @@ export default function FridgeItems() {
           style={styles.addButton}
           onPress={() => router.push("/(tabs)/fridge/fridge_add")}
         >
-          <Text style={styles.addButtonText}>ADD NEW ITEM</Text>
+          <Text style={styles.addButtonText}>{"ADD NEW ITEM"}</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

@@ -69,7 +69,7 @@ export default function Meat() {
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#8B5CF6" />
-          <Text style={styles.loadingText}>Loading meat & fish...</Text>
+          <Text style={styles.loadingText}>{"Loading meat & fish..."}</Text>
         </View>
       </SafeAreaView>
     );
@@ -86,7 +86,7 @@ export default function Meat() {
 
       {/* Title Section */}
       <View style={styles.titleSection}>
-        <Text style={styles.title}>Meat & Fish</Text>
+        <Text style={styles.title}>{"Meat & Fish"}</Text>
       </View>
 
       {/* Search */}
@@ -107,9 +107,9 @@ export default function Meat() {
             source={require("../../../assets/images/fridge_icons/meat-fish.png")}
             style={styles.emptyIcon}
           />
-          <Text style={styles.emptyText}>No meat & fish items</Text>
+          <Text style={styles.emptyText}>{"No meat & fish items"}</Text>
           <Text style={styles.emptySubtext}>
-            Add some meat or fish items to keep track of freshness
+            {"Add some meat or fish items to keep track of freshness"}
           </Text>
         </View>
       ) : (
@@ -123,7 +123,8 @@ export default function Meat() {
                 style={styles.itemImage} 
               />
 
-              <View style={styles.info}>                <View style={styles.statusRow}>
+              <View style={styles.info}>
+                <View style={styles.statusRow}>
                   <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
                   <Text style={styles.statusText}>
                     {`${getDaysLeft(item.mhd)} ${getDaysLeft(item.mhd) === 1 ? "Day" : "Days"} Remaining`}
@@ -147,7 +148,7 @@ export default function Meat() {
         style={styles.addButton}
         onPress={() => router.push("/(tabs)/fridge/fridge_add")}
       >
-        <Text style={styles.addButtonText}>ADD NEW MEAT/FISH</Text>
+        <Text style={styles.addButtonText}>{"ADD NEW MEAT/FISH"}</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

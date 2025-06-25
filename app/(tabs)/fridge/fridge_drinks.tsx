@@ -69,7 +69,7 @@ export default function Drinks() {
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#8B5CF6" />
-          <Text style={styles.loadingText}>Loading drinks...</Text>
+          <Text style={styles.loadingText}>{"Loading drinks..."}</Text>
         </View>
       </SafeAreaView>
     );
@@ -90,7 +90,7 @@ export default function Drinks() {
 
         {/* Title Section */}
         <View style={styles.titleSection}>
-          <Text style={styles.title}>Fresh Drinks</Text>
+          <Text style={styles.title}>{"Fresh Drinks"}</Text>
         </View>
 
         {/* Search */}
@@ -111,9 +111,9 @@ export default function Drinks() {
               source={require("../../../assets/images/fridge_icons/drinks.png")}
               style={styles.emptyIcon}
             />
-            <Text style={styles.emptyText}>No drinks found</Text>
+            <Text style={styles.emptyText}>{"No drinks found"}</Text>
             <Text style={styles.emptySubtext}>
-              Add some refreshing drinks to your fridge
+              {"Add some refreshing drinks to your fridge"}
             </Text>
           </View>
         ) : (
@@ -121,7 +121,8 @@ export default function Drinks() {
             {filteredItems.map((item) => (
               <View key={item.$id} style={styles.row}>
                 <Image source={require("../../../assets/images/fridge_icons/drinks.png")} style={styles.itemImage} />
-                <View style={styles.info}>                  <View style={styles.statusRow}>
+                <View style={styles.info}>
+                  <View style={styles.statusRow}>
                     <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
                     <Text style={styles.statusText}>
                       {`${getDaysLeft(item.mhd)} ${getDaysLeft(item.mhd) === 1 ? "Day" : "Days"} Remaining`}
@@ -142,7 +143,7 @@ export default function Drinks() {
           style={styles.addButton}
           onPress={() => router.push("/(tabs)/fridge/fridge_add")}
         >
-          <Text style={styles.addButtonText}>ADD NEW DRINK</Text>
+          <Text style={styles.addButtonText}>{"ADD NEW DRINK"}</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

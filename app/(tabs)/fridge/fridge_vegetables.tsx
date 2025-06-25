@@ -85,8 +85,10 @@ export default function Vegetables() {
 
         {/* Title Section */}
         <View style={styles.titleSection}>
-          <Text style={styles.title}>Fresh Vegetables</Text>
-        </View>        {/* Search */}
+          <Text style={styles.title}>{"Fresh Vegetables"}</Text>
+        </View>
+        
+        {/* Search */}
         <View style={styles.searchContainer}>
           <TextInput
             placeholder="Find fresh vegetables..."
@@ -102,7 +104,8 @@ export default function Vegetables() {
           {filteredItems.map((item) => (
             <View key={item.$id} style={styles.row}>
               <Image source={require("../../../assets/images/fridge_icons/vegetables.png")} style={styles.itemImage} />
-              <View style={styles.info}>                <View style={styles.statusRow}>
+              <View style={styles.info}>
+                <View style={styles.statusRow}>
                   <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
                   <Text style={styles.statusText}>
                     {`${getDaysLeft(item.mhd)} ${getDaysLeft(item.mhd) === 1 ? "Day" : "Days"} Remaining`}
@@ -122,7 +125,7 @@ export default function Vegetables() {
           style={styles.addButton}
           onPress={() => router.push("/(tabs)/fridge/fridge_add")}
         >
-          <Text style={styles.addButtonText}>ADD NEW VEGETABLE</Text>
+          <Text style={styles.addButtonText}>{"ADD NEW VEGETABLE"}</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

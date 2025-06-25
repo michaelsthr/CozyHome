@@ -23,7 +23,8 @@ export default function Other() {
   useEffect(() => {
     const fetchOtherItems = async () => {
       try {
-        const items = await getKuehlschrankInhalt();        const otherProducts = items.documents.filter(item => 
+        const items = await getKuehlschrankInhalt();
+        const otherProducts = items.documents.filter(item => 
           item.kategorie === "Sonstige" || 
           !item.kategorie
         );
@@ -34,7 +35,6 @@ export default function Other() {
         setLoading(false);
       }
     };
-
     fetchOtherItems();
   }, []);
 
@@ -71,7 +71,7 @@ export default function Other() {
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#8B5CF6" />
-          <Text style={styles.loadingText}>Loading other items...</Text>
+          <Text style={styles.loadingText}>{"Loading other items..."}</Text>
         </View>
       </SafeAreaView>
     );
@@ -92,7 +92,7 @@ export default function Other() {
 
         {/* Title Section */}
         <View style={styles.titleSection}>
-          <Text style={styles.title}>Other Items</Text>
+          <Text style={styles.title}>{"Other Items"}</Text>
         </View>
 
         {/* Search */}
@@ -113,17 +113,16 @@ export default function Other() {
               source={require("../../../assets/images/fridge_icons/fridge.png")}
               style={styles.emptyIcon}
             />
-            <Text style={styles.emptyText}>No other items</Text>
-            <Text style={styles.emptySubtext}>
-              Add miscellaneous items to keep track of everything
-            </Text>
+            <Text style={styles.emptyText}>{"No other items"}</Text>
+            <Text style={styles.emptySubtext}>{"Add miscellaneous items to keep track of everything"}</Text>
           </View>
         ) : (
           <View style={styles.itemsList}>
             {filteredItems.map((item) => (
               <View key={item.$id} style={styles.row}>
                 <Image source={require("../../../assets/images/fridge_icons/fridge.png")} style={styles.itemImage} />
-                <View style={styles.info}>                  <View style={styles.statusRow}>
+                <View style={styles.info}>
+                  <View style={styles.statusRow}>
                     <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
                     <Text style={styles.statusText}>
                       {`${getDaysLeft(item.mhd)} ${getDaysLeft(item.mhd) === 1 ? "Day" : "Days"} Remaining`}
@@ -144,7 +143,7 @@ export default function Other() {
           style={styles.addButton}
           onPress={() => router.push("/(tabs)/fridge/fridge_add")}
         >
-          <Text style={styles.addButtonText}>ADD NEW OTHER ITEM</Text>
+          <Text style={styles.addButtonText}>{"ADD NEW OTHER ITEM"}</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

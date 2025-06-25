@@ -67,7 +67,7 @@ export default function Fruits() {
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#8B5CF6" />
-          <Text style={styles.loadingText}>Loading fruits...</Text>
+          <Text style={styles.loadingText}>{"Loading fruits..."}</Text>
         </View>
       </SafeAreaView>
     );
@@ -88,8 +88,10 @@ export default function Fruits() {
 
         {/* Title Section */}
         <View style={styles.titleSection}>
-          <Text style={styles.title}>Fresh Fruits</Text>
-        </View>        {/* Search */}
+          <Text style={styles.title}>{"Fresh Fruits"}</Text>
+        </View>
+        
+        {/* Search */}
         <View style={styles.searchContainer}>
           <TextInput
             placeholder="Find fresh fruits..."
@@ -107,17 +109,16 @@ export default function Fruits() {
               source={require("../../../assets/images/fridge_icons/fruits.png")}
               style={styles.emptyIcon}
             />
-            <Text style={styles.emptyText}>No fruits found</Text>
-            <Text style={styles.emptySubtext}>
-              Add some fresh fruits to keep your fridge healthy
-            </Text>
+            <Text style={styles.emptyText}>{"No fruits found"}</Text>
+            <Text style={styles.emptySubtext}>{"Add some fresh fruits to keep your fridge healthy"}</Text>
           </View>
         ) : (
           <View style={styles.itemsList}>
             {filteredItems.map((item) => (
               <View key={item.$id} style={styles.row}>
                 <Image source={require("../../../assets/images/fridge_icons/fruits.png")} style={styles.itemImage} />
-                <View style={styles.info}>                  <View style={styles.statusRow}>
+                <View style={styles.info}>
+                  <View style={styles.statusRow}>
                     <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
                     <Text style={styles.statusText}>
                       {`${getDaysLeft(item.mhd)} ${getDaysLeft(item.mhd) === 1 ? "Day" : "Days"} Remaining`}
@@ -138,7 +139,7 @@ export default function Fruits() {
           style={styles.addButton}
           onPress={() => router.push("/(tabs)/fridge/fridge_add")}
         >
-          <Text style={styles.addButtonText}>ADD NEW FRUIT</Text>
+          <Text style={styles.addButtonText}>{"ADD NEW FRUIT"}</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
