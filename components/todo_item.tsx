@@ -1,4 +1,5 @@
-import { Badge, Box, HStack, RepeatIcon, VStack, TrashIcon } from "@gluestack-ui/themed";
+import { Badge, BadgeText, Box, HStack, RepeatIcon, TrashIcon, VStack } from "@gluestack-ui/themed";
+import { useRouter } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { Checkbox } from 'react-native-paper';
@@ -33,12 +34,12 @@ export const ToDoItem = ({
         <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
         {responsible ? (
           <Badge style={styles.badge}>
-            <Text style={styles.badgeText}>{responsible}</Text>
+            <BadgeText style={styles.badgeText}>{responsible}</BadgeText>
           </Badge>
         ) : null} 
         {tag ? (
           <Badge style={styles.badge}>
-            <Text style={styles.badgeText}>{tag}</Text>
+            <BadgeText style={styles.badgeText}>{tag}</BadgeText>
           </Badge>
         ) : null}
       </HStack>
@@ -80,38 +81,41 @@ export const EditToDoItem = ({
   routine,
   onTrashPress,
   tag=null
-}: ToDoItemProps) => 
-  <Box style={styles.todoItem}>
-    <VStack space="xs">
-      <TouchableOpacity onPress={() => router.push("../(todo)/edit_todo")}>
-        <HStack style={styles.titleRow}>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
-          {responsible ? (
-          <Badge style={styles.badge}>
-            <Text style={styles.badgeText}>{responsible}</Text>
-          </Badge>
-        ) : null} 
-        {tag ? (
-          <Badge style={styles.badge}>
-            <Text style={styles.badgeText}>{tag}</Text>
-          </Badge>
-        ) : null}
-        </HStack>
-        <HStack style={styles.IconRow}>
-          <TouchableOpacity onPress={onTrashPress} style={{marginRight:"8%"}}>
-            <TrashIcon size="lg" />
-          </TouchableOpacity>
-        </HStack>
-        <HStack style={styles.dateRow}>
-          <Text style={styles.dateText}>{date}</Text>
-          {routine ? (
-            <HStack style={styles.routineContainer}>
-              <RepeatIcon />
-              <Text style={styles.routineText}>{routine}</Text>
-            </HStack>
+}: ToDoItemProps) => {
+  const router = useRouter();
+  return (
+    <Box style={styles.todoItem}>
+      <VStack space="xs">
+        <TouchableOpacity onPress={() => router.push("../(todo)/edit_todo")}>
+          <HStack style={styles.titleRow}>
+            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
+            {responsible ? (
+            <Badge style={styles.badge}>
+              <Text style={styles.badgeText}>{responsible}</Text>
+            </Badge>
+          ) : null} 
+          {tag ? (
+            <Badge style={styles.badge}>
+              <Text style={styles.badgeText}>{tag}</Text>
+            </Badge>
           ) : null}
-        </HStack>
-      </TouchableOpacity>
-    </VStack>
-  </Box>
-;
+          </HStack>
+          <HStack style={styles.IconRow}>
+            <TouchableOpacity onPress={onTrashPress} style={{marginRight:"8%"}}>
+              <TrashIcon size="lg" />
+            </TouchableOpacity>
+          </HStack>
+          <HStack style={styles.dateRow}>
+            <Text style={styles.dateText}>{date}</Text>
+            {routine ? (
+              <HStack style={styles.routineContainer}>
+                <RepeatIcon />
+                <Text style={styles.routineText}>{routine}</Text>
+              </HStack>
+            ) : null}
+          </HStack>
+        </TouchableOpacity>
+      </VStack>
+    </Box>
+  )
+};

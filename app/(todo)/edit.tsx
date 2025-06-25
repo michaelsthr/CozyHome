@@ -1,40 +1,13 @@
 import { config } from "@gluestack-ui/config";
-import { Badge, BadgeText, Box, Button, GluestackUIProvider, HStack, RepeatIcon, TrashIcon, VStack } from "@gluestack-ui/themed";
-import { router, useRouter } from "expo-router";
+import { Badge, BadgeText, Button, GluestackUIProvider, HStack } from "@gluestack-ui/themed";
+import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { Modal, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Modal, SafeAreaView, ScrollView, Text, View } from "react-native";
 import styles, { containerWidth } from "../(todo)/styles";
-import { getTodos, updateTodo, deleteTodo } from "../../lib/appwrite/dbTodo"; //für db
-import { EditToDoItem, ToDoItemProps } from "../../components/todo_item";
+import { EditToDoItem } from "../../components/todo_item";
+import { deleteTodo, getTodos } from "../../lib/appwrite/dbTodo"; //für db
 
-const ToDoItem = ({ title, date, responsible, isChecked, routine, onTrashPress }) => (
-  <Box style={styles.todoItem}>
-    <VStack space="xs">
-      <TouchableOpacity onPress={() => router.push("../(todo)/edit_todo")}>
-        <HStack style={styles.titleRow}>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
-          <Badge style={styles.badge}>
-            <Text style={styles.badgeText}>{responsible}</Text>
-          </Badge>
-        </HStack>
-        <HStack style={styles.IconRow}>
-          <TouchableOpacity onPress={onTrashPress} style={{ marginRight: "8%" }}>
-            <TrashIcon size="lg" />
-          </TouchableOpacity>
-        </HStack>
-        <HStack style={styles.dateRow}>
-          <Text style={styles.dateText}>{date}</Text>
-          {routine ? (
-            <HStack style={styles.routineContainer}>
-              <RepeatIcon />
-              <Text style={styles.routineText}>{routine}</Text>
-            </HStack>
-          ) : null}
-        </HStack>
-      </TouchableOpacity>
-    </VStack>
-  </Box>
-);
+
 
 export default function Edit() {
   const [modalVisible, setModalVisible] = useState(false);

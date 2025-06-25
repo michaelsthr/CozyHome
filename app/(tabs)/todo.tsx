@@ -120,7 +120,8 @@ export default function Todo() {
           </Button>
         </HStack>
         <View style={{ marginBottom: 5, width: screenWidth }}>
-          <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />        </View>
+          <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+        </View>
         <View style={{ height: screenHeight / 1.5 }}>
           <ScrollView contentContainerStyle={{ paddingBottom: 120 }} >
             {filteredTodos?.map((item, index) => (
