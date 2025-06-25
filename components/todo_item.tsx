@@ -1,6 +1,6 @@
-import { Badge, Box, HStack, RepeatIcon, VStack } from "@gluestack-ui/themed";
+import { Badge, Box, HStack, RepeatIcon, VStack, TrashIcon } from "@gluestack-ui/themed";
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { Checkbox } from 'react-native-paper';
 import styles from "../app/(todo)/styles";
 
@@ -13,9 +13,10 @@ export interface ToDoItemProps {
   routine?: string;
   responsible?: string;
   changeToDoStatus: (id: string, currentStatus: boolean) => void;
+  onTrashPress: () => void;
 }
 
-const ToDoItem = ({
+export const ToDoItem = ({
   id,
   title,
   date,
@@ -62,4 +63,40 @@ const ToDoItem = ({
     </VStack>
   </Box>
 ;
-export default ToDoItem;
+
+export const EditToDoItem = ({
+  id,
+  title,
+  date, 
+  responsible, 
+  isChecked,
+  routine,
+  onTrashPress
+}: ToDoItemProps) => 
+  <Box style={styles.todoItem}>
+    <VStack space="xs">
+      <TouchableOpacity onPress={() => router.push("../(todo)/edit_todo")}>
+        <HStack style={styles.titleRow}>
+          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
+          <Badge style={styles.badge}>
+            <Text style={styles.badgeText}>{responsible}</Text>
+          </Badge>
+        </HStack>
+        <HStack style={styles.IconRow}>
+          <TouchableOpacity onPress={onTrashPress} style={{marginRight:"8%"}}>
+            <TrashIcon size="lg" />
+          </TouchableOpacity>
+        </HStack>
+        <HStack style={styles.dateRow}>
+          <Text style={styles.dateText}>{date}</Text>
+          {routine ? (
+            <HStack style={styles.routineContainer}>
+              <RepeatIcon />
+              <Text style={styles.routineText}>{routine}</Text>
+            </HStack>
+          ) : null}
+        </HStack>
+      </TouchableOpacity>
+    </VStack>
+  </Box>
+;

@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import styles, { screenHeight, screenWidth } from "../(todo)/styles";
-import ToDoItem, { ToDoItemProps } from "../../components/todo_item";
+import { ToDoItem, ToDoItemProps } from "../../components/todo_item";
 import { getTodos, updateTodo } from "../../lib/appwrite/dbTodo"; //für db
 
 
