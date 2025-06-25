@@ -230,6 +230,7 @@ const DatePickerField = ({ date, setDate }) => {
     const [selectedPerson, setSelectedPerson] = useState('');
     const [selectedRepeat, setSelectedRepeat] = useState('');
     const [selectedLabel, setSelectedLabel] = useState('');
+    const [successMessage, setSuccessMessage]  = useState("");
     const [todoName, setTodoName] = useState('');
     const [date, setDate] = useState<Date | null> (null);
     const [show, setShow] = useState(false);
@@ -246,7 +247,8 @@ const DatePickerField = ({ date, setDate }) => {
       tile: string,
       responsible: string, 
       date: string, 
-      regularity: string
+      regularity: string,
+      tag: string
     ) => {
       if (!tile) {
         setErrorMessage("Please fill in the title")
@@ -258,10 +260,10 @@ const DatePickerField = ({ date, setDate }) => {
         name: tile,
         // Todo: responsible: (responsible ? responsible : null),
         date: (date ? date.toISOString() : null),
-        regularity: (regularity ? regularity : null),
+        regularity: regularity || null,
+        tag: tag || null,
         done: false,
       }
-      const [successMessage, setSuccessMessage]  = useState("");
       addTodo(newTodo)
       setSuccessMessage("New To-Do added")
       console.log("Speichern");
@@ -305,7 +307,7 @@ const DatePickerField = ({ date, setDate }) => {
           <Button style={[styles.buttons, {backgroundColor: "grey"}]} onPress={cancel}>
             <Text style={styles.buttonText}>Cancel</Text>
           </Button>
-          <Button style={[styles.buttons, {backgroundColor: "blue"}]} onPress={() => saveNewTodo(todoName, selectedPerson, date, selectedRepeat)}>
+          <Button style={[styles.buttons, {backgroundColor: "blue"}]} onPress={() => saveNewTodo(todoName, selectedPerson, date, selectedRepeat, selectedLabel)}>
             <Text style={styles.buttonText}>Add</Text>
           </Button>
         </HStack>

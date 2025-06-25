@@ -84,10 +84,11 @@ export default function Edit() {
                 key={index}
                 id={item.$id}
                 title={item.name}
-                date={item.date ? item.date : null}
-                routine={item.regularity ? item.regularity : null}
+                date={item.date || null}
+                routine={item.regularity || null}
                 isChecked={item.done}
                 onTrashPress={() => handleDeletePress(item.$id)}
+                tag={item.tag || null}
               />
             ))}
           </ScrollView>

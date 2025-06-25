@@ -8,11 +8,13 @@ import styles, { screenHeight, screenWidth } from "../(todo)/styles";
 import { ToDoItem, ToDoItemProps } from "../../components/todo_item";
 import { getTodos, updateTodo } from "../../lib/appwrite/dbTodo"; //für db
 
+type TabsProps = {
+  selectedTab: string;
+  setSelectedTab: (tab: string) => void;
+};
 
 const tabs = ['All', 'Tasks', 'Shopping'];
-const Tabs = () => {
-  const [selectedTab, setSelectedTab] = useState('All');
-
+const Tabs = ({ selectedTab, setSelectedTab }: TabsProps) => {
   return (
     <ScrollView
       horizontal
@@ -25,7 +27,7 @@ const Tabs = () => {
           onPress={() => {
             console.log(`${tab} selected`);
             setSelectedTab(tab);
-          } }
+          }}
           style={[
             styles.tabItem,
             selectedTab === tab && styles.tabItemSelected,
@@ -45,19 +47,21 @@ const Tabs = () => {
   );
 };
 
-
-
-
-
 export default function Todo() {
   const router = useRouter();
   const [todos, setTodos] = useState<{ total: number; documents: any[] }>({
     total: 0,
     documents: [],
   });
+
   const [loading, setLoading] = useState(true);
   const newToDo = () => router.push("../(todo)/newtodo");
   const edit = () => router.push("../(todo)/edit")
+  const [selectedTab, setSelectedTab] = useState('All');
+  const filteredTodos = todos?.documents?.filter((todo) => {
+    if (selectedTab === "All") return true;
+    return todo.tag === selectedTab;
+  });
 
   const fetchTodos = async () => {
     try {
@@ -89,11 +93,11 @@ export default function Todo() {
 
     const updatedTodos = todos?.documents?.map((todo: ToDoItemProps) => {
       if (todo.id == id || todo.$id == id) {
-        return { ...todo, done: !done };  
+        return { ...todo, done: !done };
       }
       return todo;
     });
-    setTodos({ ...todos, documents: updatedTodos});
+    setTodos({ ...todos, documents: updatedTodos });
 
     updateTodo(
       {
@@ -115,12 +119,11 @@ export default function Todo() {
             <Text style={styles.buttonText}>Edit ToDo</Text>
           </Button>
         </HStack>
-        <View style={{marginBottom:5, width: screenWidth}}>
-          <Tabs/>
-        </View>
-        <View style={{ height: screenHeight / 1.5}}>
+        <View style={{ marginBottom: 5, width: screenWidth }}>
+          <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />        </View>
+        <View style={{ height: screenHeight / 1.5 }}>
           <ScrollView contentContainerStyle={{ paddingBottom: 120 }} >
-            {todos?.documents?.map((item, index) => (
+            {filteredTodos?.map((item, index) => (
               <ToDoItem
                 key={index}
                 id={item.$id}
@@ -129,6 +132,7 @@ export default function Todo() {
                 routine={item.regularity ? item.regularity : null}
                 isChecked={item.done}
                 changeToDoStatus={changeToDoStatus}
+                tag={item.tag ? item.tag : null}
               />
             ))}
           </ScrollView>
