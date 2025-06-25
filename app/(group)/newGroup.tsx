@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { useNavigation } from 'expo-router';
+import { useNavigation, router } from 'expo-router';
 import { addGroup, getGroups } from "../../lib/appwrite/dbGroup";
 
 interface GroupProps {
@@ -64,13 +64,13 @@ export default function NewGroup() {
         try {
             await addGroup(newGroup);
             Alert.alert('Group created successfully!');
-            navigation.goBack(); // or navigate somewhere else
+            router.replace('/(tabs)'); 
+            // ToDo: add Group ID to current user
         } catch (error) {
             console.error('Failed to create group:', error);
             Alert.alert('Failed to create group. Please try again.');
         }
 
-        // ToDo: add Group ID to current user
     };
 
     return (

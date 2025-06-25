@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { useNavigation } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import { getGroups } from "../../lib/appwrite/dbGroup";
 
 interface GroupProps {
@@ -32,7 +32,8 @@ export default function EnterGroupKey() {
       return;
     }
     console.log(foundGroup);
-    
+    router.replace('/(tabs)');
+
     // ToDo: add Group to user
     // Beispiel: navigation.push('/groupDetails', { code: groupKey });
   };
