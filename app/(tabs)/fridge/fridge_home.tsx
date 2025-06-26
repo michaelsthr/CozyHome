@@ -108,7 +108,7 @@ export default function Fridge() {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0) {
-      return { days: -diffDays, label: "Days over" };
+      return { days: Math.abs(diffDays), label: "Days over" };
     } else {
       return { days: diffDays, label: "Days left" };
     }

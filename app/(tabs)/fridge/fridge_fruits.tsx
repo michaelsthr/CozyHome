@@ -1,14 +1,14 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
+    ActivityIndicator,
+    Image,
+    SafeAreaView,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { QuantityControls } from "./fridgeBack/components/QuantityControls";
@@ -63,11 +63,17 @@ export default function Fruits() {
   };
 
   const getDaysLeft = (mhd?: string) => {
-    if (!mhd) return 0;
+    if (!mhd) return { days: 0, label: "No expiration date" };
     const today = new Date();
     const expDate = new Date(mhd);
     const diffTime = expDate.getTime() - today.getTime();
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 0) {
+      return { days: Math.abs(diffDays), label: diffDays === -1 ? "Day Over" : "Days Over" };
+    } else {
+      return { days: diffDays, label: diffDays === 1 ? "Day Remaining" : "Days Remaining" };
+    }
   };
   if (loading) {
     return (
@@ -128,7 +134,10 @@ export default function Fruits() {
                   <View style={styles.statusRow}>
                     <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
                     <Text style={styles.statusText}>
-                      {`${getDaysLeft(item.mhd)} ${getDaysLeft(item.mhd) === 1 ? "Day" : "Days"} Remaining`}
+                      {(() => {
+                        const { days, label } = getDaysLeft(item.mhd);
+                        return `${days} ${label}`;
+                      })()}
                     </Text>
                   </View>
                   <Text style={styles.itemName}>{item.name}</Text>

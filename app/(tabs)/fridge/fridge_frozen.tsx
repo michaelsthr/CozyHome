@@ -64,11 +64,17 @@ export default function Frozen() {
   };
 
   const getDaysLeft = (mhd?: string) => {
-    if (!mhd) return 0;
+    if (!mhd) return { days: 0, label: "No expiration date" };
     const today = new Date();
     const expDate = new Date(mhd);
     const diffTime = expDate.getTime() - today.getTime();
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 0) {
+      return { days: Math.abs(diffDays), label: diffDays === -1 ? "Day Over" : "Days Over" };
+    } else {
+      return { days: diffDays, label: diffDays === 1 ? "Day Remaining" : "Days Remaining" };
+    }
   };
 
   if (loading) {
@@ -132,7 +138,10 @@ export default function Frozen() {
                   <View style={styles.statusRow}>
                     <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
                     <Text style={styles.statusText}>
-                      {`${getDaysLeft(item.mhd)} ${getDaysLeft(item.mhd) === 1 ? "Day" : "Days"} Remaining`}
+                      {(() => {
+                        const { days, label } = getDaysLeft(item.mhd);
+                        return `${days} ${label}`;
+                      })()}
                     </Text>
                   </View>
                   <Text style={styles.itemName}>{item.name}</Text>
