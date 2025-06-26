@@ -11,6 +11,8 @@ import {
     View,
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
+import { QuantityControls } from "./fridgeBack/components/QuantityControls";
+import { useQuantityManager } from "./fridgeBack/hooks/useQuantityManager";
 import { fridgeCategoryStyles as styles } from "./styles";
 
 export default function Meat() {
@@ -19,6 +21,7 @@ export default function Meat() {
   const [meatItems, setMeatItems] = useState<KuehlschrankItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState((search as string) || "");
+  const { handleQuantityChange, isUpdating } = useQuantityManager();
 
   useEffect(() => {
     const fetchMeatItems = async () => {
@@ -39,6 +42,10 @@ export default function Meat() {
   const filteredItems = meatItems.filter(item =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const onQuantityChange = (item: KuehlschrankItem, change: number) => {
+    handleQuantityChange(item, change, setMeatItems, meatItems);
+  };
 
   const getStatusIcon = (mhd?: string) => {
     if (!mhd) return require("../../../assets/images/fridge_icons/eatable.png");
@@ -133,9 +140,12 @@ export default function Meat() {
                 <Text style={styles.itemName}>{item.name}</Text>
               </View>
 
-              <View style={styles.countContainer}>
-                <Text style={styles.itemCount}>{item.anzahl}</Text>
-              </View>
+              <QuantityControls
+                item={item}
+                onQuantityChange={onQuantityChange}
+                isUpdating={isUpdating}
+                styles={styles}
+              />
             </View>
           )}
           contentContainerStyle={styles.itemsList}

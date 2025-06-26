@@ -11,6 +11,7 @@ import {
   View,
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
+import { useQuantityManager } from "./fridgeBack/hooks/useQuantityManager";
 import { fridgeStyles as styles } from "./styles";
 
 export default function Fridge() {
@@ -18,6 +19,7 @@ export default function Fridge() {
   const [fridgeItems, setFridgeItems] = useState<KuehlschrankItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const { handleQuantityChange, isUpdating } = useQuantityManager();
 
   useEffect(() => {
     const fetchFridgeItems = async () => {
@@ -77,6 +79,10 @@ export default function Fridge() {
     
     // Clear search after navigation
     setSearchTerm("");
+  };
+
+  const onQuantityChange = (item: KuehlschrankItem, change: number) => {
+    handleQuantityChange(item, change, setFridgeItems, fridgeItems);
   };
   const getStatusIcon = (mhd?: string) => {
     if (!mhd) return require("../../../assets/images/fridge_icons/eatable.png");
@@ -213,6 +219,25 @@ export default function Fridge() {
                       <Text style={styles.itemName} numberOfLines={2}>
                         {item.name}
                       </Text>
+                      <View style={styles.homeQuantityControls}>
+                        <TouchableOpacity
+                          style={[styles.homeQuantityButton, isUpdating && { backgroundColor: "#94a3b8" }]}
+                          onPress={() => onQuantityChange(item, -1)}
+                          disabled={isUpdating}
+                        >
+                          <Text style={styles.homeQuantityButtonText}>{"-"}</Text>
+                        </TouchableOpacity>
+                        <View style={styles.homeQuantityDisplay}>
+                          <Text style={styles.homeQuantityText}>{item.anzahl}</Text>
+                        </View>
+                        <TouchableOpacity
+                          style={[styles.homeQuantityButton, isUpdating && { backgroundColor: "#94a3b8" }]}
+                          onPress={() => onQuantityChange(item, 1)}
+                          disabled={isUpdating}
+                        >
+                          <Text style={styles.homeQuantityButtonText}>{"+"}</Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   </View>
                 );
