@@ -8,7 +8,15 @@ import { EditToDoItem } from "../../components/todo_item";
 import { deleteTodo, getTodos } from "../../lib/appwrite/dbTodo"; //für db
 import { useIsFocused } from "@react-navigation/native";
 
-
+const formatDate = (isoString: string) => {
+  if (!isoString) return null;
+  const date = new Date(isoString);
+  return date.toLocaleDateString("de-DE", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+};
 
 export default function Edit() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -67,7 +75,7 @@ export default function Edit() {
                 key={index}
                 id={item.$id}
                 title={item.name}
-                date={item.date || null}
+                date={formatDate(item.date) || null}
                 routine={item.regularity || null}
                 isChecked={item.done}
                 onTrashPress={() => handleDeletePress(item.$id)}
