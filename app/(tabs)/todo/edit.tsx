@@ -1,12 +1,12 @@
 import { config } from "@gluestack-ui/config";
 import { Badge, BadgeText, Button, GluestackUIProvider, HStack } from "@gluestack-ui/themed";
+import { useIsFocused } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Modal, SafeAreaView, ScrollView, Text, View } from "react-native";
-import styles, { containerWidth } from "../(todo)/styles";
-import { EditToDoItem } from "../../components/todo_item";
-import { deleteTodo, getTodos } from "../../lib/appwrite/dbTodo"; //für db
-import { useIsFocused } from "@react-navigation/native";
+import { EditToDoItem } from "../../../components/todo_item";
+import { deleteTodo, getTodos } from "../../../lib/appwrite/dbTodo"; //für db
+import styles, { containerWidth } from "./styles";
 
 const formatDate = (isoString: string) => {
   if (!isoString) return null;

@@ -3,7 +3,7 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { Checkbox } from 'react-native-paper';
-import styles from "../app/(todo)/styles";
+import styles from "../app/(tabs)/todo/styles";
 
 export interface ToDoItemProps {
   key: string;
@@ -13,7 +13,7 @@ export interface ToDoItemProps {
   isChecked: boolean;
   routine?: string;
   responsible?: string;
-  tag: string;
+  tag?: string;
   changeToDoStatus: (id: string, currentStatus: boolean) => void;
   onTrashPress: () => void;
 }
@@ -86,7 +86,7 @@ export const EditToDoItem = ({
   return (
     <Box style={styles.todoItem}>
       <VStack space="xs">
-        <TouchableOpacity onPress={() => router.push(`../(todo)/edit_todo?id=${id}`)}>
+        <TouchableOpacity onPress={() => router.push(`/todo/edit_todo?id=${id}`)}>
           <HStack style={styles.titleRow}>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
             {responsible ? (

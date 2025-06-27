@@ -35,8 +35,9 @@ export default function TabLayout() {
         )
       }}/>
       <Tabs.Screen 
-        name='todo'
+        name="todo"
         options={{
+          title: "Todos",
           headerShown: false,
           tabBarIcon: () => (
             <Image

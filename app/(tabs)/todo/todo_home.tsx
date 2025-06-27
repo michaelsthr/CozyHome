@@ -4,9 +4,9 @@ import { useIsFocused } from '@react-navigation/native';
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import styles, { screenHeight, screenWidth } from "../(todo)/styles";
-import { ToDoItem, ToDoItemProps } from "../../components/todo_item";
-import { getTodos, updateTodo } from "../../lib/appwrite/dbTodo"; //für db
+import { ToDoItem, ToDoItemProps } from "../../../components/todo_item";
+import { getTodos, updateTodo } from "../../../lib/appwrite/dbTodo"; //für db
+import styles, { screenHeight, screenWidth } from "./styles";
 
 const formatDate = (isoString: string) => {
   if (!isoString) return null;
@@ -65,8 +65,8 @@ export default function Todo() {
   });
 
   const [loading, setLoading] = useState(true);
-  const newToDo = () => router.push("../(todo)/newtodo");
-  const edit = () => router.push("../(todo)/edit")
+  const newToDo = () => router.push("./newtodo");
+  const edit = () => router.push("./edit")
   const [selectedTab, setSelectedTab] = useState('All');
   const filteredTodos = todos?.documents?.filter((todo) => {
     if (selectedTab === "All") return true;
