@@ -1,12 +1,20 @@
-
-import { Box, Button, HStack, VStack } from "@gluestack-ui/themed";
+import { Badge, BadgeText, Box, Button, HStack, VStack } from "@gluestack-ui/themed";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useEffect, useState } from "react";
-import { Dimensions, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
+import styles, { containerWidth } from "../(todo)/styles";
+import { addTodo } from "../../lib/appwrite/dbTodo"; //für db
   
-  const screenWidth = Dimensions.get("screen").width;
-  const containerWidth = Math.min(screenWidth * 0.9, 400);  // max 400px, sonst 90% Breite
+interface ToDoItemProps {
+  key: string;
+  id: string;
+  name: string;
+  date?: string;
+  done: boolean;
+  regularity?: string;
+  responsible?: string;
+}
   
   const dataWH = [
     { key: "1", value: "täglich" },
@@ -36,7 +44,9 @@ import DropDownPicker from "react-native-dropdown-picker";
       setOpen={setOpen}
       setValue={setValue}
       setItems={setItems}
-      placeholder="Verantwortlichen auswählen"
+      zIndex={4000}
+      zIndexInverse={1000}
+      placeholder="None"
       style={{
         borderColor: '#ccc',
         borderRadius: 8,
@@ -52,7 +62,49 @@ import DropDownPicker from "react-native-dropdown-picker";
   );
 };
 
-  const DropDownRoutine= ({ selected, setSelected }) => {
+  const DropDownLabel= ({ selectedLabel, setSelectedLabel }) => {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(selectedLabel || null);
+  const [items, setItems] = useState([
+    { label: 'None', value: 'None' },
+    { label: 'Tasks', value: 'Tasks' },
+    { label: 'Shopping', value: 'Shopping' },
+  ]);
+
+  useEffect(() => {
+    setSelectedLabel(value);
+  }, [value]);
+
+  return(
+    <DropDownPicker
+      open={open}
+      value={value}
+      items={items}
+      setOpen={setOpen}
+      setValue={setValue}
+      setItems={setItems}
+      zIndex={4000}
+      zIndexInverse={1000}
+      placeholder="None"
+      style={{
+        borderColor: '#ccc',
+        borderRadius: 8,
+      }}
+      textStyle={{
+        fontSize: 14,
+        color: '#000',
+      }}
+      dropDownContainerStyle={{
+        borderColor: '#ccc',
+        elevation: 10,
+        zIndex:2000,
+        position:"absolute",
+        top:"100%"
+      }}
+    />
+  );
+};
+  const DropDownRepeat= ({ selectedRepeat, setSelectedRepeat }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(selected || null);
   const [items, setItems] = useState([
@@ -85,6 +137,8 @@ import DropDownPicker from "react-native-dropdown-picker";
       }}
       dropDownContainerStyle={{
         borderColor: '#ccc',
+        elevation: 10,
+        
       }}
     />
   );
@@ -103,10 +157,9 @@ const DatePickerField = ({ date, setDate }) => {
   };
 
   return (
-    <View style={{ width: '100%', marginBottom: '15%' }}>
-      <Text style={{ marginBottom: 6 }}>Datum</Text>
-      <TouchableOpacity
-        onPress={() => setShowPicker(true)}
+    <View style={{ width: '100%', marginBottom: '10%' }}>
+      <Text style={{ marginBottom: 6 }}>Date</Text>
+      <View
         style={{
           borderWidth: 1,
           borderColor: '#ccc',
@@ -117,13 +170,26 @@ const DatePickerField = ({ date, setDate }) => {
           height: 44
         }}
       >
-        <Text style={{ color: hasSelected ? '#000' : '#999' }}>
-          {hasSelected ? date.toLocaleDateString() : ''}
-          {/* <Icon as ={CalendarDaysIcon}/> */}
-        </Text>
-      </TouchableOpacity>
-        {showPicker && (
-          <View style={{alignItems:"center"}}>
+        {isWeb ? (
+          <TextInput
+            style={{ flex: 1, color: '#000', fontSize: 14 }}
+            type="date"
+            value={date ? date.toISOString().split('T')[0] : ''}
+            onChange={handleWebChange}
+          />
+        ) : (
+          <>
+            <Text style={{ color: hasSelected ? '#000' : '#999' }}>
+              {hasSelected && date ? date.toLocaleDateString() : ''}
+            </Text>
+            <TouchableOpacity onPress={() => setShowPicker(prev => !prev)}>
+              <CalendarDays size={20} color="black" />
+            </TouchableOpacity>
+          </>
+        )}
+      </View>
+      {!isWeb && showPicker && (
+        <View style={{alignItems:"center", bottom:-43, left:6, right: 12, position:"absolute"}}>
           <DateTimePicker
             mode="date"
             display="default"
@@ -139,7 +205,10 @@ const DatePickerField = ({ date, setDate }) => {
   export default function NewToDo() {
     const [selectedPerson, setSelectedPerson] = useState('');
     const [selectedRepeat, setSelectedRepeat] = useState('');
-    const [date, setDate] = useState(new Date());
+    const [selectedLabel, setSelectedLabel] = useState('');
+    const [successMessage, setSuccessMessage]  = useState("");
+    const [todoName, setTodoName] = useState('');
+    const [date, setDate] = useState<Date | null> (null);
     const [show, setShow] = useState(false);
   
     const onChange = (event, selectedDate) => {
@@ -148,139 +217,76 @@ const DatePickerField = ({ date, setDate }) => {
     };
   
     const showDatepicker = () => setShow(true);
-    const cancel = () => console.log("Abbrechen");
-    const save = () => console.log("Speichern");
+    const cancel = () => {console.log("Abbrechen"); router.back();};
+    const [errorMessage, setErrorMessage] = useState("");
+    const saveNewTodo = (
+      tile: string,
+      responsible: string, 
+      date: string, 
+      regularity: string,
+      tag: string
+    ) => {
+      if (!tile) {
+        setErrorMessage("Please fill in the title")
+        return;
+      }
+      setErrorMessage("");
+
+      const newTodo = {
+        name: tile,
+        // Todo: responsible: (responsible ? responsible : null),
+        date: (date ? date.toISOString() : null),
+        regularity: regularity || null,
+        tag: tag || null,
+        done: false,
+      }
+      addTodo(newTodo)
+      setSuccessMessage("New To-Do added")
+      console.log("Speichern");
+      router.back();
+  
+    }
     
     return (
-      <SafeAreaView style={styles.container}>
-          <Text style={styles.heading}>Neues To Do erstellen</Text>
+      <SafeAreaView style={styles.container_box}>
+        <Text style={styles.heading}>Add new ToDo</Text>
+        {errorMessage !== "" && (
+          <View style={{position:"absolute", alignItems:"center", zIndex: 2000, marginTop:"20%", width: containerWidth}}>
+          <Badge style={styles.badgeErrorMessage}><BadgeText style={styles.badgeErrorMessageText}>{errorMessage}</BadgeText></Badge>
+          </View>
+        )}
         <Box style={styles.box}>
           <VStack>
-            <Text> Name des ToDos </Text>
-          <TextInput
-            style={styles.textInput}
-            placeholderTextColor="#000"
-          />
-          <View style={{marginBottom: "15%"}}>
-          <DropDownResponsible selected={selectedPerson} setSelected={setSelectedPerson}/>
-          </View> 
-          <DatePickerField date={date} setDate={setDate}/>
-           <View style={{marginBottom: "15%"}}>
-          <DropDownRoutine selected={selectedPerson} setSelected={setSelectedPerson}/>
-          </View> 
+            <Text> Title </Text>
+            <TextInput
+              value={todoName}
+              onChangeText={setTodoName}
+              style={styles.textInput}
+              placeholderTextColor="#000"
+            />
+            <View style={{marginBottom: "10%", zIndex:4000}}>
+              <Text style={{marginBottom: "2%"}}>Assignee</Text>
+              <DropDownAssignee selectedPerson={selectedPerson} setSelectedPerson={setSelectedPerson}/>
+            </View> 
+            <View style={{marginBottom: "10%", zIndex:3000, position:"relative"}}>
+              <Text style={{marginBottom: "2%"}}>Repeat</Text>
+              <DropDownRepeat selectedRepeat={selectedRepeat} setSelectedRepeat={setSelectedRepeat}/>
+            </View>
+            <View style={{marginBottom: "10%", zIndex:2000}}>
+              <Text style={{marginBottom: "2%"}}>Label</Text>
+              <DropDownLabel selectedLabel={selectedLabel} setSelectedLabel={setSelectedLabel}/>
+            </View> 
+            <DatePickerField date={date} setDate={setDate}/>
           </VStack>
         </Box>
         <HStack style={styles.buttonContainer}>
-                 <Button style={styles.buttons} onPress={cancel}>
-                   <Text style={styles.buttonText}>Abbrechen</Text>
-                 </Button>
-                 <Button style={styles.buttons} onPress={save}>
-                   <Text style={styles.buttonText}>Speichern</Text>
-                 </Button>
-               </HStack>
+          <Button style={[styles.buttons, {backgroundColor: "grey"}]} onPress={cancel}>
+            <Text style={styles.buttonText}>Cancel</Text>
+          </Button>
+          <Button style={[styles.buttons, {backgroundColor: "blue"}]} onPress={() => saveNewTodo(todoName, selectedPerson, date, selectedRepeat, selectedLabel)}>
+            <Text style={styles.buttonText}>Add</Text>
+          </Button>
+        </HStack>
       </SafeAreaView>
     );
   }
-  
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "white",
-      alignItems: "center",
-      paddingVertical: 20,
-    },
-    box: {
-      width: containerWidth,
-      backgroundColor: "#fff",
-      borderRadius: 12,
-      padding: 16,
-      marginBottom: "15%",
-      
-      shadowColor: "#000",
-      shadowOpacity: 0.1,
-      shadowRadius: 6,
-      shadowOffset: { width: 0, height: 3 },
-      elevation: 3, 
-      marginTop:"10%"
-    },
-    heading: {
-      fontSize: 24,
-      fontWeight: "bold",
-      marginBottom: 12,
-      textAlign: "center",
-    },
-    textInput: {
-      width: "100%",
-      height: 44,
-      borderWidth: 1,
-      borderColor: "#ccc",
-      borderRadius: 8,
-      paddingHorizontal: 12,
-      marginBottom: "15%",
-      marginTop: "2%",
-      fontSize: 14,
-      color: "#000",
-    },
-    selectBox: {
-      width: "100%",
-      borderRadius: 8,
-      marginBottom: 16,
-      borderWidth: 1,
-      borderColor: "#ccc",
-    },
-    dropdown: {
-      maxHeight: "45%",
-    },
-    dateArea: {
-      height: 50,
-      width: "100%",
-      paddingHorizontal: 10,
-      justifyContent: "center",
-      borderWidth: 1,
-      borderColor: "#ccc",
-      borderRadius: 12,
-      marginBottom: "15%"
-    },
-    dateText: {
-      color:"#000",
-      fontSize:14
-    },
-    datePicker: {
-      width: "100%",
-    },
-    buttonRow: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      width: "100%",
-    },
-    button: {
-      flex: 1,
-      maxWidth: 160,
-      marginHorizontal: 8,
-      borderRadius: 8,
-      paddingVertical: 12,
-    },
-    buttonContainer: {
-      flexDirection: "row",
-      justifyContent: "space-around",
-      marginBottom: "10%",
-      marginTop:"auto",
-      paddingHorizontal: 16,
-      width: containerWidth
-    },
-    buttons: {                    
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-    marginBottom: "3%",
-    borderRadius: 8,
-    alignItems: "center",
-    alignSelf: "center", 
-    backgroundColor: "blue"
-    },
-    buttonText: {
-      color: "white",
-      fontSize: 14,
-      fontWeight: "bold"
-    },
-  });
-  
