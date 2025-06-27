@@ -57,7 +57,6 @@ export default function AddItem() {
         isToday: date.getTime() === today.getTime()
       });
     }
-    
     return days;
   };
 
@@ -90,6 +89,7 @@ export default function AddItem() {
     setSelectedMonth(today.getMonth());
     setSelectedYear(today.getFullYear());
   };
+  
   const formatDate = (date: Date | null) => {
     if (!date) return "Select expiration date";
     return date.toLocaleDateString('en-GB');
@@ -107,7 +107,8 @@ export default function AddItem() {
     }
 
     setIsSubmitting(true);
-      try {      await setKuehlschrankInhalt({
+      try {
+        await setKuehlschrankInhalt({
         name: name.trim(),
         anzahl: Number(quantity),
         kategorie: category,
@@ -123,7 +124,9 @@ export default function AddItem() {
     } finally {
       setIsSubmitting(false);
     }
-  };  return (
+  };
+  
+  return (
     <SafeAreaView style={styles.container}>
       <ScrollView 
         showsVerticalScrollIndicator={false}
@@ -219,7 +222,7 @@ export default function AddItem() {
             </View>):(<Text style={styles.addButtonText}>{"ADD TO FRIDGE"}</Text>
           )}</TouchableOpacity>
           
-          {/* Date Picker Modal */}
+        {/* Date Picker Modal */}
         {showDatePicker && (
           <Modal
             visible={showDatePicker}

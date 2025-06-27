@@ -1,14 +1,14 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Image,
-    SafeAreaView,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { QuantityControls } from "./fridgeBack/components/QuantityControls";
@@ -34,7 +34,9 @@ export default function Vegetables() {
       } finally {
         setLoading(false);
       }
-    };    fetchVegetables();
+    };
+    
+    fetchVegetables();
   }, []);
 
   const filteredItems = vegetables.filter(item =>
@@ -69,18 +71,21 @@ export default function Vegetables() {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0) {
-      return { days: Math.abs(diffDays), label: diffDays === -1 ? "Day Over" : "Days Over" };
+      return { days: Math.abs(diffDays), label: diffDays === -1 ? "Day over" : "Days over" };
     } else {
-      return { days: diffDays, label: diffDays === 1 ? "Day Remaining" : "Days Remaining" };
+      return { days: diffDays, label: diffDays === 1 ? "Day left" : "Days left" };
     }
   };
 
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#8B5CF6" />
+          <Text style={styles.loadingText}>{"Loading other items..."}</Text>
+        </View>
       </SafeAreaView>
-    );
+   );
   }
   return (
     <SafeAreaView style={styles.container}>
@@ -113,31 +118,41 @@ export default function Vegetables() {
         </View>
         
         {/* List */}
-        <View style={styles.itemsList}>
-          {filteredItems.map((item) => (
-            <View key={item.$id} style={styles.row}>
-              <Image source={require("../../../assets/images/fridge_icons/vegetables.png")} style={styles.itemImage} />
-              <View style={styles.info}>
-                <View style={styles.statusRow}>
-                  <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
-                  <Text style={styles.statusText}>
-                    {(() => {
-                      const { days, label } = getDaysLeft(item.mhd);
-                      return `${days} ${label}`;
-                    })()}
-                  </Text>
+        {filteredItems.length === 0 ? (
+          <View style={styles.emptyState}>
+            <Image
+              source={require("../../../assets/images/fridge_icons/vegetables.png")}
+              style={styles.emptyIcon}
+            />
+            <Text style={styles.emptyText}>{"No vegetables found"}</Text>
+            <Text style={styles.emptySubtext}>{"Add some vegetables to your fridge"}</Text>
+          </View> ) : (
+          <View style={styles.itemsList}>
+            {filteredItems.map((item) => (
+              <View key={item.$id} style={styles.row}>
+                <Image source={require("../../../assets/images/fridge_icons/vegetables.png")} style={styles.itemImage} />
+                <View style={styles.info}>
+                  <View style={styles.statusRow}>
+                    <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
+                    <Text style={styles.statusText}>
+                      {(() => {
+                        const { days, label } = getDaysLeft(item.mhd);
+                        return `${days} ${label}`;
+                      })()}
+                    </Text>
+                  </View>
+                  <Text style={styles.itemName}>{item.name}</Text>
                 </View>
-                <Text style={styles.itemName}>{item.name}</Text>
+                <QuantityControls
+                  item={item}
+                  onQuantityChange={onQuantityChange}
+                  isUpdating={isUpdating}
+                  styles={styles}
+                />
               </View>
-              <QuantityControls
-                item={item}
-                onQuantityChange={onQuantityChange}
-                isUpdating={isUpdating}
-                styles={styles}
-              />
-            </View>
-          ))}
-        </View>
+            ))}
+          </View>
+        )}
 
         {/* Add New Item Button */}
         <TouchableOpacity

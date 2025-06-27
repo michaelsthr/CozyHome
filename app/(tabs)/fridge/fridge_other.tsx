@@ -1,14 +1,14 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Image,
-    SafeAreaView,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { QuantityControls } from "./fridgeBack/components/QuantityControls";
@@ -27,10 +27,7 @@ export default function Other() {
     const fetchOtherItems = async () => {
       try {
         const items = await getKuehlschrankInhalt();
-        const otherProducts = items.documents.filter(item => 
-          item.kategorie === "Sonstige" || 
-          !item.kategorie
-        );
+        const otherProducts = items.documents.filter(item => item.kategorie === "Sonstige" || !item.kategorie);
         setOtherItems(otherProducts);
       } catch (error) {
         console.error("Error fetching other items:", error);
@@ -38,6 +35,7 @@ export default function Other() {
         setLoading(false);
       }
     };
+    
     fetchOtherItems();
   }, []);
 
@@ -73,9 +71,9 @@ export default function Other() {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0) {
-      return { days: Math.abs(diffDays), label: diffDays === -1 ? "Day Over" : "Days Over" };
+      return { days: Math.abs(diffDays), label: diffDays === -1 ? "Day over" : "Days over" };
     } else {
-      return { days: diffDays, label: diffDays === 1 ? "Day Remaining" : "Days Remaining" };
+      return { days: diffDays, label: diffDays === 1 ? "Day left" : "Days left" };
     }
   };
 
@@ -127,9 +125,8 @@ export default function Other() {
               style={styles.emptyIcon}
             />
             <Text style={styles.emptyText}>{"No other items"}</Text>
-            <Text style={styles.emptySubtext}>{"Add miscellaneous items to keep track of everything"}</Text>
-          </View>
-        ) : (
+            <Text style={styles.emptySubtext}>{"Add some other items to your fridge"}</Text>
+          </View> ) : (
           <View style={styles.itemsList}>
             {filteredItems.map((item) => (
               <View key={item.$id} style={styles.row}>

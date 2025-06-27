@@ -1,14 +1,14 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Image,
-    SafeAreaView,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  ActivityIndicator,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { QuantityControls } from "./fridgeBack/components/QuantityControls";
@@ -46,6 +46,7 @@ export default function Fruits() {
   const onQuantityChange = (item: KuehlschrankItem, change: number) => {
     handleQuantityChange(item, change, setFruits, fruits);
   };
+  
   const getStatusIcon = (mhd?: string) => {
     if (!mhd) return require("../../../assets/images/fridge_icons/eatable.png");
     const today = new Date();
@@ -70,11 +71,12 @@ export default function Fruits() {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0) {
-      return { days: Math.abs(diffDays), label: diffDays === -1 ? "Day Over" : "Days Over" };
+      return { days: Math.abs(diffDays), label: diffDays === -1 ? "Day over" : "Days over" };
     } else {
-      return { days: diffDays, label: diffDays === 1 ? "Day Remaining" : "Days Remaining" };
+      return { days: diffDays, label: diffDays === 1 ? "Day left" : "Days left" };
     }
   };
+  
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
@@ -123,9 +125,8 @@ export default function Fruits() {
               style={styles.emptyIcon}
             />
             <Text style={styles.emptyText}>{"No fruits found"}</Text>
-            <Text style={styles.emptySubtext}>{"Add some fresh fruits to keep your fridge healthy"}</Text>
-          </View>
-        ) : (
+            <Text style={styles.emptySubtext}>{"Add some fruits to your fridge"}</Text>
+          </View> ) : (
           <View style={styles.itemsList}>
             {filteredItems.map((item) => (
               <View key={item.$id} style={styles.row}>

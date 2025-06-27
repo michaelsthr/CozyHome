@@ -1,14 +1,14 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Image,
-    SafeAreaView,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { QuantityControls } from "./fridgeBack/components/QuantityControls";
@@ -71,9 +71,9 @@ export default function Frozen() {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0) {
-      return { days: Math.abs(diffDays), label: diffDays === -1 ? "Day Over" : "Days Over" };
+      return { days: Math.abs(diffDays), label: diffDays === -1 ? "Day over" : "Days over" };
     } else {
-      return { days: diffDays, label: diffDays === 1 ? "Day Remaining" : "Days Remaining" };
+      return { days: diffDays, label: diffDays === 1 ? "Day left" : "Days left" };
     }
   };
 
@@ -82,7 +82,7 @@ export default function Frozen() {
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#8B5CF6" />
-          <Text style={styles.loadingText}>{"Loading frozen foods..."}</Text>
+          <Text style={styles.loadingText}>{"Loading frozen items..."}</Text>
         </View>
       </SafeAreaView>
     );
@@ -103,13 +103,13 @@ export default function Frozen() {
 
         {/* Title Section */}
         <View style={styles.titleSection}>
-          <Text style={styles.title}>{"Frozen Foods"}</Text>
+          <Text style={styles.title}>{"Frozen Items"}</Text>
         </View>
 
         {/* Search */}
         <View style={styles.searchContainer}>
           <TextInput
-            placeholder="Find frozen foods..."
+            placeholder="Find frozen items..."
             placeholderTextColor="#9ca3af"
             style={styles.searchInput}
             value={searchTerm}
@@ -124,12 +124,9 @@ export default function Frozen() {
               source={require("../../../assets/images/fridge_icons/freezer.png")}
               style={styles.emptyIcon}
             />
-            <Text style={styles.emptyText}>{"No frozen foods"}</Text>
-            <Text style={styles.emptySubtext}>
-              {"Add some frozen items to keep your freezer stocked"}
-            </Text>
-          </View>
-        ) : (
+            <Text style={styles.emptyText}>{"No frozen items"}</Text>
+            <Text style={styles.emptySubtext}>{"Add some frozen items to your freezer"}</Text>
+          </View> ) : (
           <View style={styles.itemsList}>
             {filteredItems.map((item) => (
               <View key={item.$id} style={styles.row}>

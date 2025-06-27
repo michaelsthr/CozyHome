@@ -30,7 +30,7 @@ export default function Drinks() {
         const drinkProducts = items.documents.filter(item => item.kategorie === "Getränke");
         setDrinkItems(drinkProducts);
       } catch (error) {
-        console.error("Error fetching drink items:", error);
+        console.error("Error fetching drinks:", error);
       } finally {
         setLoading(false);
       }
@@ -71,9 +71,9 @@ export default function Drinks() {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0) {
-      return { days: Math.abs(diffDays), label: diffDays === -1 ? "Day Over" : "Days Over" };
+      return { days: Math.abs(diffDays), label: diffDays === -1 ? "Day over" : "Days over" };
     } else {
-      return { days: diffDays, label: diffDays === 1 ? "Day Remaining" : "Days Remaining" };
+      return { days: diffDays, label: diffDays === 1 ? "Day left" : "Days left" };
     }
   };
 
@@ -103,7 +103,7 @@ export default function Drinks() {
 
         {/* Title Section */}
         <View style={styles.titleSection}>
-          <Text style={styles.title}>{"Fresh Drinks"}</Text>
+          <Text style={styles.title}>{"Refreshing Drinks"}</Text>
         </View>
 
         {/* Search */}
@@ -125,11 +125,8 @@ export default function Drinks() {
               style={styles.emptyIcon}
             />
             <Text style={styles.emptyText}>{"No drinks found"}</Text>
-            <Text style={styles.emptySubtext}>
-              {"Add some refreshing drinks to your fridge"}
-            </Text>
-          </View>
-        ) : (
+            <Text style={styles.emptySubtext}>{"Add some drinks to your fridge"}</Text>
+          </View> ) : (
           <View style={styles.itemsList}>
             {filteredItems.map((item) => (
               <View key={item.$id} style={styles.row}>

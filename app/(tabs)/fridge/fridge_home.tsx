@@ -8,7 +8,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { useQuantityManager } from "./fridgeBack/hooks/useQuantityManager";
@@ -31,10 +31,11 @@ export default function Fridge() {
       } finally {
         setLoading(false);
       }
-    };    fetchFridgeItems();
-  }, []);
+    };
+    fetchFridgeItems();
+  },[]);
 
-  // Map German categories to route names
+  // Map categories to route names
   const getCategoryRoute = (category: string) => {
     switch (category) {
       case "Obst":
@@ -58,7 +59,6 @@ export default function Fridge() {
 
   const handleSearch = () => {
     if (!searchTerm.trim()) return;
-
     // Find items that match the search term
     const matchingItems = fridgeItems.filter(item => 
       item.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -68,22 +68,23 @@ export default function Fridge() {
       // If no items found, go to general fridge items page
       router.push("/(tabs)/fridge/fridge_items");
       return;
-    }    // Get the category of the first matching item
+    }
+    
     const firstMatch = matchingItems[0];
     const categoryRoute = getCategoryRoute(firstMatch.kategorie || "Sonstige");
-      // Navigate to the category page with search parameter
+    
     router.push({
       pathname: categoryRoute as any,
       params: { search: searchTerm }
     });
     
-    // Clear search after navigation
     setSearchTerm("");
   };
 
   const onQuantityChange = (item: KuehlschrankItem, change: number) => {
     handleQuantityChange(item, change, setFridgeItems, fridgeItems);
   };
+  
   const getStatusIcon = (mhd?: string) => {
     if (!mhd) return require("../../../assets/images/fridge_icons/eatable.png");
     const today = new Date();
@@ -107,12 +108,14 @@ export default function Fridge() {
     const diffTime = expDate.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDays < 0) {
-      return { days: Math.abs(diffDays), label: "Days over" };
+   if (diffDays < 0) {
+      return { days: Math.abs(diffDays), label: diffDays === -1 ? "Day over" : "Days over" };
     } else {
-      return { days: diffDays, label: "Days left" };
+      return { days: diffDays, label: diffDays === 1 ? "Day left" : "Days left" };
     }
-  };  const getCategoryImage = (category?: string) => {
+  };
+  
+  const getCategoryImage = (category?: string) => {
     switch (category) {
       case "Obst":
         return require("../../../assets/images/fridge_icons/fruits.png");
@@ -136,7 +139,7 @@ export default function Fridge() {
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#8B5CF6" />
       </SafeAreaView>
     );
   }
@@ -163,6 +166,7 @@ export default function Fridge() {
           <Text style={styles.greeting}>{"Good morning!"}</Text>
           <Text style={styles.username}>{"Max Mustermann"}</Text>
         </View>
+        
         {/* Search Bar */}
         <View style={styles.searchContainer}>
           <TextInput
@@ -241,9 +245,8 @@ export default function Fridge() {
                     </View>
                   </View>
                 );
-              })}
-            </ScrollView>
-          ) : (
+                })} 
+          </ScrollView> ) : (
             <View style={styles.emptyState}>
               <Image
                 source={require("../../../assets/images/fridge_icons/fridge.png")}
@@ -254,7 +257,8 @@ export default function Fridge() {
                 {"Start adding items to keep track of\nyour food and expiration dates"}
               </Text>
             </View>
-          )}
+            )
+          }
         </View>
 
         {/* Check Fridge Button */}

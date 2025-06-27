@@ -10,15 +10,15 @@ import {
 } from "react-native";
 import { fridgeItemsStyles as styles } from "./styles";
 
-// add a `route` field matching your screen file names
+// Routes matching the screen file names
 const categories = [
-  { id: 1, name: "Fruits",    img: require("../../../assets/images/fridge_icons/fruits.png"),    route: "/(tabs)/fridge/fridge_fruits" },
-  { id: 2, name: "Vegetable", img: require("../../../assets/images/fridge_icons/vegetables.png"), route: "/(tabs)/fridge/fridge_vegetables" },
-  { id: 3, name: "Dairy",     img: require("../../../assets/images/fridge_icons/dairy.png"), route: "/(tabs)/fridge/fridge_dairy" },
-  { id: 4, name: "Drinks",    img: require("../../../assets/images/fridge_icons/drinks.png"), route: "/(tabs)/fridge/fridge_drinks" },
+  { id: 1, name: "Fruits",      img: require("../../../assets/images/fridge_icons/fruits.png"), route: "/(tabs)/fridge/fridge_fruits" },
+  { id: 2, name: "Vegetable",   img: require("../../../assets/images/fridge_icons/vegetables.png"), route: "/(tabs)/fridge/fridge_vegetables" },
+  { id: 3, name: "Dairy",       img: require("../../../assets/images/fridge_icons/dairy.png"), route: "/(tabs)/fridge/fridge_dairy" },
+  { id: 4, name: "Drinks",      img: require("../../../assets/images/fridge_icons/drinks.png"), route: "/(tabs)/fridge/fridge_drinks" },
   { id: 5, name: "Meat & Fish", img: require("../../../assets/images/fridge_icons/meat-fish.png"), route: "/(tabs)/fridge/fridge_meat" },
-  { id: 6, name: "Frozen",    img: require("../../../assets/images/fridge_icons/freezer.png"), route: "/(tabs)/fridge/fridge_frozen" },
-  { id: 7, name: "Other",     img: require("../../../assets/images/fridge_icons/fridge.png"), route: "/(tabs)/fridge/fridge_other" },
+  { id: 6, name: "Frozen",      img: require("../../../assets/images/fridge_icons/freezer.png"), route: "/(tabs)/fridge/fridge_frozen" },
+  { id: 7, name: "Other",       img: require("../../../assets/images/fridge_icons/fridge.png"), route: "/(tabs)/fridge/fridge_other" },
 ];
 
 export default function FridgeItems() {

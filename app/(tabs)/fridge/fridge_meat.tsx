@@ -2,13 +2,13 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  FlatList,
   Image,
   SafeAreaView,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { QuantityControls } from "./fridgeBack/components/QuantityControls";
@@ -30,7 +30,7 @@ export default function Meat() {
         const meatProducts = items.documents.filter(item => item.kategorie === "Fleisch");
         setMeatItems(meatProducts);
       } catch (error) {
-        console.error("Error fetching meat items:", error);
+        console.error("Error fetching meat & fish:", error);
       } finally {
         setLoading(false);
       }
@@ -71,9 +71,9 @@ export default function Meat() {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0) {
-      return { days: Math.abs(diffDays), label: diffDays === -1 ? "Day Over" : "Days Over" };
+      return { days: Math.abs(diffDays), label: diffDays === -1 ? "Day over" : "Days over" };
     } else {
-      return { days: diffDays, label: diffDays === 1 ? "Day Remaining" : "Days Remaining" };
+      return { days: diffDays, label: diffDays === 1 ? "Day left" : "Days left" };
     }
   };
 
@@ -89,86 +89,79 @@ export default function Meat() {
   }
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Image
-          source={require("../../../assets/images/fridge_icons/profile-picture.png")}
-          style={styles.avatar}
-        />
-      </View>
-
-      {/* Title Section */}
-      <View style={styles.titleSection}>
-        <Text style={styles.title}>{"Meat & Fish"}</Text>
-      </View>
-
-      {/* Search */}
-      <View style={styles.searchContainer}>
-        <TextInput
-          placeholder="Find meat & fish items..."
-          placeholderTextColor="#94a3b8"
-          style={styles.searchInput}
-          value={searchTerm}
-          onChangeText={setSearchTerm}
-        />
-      </View>
-
-      {/* List */}
-      {filteredItems.length === 0 ? (
-        <View style={styles.emptyState}>
-          <Image
-            source={require("../../../assets/images/fridge_icons/meat-fish.png")}
-            style={styles.emptyIcon}
-          />
-          <Text style={styles.emptyText}>{"No meat & fish items"}</Text>
-          <Text style={styles.emptySubtext}>
-            {"Add some meat or fish items to keep track of freshness"}
-          </Text>
-        </View>
-      ) : (
-        <FlatList
-          data={filteredItems}
-          keyExtractor={(item) => item.$id}
-          renderItem={({ item }) => (
-            <View style={styles.row}>
-              <Image 
-                source={require("../../../assets/images/fridge_icons/meat-fish.png")} 
-                style={styles.itemImage} 
-              />
-
-              <View style={styles.info}>
-                <View style={styles.statusRow}>
-                  <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
-                  <Text style={styles.statusText}>
-                    {(() => {
-                      const { days, label } = getDaysLeft(item.mhd);
-                      return `${days} ${label}`;
-                    })()}
-                  </Text>
-                </View>
-                <Text style={styles.itemName}>{item.name}</Text>
-              </View>
-
-              <QuantityControls
-                item={item}
-                onQuantityChange={onQuantityChange}
-                isUpdating={isUpdating}
-                styles={styles}
-              />
-            </View>
-          )}
-          contentContainerStyle={styles.itemsList}
-          showsVerticalScrollIndicator={false}
-        />
-      )}
-
-      {/* Add New Item Button */}
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => router.push("/(tabs)/fridge/fridge_add")}
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContainer}
       >
-        <Text style={styles.addButtonText}>{"ADD NEW MEAT/FISH"}</Text>
-      </TouchableOpacity>
+        {/* Header */}
+        <View style={styles.header}>
+          <Image
+            source={require("../../../assets/images/fridge_icons/profile-picture.png")}
+            style={styles.avatar}
+          />
+        </View>
+
+        {/* Title Section */}
+        <View style={styles.titleSection}>
+          <Text style={styles.title}>{"Meat & Fish"}</Text>
+        </View>
+
+        {/* Search */}
+        <View style={styles.searchContainer}>
+          <TextInput
+            placeholder="Find meat & fish..."
+            placeholderTextColor="#9ca3af"
+            style={styles.searchInput}
+            value={searchTerm}
+            onChangeText={setSearchTerm}
+          />
+        </View>
+
+        {/* List */}
+        {filteredItems.length === 0 ? (
+          <View style={styles.emptyState}>
+            <Image
+              source={require("../../../assets/images/fridge_icons/meat-fish.png")}
+              style={styles.emptyIcon}
+            />
+            <Text style={styles.emptyText}>{"No meat & fish"}</Text>
+            <Text style={styles.emptySubtext}>{"Add some meat or fish to your fridge"}</Text>
+          </View> ) : (
+          <View style={styles.itemsList}>
+            {filteredItems.map((item) => (
+              <View key={item.$id} style={styles.row}>
+                <Image source={require("../../../assets/images/fridge_icons/meat-fish.png")} style={styles.itemImage}/>
+                <View style={styles.info}>
+                  <View style={styles.statusRow}>
+                    <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
+                    <Text style={styles.statusText}>
+                      {(() => {
+                        const { days, label } = getDaysLeft(item.mhd);
+                        return `${days} ${label}`;
+                      })()}
+                    </Text>
+                  </View>
+                  <Text style={styles.itemName}>{item.name}</Text>
+                </View>
+                <QuantityControls
+                  item={item}
+                  onQuantityChange={onQuantityChange}
+                  isUpdating={isUpdating}
+                  styles={styles}
+                />
+              </View>
+            ))}
+          </View>
+        )}
+
+        {/* Add New Item Button */}
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => router.push("/(tabs)/fridge/fridge_add")}
+        >
+          <Text style={styles.addButtonText}>{"ADD NEW MEAT/FISH"}</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 }
