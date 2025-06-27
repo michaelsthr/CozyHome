@@ -86,7 +86,7 @@ export const EditToDoItem = ({
   return (
     <Box style={styles.todoItem}>
       <VStack space="xs">
-        <TouchableOpacity onPress={() => router.push("../(todo)/edit_todo")}>
+        <TouchableOpacity onPress={() => router.push(`../(todo)/edit_todo?id=${id}`)}>
           <HStack style={styles.titleRow}>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
             {responsible ? (

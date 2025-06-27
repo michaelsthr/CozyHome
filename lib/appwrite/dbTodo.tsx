@@ -1,5 +1,5 @@
+import { Models } from 'react-native-appwrite';
 import { getDatabases } from './initializer'; //für db
-import { Databases, Models, Query } from 'react-native-appwrite';
 
 
 const databases = getDatabases();
@@ -45,4 +45,4 @@ const deleteTodo = async function (id: string): Promise<void> {
     }
 };
 
-export { getTodos, addTodo, updateTodo, deleteTodo };
+export { addTodo, deleteTodo, getTodos, updateTodo };

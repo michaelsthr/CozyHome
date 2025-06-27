@@ -6,6 +6,7 @@ import { Modal, SafeAreaView, ScrollView, Text, View } from "react-native";
 import styles, { containerWidth } from "../(todo)/styles";
 import { EditToDoItem } from "../../components/todo_item";
 import { deleteTodo, getTodos } from "../../lib/appwrite/dbTodo"; //für db
+import { useIsFocused } from "@react-navigation/native";
 
 
 
@@ -34,6 +35,15 @@ export default function Edit() {
   useEffect(() => {
     fetchTodos();
   }, []);
+
+   const isFocused = useIsFocused();
+  
+    useEffect(() => {
+      if (isFocused) {
+        fetchTodos();
+        console.log("Screen is focused – Daten neu geladen");
+      }
+    }, [isFocused]);
 
   const handleDeletePress = (id: string) => {
     setSelectedTodoId(id);

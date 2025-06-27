@@ -8,6 +8,16 @@ import styles, { screenHeight, screenWidth } from "../(todo)/styles";
 import { ToDoItem, ToDoItemProps } from "../../components/todo_item";
 import { getTodos, updateTodo } from "../../lib/appwrite/dbTodo"; //für db
 
+const formatDate = (isoString: string) => {
+  if (!isoString) return null;
+  const date = new Date(isoString);
+  return date.toLocaleDateString("de-DE", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+};
+
 type TabsProps = {
   selectedTab: string;
   setSelectedTab: (tab: string) => void;
@@ -129,7 +139,7 @@ export default function Todo() {
                 key={index}
                 id={item.$id}
                 title={item.name}
-                date={item.date ? item.date : null}
+                date={item.date ? formatDate(item.date) : null}
                 routine={item.regularity ? item.regularity : null}
                 isChecked={item.done}
                 changeToDoStatus={changeToDoStatus}
