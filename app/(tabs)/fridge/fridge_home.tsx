@@ -2,7 +2,9 @@ import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Image,
+  Platform,
   SafeAreaView,
   ScrollView,
   Text,
@@ -84,6 +86,35 @@ export default function Fridge() {
   const onQuantityChange = (item: KuehlschrankItem, change: number) => {
     handleQuantityChange(item, change, setFridgeItems, fridgeItems);
   };
+
+  const handleDecrease = (item: KuehlschrankItem) => {
+    if (item.anzahl === 1) {
+      if (Platform.OS === 'web') {
+        const confirmed = window.confirm(`Are you sure you want to remove "${item.name}" from your fridge?`);
+        if (confirmed) {
+          onQuantityChange(item, -1);
+        }
+      } else {
+        Alert.alert(
+          "Remove Item",
+          `Are you sure you want to remove "${item.name}" from your fridge?`,
+          [
+            {
+              text: "Cancel",
+              style: "cancel"
+            },
+            {
+              text: "Remove",
+              style: "destructive",
+              onPress: () => onQuantityChange(item, -1)
+            }
+          ]
+        );
+      }
+    } else {
+      onQuantityChange(item, -1);
+    }
+  };
   
   const getStatusIcon = (mhd?: string) => {
     if (!mhd) return require("../../../assets/images/fridge_icons/eatable.png");
@@ -109,9 +140,9 @@ export default function Fridge() {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
    if (diffDays < 0) {
-      return { days: Math.abs(diffDays), label: diffDays === -1 ? "Day over" : "Days over" };
+      return { days: Math.abs(diffDays), label: diffDays === -1 ? "day over" : "days over" };
     } else {
-      return { days: diffDays, label: diffDays === 1 ? "Day left" : "Days left" };
+      return { days: diffDays, label: diffDays === 1 ? "day left" : "days left" };
     }
   };
   
@@ -190,9 +221,7 @@ export default function Fridge() {
             <Text style={styles.title}>{"Your Fridge"}</Text>
           </View>
           <Text style={styles.subtitle}>
-            {fridgeItems.length > 0 
-              ? `${fridgeItems.length} items in your fridge` 
-              : "Your fridge is empty"}
+            {fridgeItems.length > 0 ? `${fridgeItems.length} items in your fridge` : "Your fridge is empty"}
           </Text>
 
           {/* Items Carousel */}
@@ -226,7 +255,7 @@ export default function Fridge() {
                       <View style={styles.homeQuantityControls}>
                         <TouchableOpacity
                           style={[styles.homeQuantityButton, isUpdating && { backgroundColor: "#94a3b8" }]}
-                          onPress={() => onQuantityChange(item, -1)}
+                          onPress={() => handleDecrease(item)}
                           disabled={isUpdating}
                         >
                           <Text style={styles.homeQuantityButtonText}>{"-"}</Text>

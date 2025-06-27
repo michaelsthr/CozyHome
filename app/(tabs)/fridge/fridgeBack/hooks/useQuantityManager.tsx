@@ -14,10 +14,12 @@ export const useQuantityManager = () => {
     
     if (isUpdating) return;
     
+    if (newQuantity < 0) return;
+    
     setIsUpdating(true);
     
     try {
-      if (newQuantity <= 0) {
+      if (newQuantity === 0) {
         await deleteKuehlschrankInhalt({ $id: item.$id });
         const updatedItems = currentItems.filter(i => i.$id !== item.$id);
         onUpdate(updatedItems);

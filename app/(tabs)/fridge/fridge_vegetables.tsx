@@ -71,9 +71,9 @@ export default function Vegetables() {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0) {
-      return { days: Math.abs(diffDays), label: diffDays === -1 ? "Day over" : "Days over" };
+      return { days: Math.abs(diffDays), label: diffDays === -1 ? "day over" : "days over" };
     } else {
-      return { days: diffDays, label: diffDays === 1 ? "Day left" : "Days left" };
+      return { days: diffDays, label: diffDays === 1 ? "day left" : "days left" };
     }
   };
 
