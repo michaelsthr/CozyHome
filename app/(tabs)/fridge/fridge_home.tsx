@@ -1,5 +1,5 @@
-import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { useFocusEffect, useRouter } from "expo-router";
+import React, { useCallback, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -23,19 +23,23 @@ export default function Fridge() {
   const [searchTerm, setSearchTerm] = useState("");
   const { handleQuantityChange, isUpdating } = useQuantityManager();
 
-  useEffect(() => {
-    const fetchFridgeItems = async () => {
-      try {
-        const items = await getKuehlschrankInhalt();
-        setFridgeItems(items.documents);
-      } catch (error) {
-        console.error("Error fetching fridge items:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchFridgeItems();
-  },[]);
+  const fetchFridgeItems = useCallback(async () => {
+    setLoading(true);
+    try {
+      const items = await getKuehlschrankInhalt();
+      setFridgeItems(items.documents);
+    } catch (error) {
+      console.error("Error fetching fridge items:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchFridgeItems();
+    }, [fetchFridgeItems])
+  );
 
   // Map categories to route names
   const getCategoryRoute = (category: string) => {
