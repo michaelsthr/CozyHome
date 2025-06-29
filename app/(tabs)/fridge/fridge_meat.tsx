@@ -27,7 +27,9 @@ export default function Meat() {
     const fetchMeatItems = async () => {
       try {
         const items = await getKuehlschrankInhalt();
-        const meatProducts = items.documents.filter(item => item.kategorie === "Fleisch");
+        const meatProducts = items.documents.filter(item => 
+          item.kategorie === "Meat & Fish" || (item.kategorie as any) === "Fleisch/Fisch" || (item.kategorie as any) === "Fleisch"
+        );
         setMeatItems(meatProducts);
       } catch (error) {
         console.error("Error fetching meat & fish:", error);

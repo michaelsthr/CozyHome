@@ -44,18 +44,26 @@ export default function Fridge() {
   // Map categories to route names
   const getCategoryRoute = (category: string) => {
     switch (category) {
+      case "Fruits":
       case "Obst":
         return "/(tabs)/fridge/fridge_fruits";
+      case "Vegetables":
       case "Gemüse":
         return "/(tabs)/fridge/fridge_vegetables";
+      case "Dairy":
       case "Milchprodukte":
         return "/(tabs)/fridge/fridge_dairy";
+      case "Meat & Fish":
+      case "Fleisch/Fisch":
       case "Fleisch":
         return "/(tabs)/fridge/fridge_meat";
+      case "Drinks":
       case "Getränke":
         return "/(tabs)/fridge/fridge_drinks";
+      case "Frozen":
       case "Tiefkühlkost":
         return "/(tabs)/fridge/fridge_frozen";
+      case "Other":
       case "Sonstige":
         return "/(tabs)/fridge/fridge_other";
       default:
@@ -152,18 +160,26 @@ export default function Fridge() {
   
   const getCategoryImage = (category?: string) => {
     switch (category) {
+      case "Fruits":
       case "Obst":
         return require("../../../assets/images/fridge_icons/fruits.png");
+      case "Vegetables":
       case "Gemüse":
         return require("../../../assets/images/fridge_icons/vegetables.png");
+      case "Dairy":
       case "Milchprodukte":
         return require("../../../assets/images/fridge_icons/dairy.png");
+      case "Meat & Fish":
+      case "Fleisch/Fisch":
       case "Fleisch":
         return require("../../../assets/images/fridge_icons/meat-fish.png");
+      case "Drinks":
       case "Getränke":
         return require("../../../assets/images/fridge_icons/drinks.png");
+      case "Frozen":
       case "Tiefkühlkost":
         return require("../../../assets/images/fridge_icons/freezer.png");
+      case "Other":
       case "Sonstige":
         return require("../../../assets/images/fridge_icons/fridge.png");
       default:

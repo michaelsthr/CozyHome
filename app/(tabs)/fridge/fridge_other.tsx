@@ -1,14 +1,14 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
+    ActivityIndicator,
+    Image,
+    SafeAreaView,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { QuantityControls } from "./fridgeBack/components/QuantityControls";
@@ -27,7 +27,9 @@ export default function Other() {
     const fetchOtherItems = async () => {
       try {
         const items = await getKuehlschrankInhalt();
-        const otherProducts = items.documents.filter(item => item.kategorie === "Sonstige" || !item.kategorie);
+        const otherProducts = items.documents.filter(item => 
+          item.kategorie === "Other" || (item.kategorie as any) === "Sonstige" || !item.kategorie
+        );
         setOtherItems(otherProducts);
       } catch (error) {
         console.error("Error fetching other items:", error);

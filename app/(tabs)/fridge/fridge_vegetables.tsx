@@ -1,14 +1,14 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
+    ActivityIndicator,
+    Image,
+    SafeAreaView,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { QuantityControls } from "./fridgeBack/components/QuantityControls";
@@ -27,7 +27,9 @@ export default function Vegetables() {
     const fetchVegetables = async () => {
       try {
         const items = await getKuehlschrankInhalt();
-        const vegetableItems = items.documents.filter(item => item.kategorie === "Gemüse");
+        const vegetableItems = items.documents.filter(item => 
+          item.kategorie === "Vegetables" || (item.kategorie as any) === "Gemüse"
+        );
         setVegetables(vegetableItems);
       } catch (error) {
         console.error("Error fetching vegetables:", error);

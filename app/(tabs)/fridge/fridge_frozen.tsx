@@ -1,14 +1,14 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
+    ActivityIndicator,
+    Image,
+    SafeAreaView,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { QuantityControls } from "./fridgeBack/components/QuantityControls";
@@ -27,7 +27,9 @@ export default function Frozen() {
     const fetchFrozenItems = async () => {
       try {
         const items = await getKuehlschrankInhalt();
-        const frozenProducts = items.documents.filter(item => item.kategorie === "Tiefkühlkost");
+        const frozenProducts = items.documents.filter(item => 
+          item.kategorie === "Frozen" || (item.kategorie as any) === "Tiefkühlkost"
+        );
         setFrozenItems(frozenProducts);
       } catch (error) {
         console.error("Error fetching frozen items:", error);
