@@ -1,94 +1,88 @@
 import React, { useState } from 'react';
-import {Client, Account, ID, Models, Query} from 'react-native-appwrite';
+import { StyleSheet, View, Button } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import {StyleSheet, Text, View, TextInput, TouchableOpacity, Button} from 'react-native';
-import {Redirect, router, useRouter} from "expo-router";
-import CozyInput from "@/components/cozy_input";
-import {createNewUser, checkUserValid, User} from "@/lib/appwrite/dbUser";
-import bcrypt from "bcryptjs";
+import { useRouter } from 'expo-router';
+import bcrypt from 'bcryptjs';
 
-const client = new Client()
-    .setEndpoint('https://fra.cloud.appwrite.io/v1')
-    .setProject('681cc5b8000a49689753')
-    .setPlatform('com.rubberduck.cozyhome');
-
-
-const account = new Account(client);
-
+import CozyInput from '@/components/cozy_input';
+import { createNewUser, checkUserValid, User } from '@/lib/appwrite/dbUser';
 
 export default function Auth() {
-    const [isAuthenticated, setIsAuthenticated] = useState(true);
-    const [password, setPassword] = useState('');
-    const [username, setName] = useState('');
-    const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-    const router = useRouter();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
-    
-    async function login(username: string, password: string) {
-      try {
-        const user = await checkUserValid(username);
-        if (user && await bcrypt.compare(password, user.password)) {
-            setLoggedInUser(loggedInUser);
-            setIsAuthenticated(true);
-            router.push("/(tabs)/calendar");
-        }
-        else {
-            alert("Benutzername oder Passwort ist falsch.");
-        }
-      } catch (error) {
-        console.error("Login fehlgeschlagen:", error);
-        alert("Login fehlgeschlagen.");
+  const router = useRouter();
+
+  async function login(username: string, password: string) {
+    try {
+      const userDoc = await checkUserValid(username);
+
+      if (userDoc && await bcrypt.compare(password, userDoc.password)) {
+        const user: User = {
+          username: userDoc.username,
+          password: userDoc.password
+        };
+        setLoggedInUser(user);
+        setIsAuthenticated(true);
+        router.push("/(tabs)/calendar");
+      } else {
+        alert("Benutzername oder Passwort ist falsch.");
       }
+    } catch (error) {
+      console.error("Login fehlgeschlagen:", error);
+      alert("Login fehlgeschlagen.");
     }
+  }
 
-
-    async function register(password: string, username: string) {
-      try {
-        await createNewUser({password, username});
-        // Nach erfolgreicher Registrierung automatisch einloggen
-        console.log("Registrierung erfolgreich");
-        await login(username, password);
-      } catch (error) {
-        console.error("Registrierung fehlgeschlagen:", error);
-      }
+  async function register(username: string, password: string) {
+    try {
+      await createNewUser({ username, password });
+      alert("Registrierung erfolgreich");
+      await login(username, password);
+    } catch (error) {
+      console.error("Registrierung fehlgeschlagen:", error);
+      alert("Registrierung fehlgeschlagen.");
     }
+  }
 
-    async function logout() {
-      setLoggedInUser(null);
-      setIsAuthenticated(false);
-      router.push("/(auth)/login");
-    }
+  async function logout() {
+    setLoggedInUser(null);
+    setIsAuthenticated(false);
+    router.push("/(auth)/login");
+  }
 
+  return (
+    <View style={styles.container}>
+      <StatusBar style="auto" />
 
-        return (
-          <View style={styles.container}>
-            <StatusBar style="auto" />
-            <CozyInput placeholder='Username'
-                     placeholderTextColor={"black"}
-                     value={username}
-                     onChangeText={(text) => setName(text)}
-          />
-            <CozyInput
-              placeholder='Passwort'
-              placeholderTextColor="black"
-              value={password}
-              onChangeText={text => setPassword(text)}
-              secureTextEntry={true}
-    />
-            <Button
-                title='Login'
-                onPress={async () => {
-                    await login(username, password);
-            }}
-          />
-            <Button
-                title='Registrieren'
-                onPress={async () => {
-                    await register(password, username);
-            }}
-          />
-          </View>
-        );
+      <CozyInput
+        placeholder="Username"
+        placeholderTextColor="black"
+        value={username}
+        onChangeText={setUsername}
+      />
+
+      <CozyInput
+        placeholder="Passwort"
+        placeholderTextColor="black"
+        secureTextEntry={true}
+        value={password}
+        onChangeText={setPassword}
+      />
+
+      <Button
+        title="Login"
+        onPress={() => login(username, password)}
+      />
+
+      <Button
+        title="Registrieren"
+        onPress={() => register(username, password)}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -96,8 +90,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  button: {
-   borderRadius: 10,
+    gap: 12,
   },
 });
