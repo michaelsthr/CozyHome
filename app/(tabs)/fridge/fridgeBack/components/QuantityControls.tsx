@@ -21,11 +21,10 @@ export const QuantityControls: React.FC<QuantityControlsProps> = ({
   const [isShowingConfirmation, setIsShowingConfirmation] = useState(false);
   const [lastProcessedValue, setLastProcessedValue] = useState<string | null>(null);
   
-  // Use a ref to track if we're currently processing to prevent immediate duplicates
   const isProcessingRef = React.useRef(false);
 
   const handleDecrease = () => {
-    if (isShowingConfirmation) return; // Prevent multiple confirmation dialogs
+    if (isShowingConfirmation) return;
     
     if (item.anzahl === 1) {
       setIsShowingConfirmation(true);
@@ -69,29 +68,24 @@ export const QuantityControls: React.FC<QuantityControlsProps> = ({
   const handleQuantityEdit = () => {
     setIsEditing(true);
     setEditingQuantity(item.anzahl.toString());
-    setLastProcessedValue(null); // Reset processed value tracker when starting new edit
+    setLastProcessedValue(null);
   };
 
   const handleQuantitySubmit = () => {
-    // Immediate duplicate prevention using ref
     if (isProcessingRef.current) {
       return;
     }
     
-    // Prevent multiple rapid submissions using state
     if (isSubmitting || isShowingConfirmation) {
       return;
     }
     
-    // Prevent processing the same value multiple times (e.g., from both onSubmitEditing and onBlur)
     if (lastProcessedValue === editingQuantity) {
       return;
     }
     
-    // Mark as processing immediately
     isProcessingRef.current = true;
     
-    // Mark this value as processed and set submitting state
     setLastProcessedValue(editingQuantity);
     setIsSubmitting(true);
     
@@ -103,7 +97,7 @@ export const QuantityControls: React.FC<QuantityControlsProps> = ({
       setEditingQuantity(item.anzahl.toString());
       setIsEditing(false);
       setIsSubmitting(false);
-      isProcessingRef.current = false; // Reset processing flag
+      isProcessingRef.current = false;
       return;
     }
 
@@ -115,7 +109,7 @@ export const QuantityControls: React.FC<QuantityControlsProps> = ({
       // Prevent multiple confirmation dialogs
       if (isShowingConfirmation) {
         setIsSubmitting(false);
-        isProcessingRef.current = false; // Reset processing flag
+        isProcessingRef.current = false;
         return;
       }
       setIsShowingConfirmation(true);
@@ -124,9 +118,8 @@ export const QuantityControls: React.FC<QuantityControlsProps> = ({
         const confirmed = window.confirm(`Are you sure you want to remove "${item.name}" from your fridge?`);
         setIsShowingConfirmation(false);
         setIsSubmitting(false);
-        isProcessingRef.current = false; // Reset processing flag
+        isProcessingRef.current = false;
         if (confirmed) {
-          // Calculate the exact change needed to reach 0
           onQuantityChange(item, -item.anzahl);
         }
       } else {
@@ -140,7 +133,7 @@ export const QuantityControls: React.FC<QuantityControlsProps> = ({
               onPress: () => {
                 setIsShowingConfirmation(false);
                 setIsSubmitting(false);
-                isProcessingRef.current = false; // Reset processing flag
+                isProcessingRef.current = false;
               }
             },
             {
@@ -149,7 +142,7 @@ export const QuantityControls: React.FC<QuantityControlsProps> = ({
               onPress: () => {
                 setIsShowingConfirmation(false);
                 setIsSubmitting(false);
-                isProcessingRef.current = false; // Reset processing flag
+                isProcessingRef.current = false;
                 onQuantityChange(item, -item.anzahl);
               }
             }
@@ -159,7 +152,7 @@ export const QuantityControls: React.FC<QuantityControlsProps> = ({
             onDismiss: () => {
               setIsShowingConfirmation(false);
               setIsSubmitting(false);
-              isProcessingRef.current = false; // Reset processing flag
+              isProcessingRef.current = false;
             }
           }
         );
@@ -175,7 +168,6 @@ export const QuantityControls: React.FC<QuantityControlsProps> = ({
     setIsEditing(false);
     setEditingQuantity("");
     
-    // Reset submission flag and processing ref after a short delay
     setTimeout(() => {
       setIsSubmitting(false);
       isProcessingRef.current = false;
@@ -185,7 +177,7 @@ export const QuantityControls: React.FC<QuantityControlsProps> = ({
   const handleQuantityCancel = () => {
     setIsEditing(false);
     setEditingQuantity("");
-    isProcessingRef.current = false; // Reset processing flag on cancel
+    isProcessingRef.current = false;
   };
 
   return (

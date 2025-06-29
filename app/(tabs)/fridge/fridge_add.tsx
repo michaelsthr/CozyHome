@@ -155,6 +155,7 @@ export default function AddItem() {
               style={styles.input}
               value={name}
               onChangeText={setName}
+              returnKeyType="done"
             />
           </View>
 
@@ -168,6 +169,7 @@ export default function AddItem() {
               value={quantity}
               onChangeText={setQuantity}
               keyboardType="numeric"
+              returnKeyType="done"
             />
           </View>
 
