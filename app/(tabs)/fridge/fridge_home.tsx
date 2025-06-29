@@ -2,9 +2,7 @@ import { useFocusEffect, useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Image,
-  Platform,
   SafeAreaView,
   ScrollView,
   Text,
@@ -13,6 +11,7 @@ import {
   View
 } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
+import { QuantityControls } from "./fridgeBack/components/QuantityControls";
 import { useQuantityManager } from "./fridgeBack/hooks/useQuantityManager";
 import { fridgeStyles as styles } from "./styles";
 
@@ -99,33 +98,14 @@ export default function Fridge() {
     handleQuantityChange(item, change, setFridgeItems, fridgeItems);
   };
 
-  const handleDecrease = (item: KuehlschrankItem) => {
-    if (item.anzahl === 1) {
-      if (Platform.OS === 'web') {
-        const confirmed = window.confirm(`Are you sure you want to remove "${item.name}" from your fridge?`);
-        if (confirmed) {
-          onQuantityChange(item, -1);
-        }
-      } else {
-        Alert.alert(
-          "Remove Item",
-          `Are you sure you want to remove "${item.name}" from your fridge?`,
-          [
-            {
-              text: "Cancel",
-              style: "cancel"
-            },
-            {
-              text: "Remove",
-              style: "destructive",
-              onPress: () => onQuantityChange(item, -1)
-            }
-          ]
-        );
-      }
-    } else {
-      onQuantityChange(item, -1);
-    }
+  const homeQuantityStyles = {
+    quantityControls: styles.homeQuantityControls,
+    quantityButton: styles.homeQuantityButton,
+    quantityButtonDisabled: { backgroundColor: "#94a3b8" },
+    quantityButtonText: styles.homeQuantityButtonText,
+    countContainer: styles.homeQuantityDisplay,
+    itemCount: styles.homeQuantityText,
+    quantityInput: styles.quantityInput,
   };
   
   const getStatusIcon = (mhd?: string) => {
@@ -272,25 +252,12 @@ export default function Fridge() {
                       <Text style={styles.itemName} numberOfLines={2}>
                         {item.name}
                       </Text>
-                      <View style={styles.homeQuantityControls}>
-                        <TouchableOpacity
-                          style={[styles.homeQuantityButton, isUpdating && { backgroundColor: "#94a3b8" }]}
-                          onPress={() => handleDecrease(item)}
-                          disabled={isUpdating}
-                        >
-                          <Text style={styles.homeQuantityButtonText}>{"-"}</Text>
-                        </TouchableOpacity>
-                        <View style={styles.homeQuantityDisplay}>
-                          <Text style={styles.homeQuantityText}>{item.anzahl}</Text>
-                        </View>
-                        <TouchableOpacity
-                          style={[styles.homeQuantityButton, isUpdating && { backgroundColor: "#94a3b8" }]}
-                          onPress={() => onQuantityChange(item, 1)}
-                          disabled={isUpdating}
-                        >
-                          <Text style={styles.homeQuantityButtonText}>{"+"}</Text>
-                        </TouchableOpacity>
-                      </View>
+                      <QuantityControls
+                        item={item}
+                        onQuantityChange={onQuantityChange}
+                        isUpdating={isUpdating}
+                        styles={homeQuantityStyles}
+                      />
                     </View>
                   </View>
                 );
