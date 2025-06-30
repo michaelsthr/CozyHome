@@ -1,12 +1,27 @@
 import { getCalender } from "@/lib/appwrite/dbKalender";
 import { MONTH_NAMES } from "@/lib/constants/calendar";
 import { useFocusEffect } from "expo-router";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+    forwardRef,
+    useCallback,
+    useEffect,
+    useImperativeHandle,
+    useRef,
+    useState,
+} from "react";
 import { Dimensions, ScrollView, View } from "react-native";
 import { EventInterface } from "../../../lib/types/calendar";
 import { WeekView } from "./week_view";
 
-export default function Timetable({ onMonthChange }: { onMonthChange: (month: string) => void }) {
+interface TimetableProps {
+    onMonthChange: (month: string) => void;
+}
+
+interface TimetableRef {
+    jumpToDate: (date: Date) => void;
+}
+
+const Timetable = forwardRef<TimetableRef, TimetableProps>(({ onMonthChange }, ref) => {
     const [events, setEvents] = useState<EventInterface[]>([]);
     const [currentDate, setCurrentDate] = useState(new Date());
     const scrollViewRef = useRef<ScrollView>(null);
@@ -74,6 +89,14 @@ export default function Timetable({ onMonthChange }: { onMonthChange: (month: st
     const nextWeekDate = new Date(currentDate);
     nextWeekDate.setDate(currentDate.getDate() + 7);
 
+    // Expose methods to parent component
+    useImperativeHandle(ref, () => ({
+        jumpToDate: (date: Date) => {
+            setCurrentDate(date);
+            setPendingMonthChange(MONTH_NAMES[date.getMonth()]);
+        },
+    }));
+
     return (
         <View
             style={{ flex: 1 }}
@@ -96,4 +119,8 @@ export default function Timetable({ onMonthChange }: { onMonthChange: (month: st
             :   null}
         </View>
     );
-}
+});
+
+Timetable.displayName = "Timetable";
+
+export default Timetable;

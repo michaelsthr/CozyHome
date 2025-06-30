@@ -4,11 +4,21 @@ import { Link } from "expo-router";
 import React from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
-export default function Header({ currentMonth }: { currentMonth: string }) {
+interface HeaderProps {
+    currentMonth: string;
+    onCalendarPress?: () => void;
+}
+
+export default function Header({ currentMonth, onCalendarPress }: HeaderProps) {
     return (
         <View style={headerStyles.container}>
             <View style={headerStyles.leftContainer}>
-                <Image source={require("@/assets/images/calendar.png")} style={iconStyles.icon1} />
+                <Pressable onPress={onCalendarPress}>
+                    <Image
+                        source={require("@/assets/images/calendar.png")}
+                        style={iconStyles.icon1}
+                    />
+                </Pressable>
                 <Text style={fontStyles.h2}>{currentMonth}</Text>
             </View>
             <View style={headerStyles.rightContainer}>
