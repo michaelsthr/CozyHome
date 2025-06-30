@@ -1,12 +1,12 @@
-import {getDatabases } from './initializer'; //für db
-import { Databases, Models, Query } from 'react-native-appwrite';
+import { Models } from 'react-native-appwrite';
+import { getDatabases } from './initializer'; //für db
 
 
 const databases = getDatabases();
 const databaseId = '681cc676001b5505b333';
 const collectionId = '681cc690001e33dabf95';
 
-const getTodos = async function(): Promise<Models.DocumentList<any>> {
+const getTodos = async function (): Promise<Models.DocumentList<any>> {
     try {
         const result = await databases.listDocuments(databaseId, collectionId);
         return result;
@@ -16,7 +16,7 @@ const getTodos = async function(): Promise<Models.DocumentList<any>> {
     }
 }
 
-const addTodo = async function(todo: any): Promise<Models.Document> {
+const addTodo = async function (todo: any): Promise<Models.Document> {
     try {
         const result = await databases.createDocument(databaseId, collectionId, 'unique()', todo);
         return result;
@@ -26,7 +26,7 @@ const addTodo = async function(todo: any): Promise<Models.Document> {
     }
 }
 
-const updateTodo = async function(todo: any): Promise<Models.Document> {
+const updateTodo = async function (todo: any): Promise<Models.Document> {
     try {
         const result = await databases.updateDocument(databaseId, collectionId, todo.$id, todo);
         return result;
@@ -36,4 +36,13 @@ const updateTodo = async function(todo: any): Promise<Models.Document> {
     }
 }
 
-export { getTodos, addTodo, updateTodo };
+const deleteTodo = async function (id: string): Promise<void> {
+    try {
+        await databases.deleteDocument(databaseId, collectionId, id);
+    } catch (error) {
+        console.error("Error deleting todo:", error);
+        throw error;
+    }
+};
+
+export { addTodo, deleteTodo, getTodos, updateTodo };

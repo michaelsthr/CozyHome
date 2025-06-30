@@ -1,6 +1,6 @@
-import { Redirect, Stack } from "expo-router";
-import React from "react";
 import { SessionProvider } from '@/lib/context/SessionContext';
+import { Stack } from "expo-router";
+import React from "react";
 
 
 export const unstable_settings = {

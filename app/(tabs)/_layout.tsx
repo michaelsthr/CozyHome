@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router";
 import React from "react";
-import { Image } from "react-native"
+import { Image } from "react-native";
 
 export default function TabLayout() {
   return (
@@ -24,8 +24,34 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen name='fridge' />
-      <Tabs.Screen name='todo' />
+      <Tabs.Screen name='fridge' options={{
+        title: "Fridge",
+        headerShown: false,
+        tabBarIcon: () => (
+          <Image
+            source={require("../../assets/images/fridge_icons/fridge.png")}
+            style={{ width: 24, height: 24 }}
+          />
+        )
+      }}/>
+      <Tabs.Screen 
+        name="todo"
+        options={{
+          title: "Todos",
+          headerShown: false,
+          tabBarIcon: () => (
+            <Image
+              source={require("../../assets/todo.png")}
+              style={{
+                width: 28,
+                height: 28,
+                marginRight: "auto",
+                alignItems: "center",
+                justifyContent: "center",
+              }} />
+            ),
+          }}
+        />
     </Tabs>
   );
 }
