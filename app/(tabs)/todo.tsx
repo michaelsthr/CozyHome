@@ -1,12 +1,21 @@
 import { config } from "@gluestack-ui/config";
 import { Badge, Box, Button, ChevronDownIcon, ChevronUpIcon, GluestackUIProvider, HStack, RepeatIcon, VStack } from "@gluestack-ui/themed";
 import { useRouter } from "expo-router";
-import { SafeAreaView, ScrollView, StyleSheet, Text } from "react-native";
+import React from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Checkbox, Menu } from 'react-native-paper';
 
-const ToDoItem = ({ title, date, responsible, isChecked, routine }) => (
+interface ToDoItemProps {
+  title: string;
+  date: string;
+  responsible: string;
+  isChecked: boolean;
+  routine?: string;
+}
+
+const ToDoItem = ({ title, date, responsible, isChecked, routine }: ToDoItemProps) => (
   <Box style={styles.todoItem}>
-    <VStack space={2}>
+    <VStack space="sm">
       <HStack style={styles.titleRow}>
         <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
         <Badge style={styles.badge}>
@@ -29,7 +38,13 @@ const ToDoItem = ({ title, date, responsible, isChecked, routine }) => (
     </VStack>
   </Box>
 );
-const DropDown= ({ selected, setSelected }) => {
+
+interface DropDownProps {
+  selected: string;
+  setSelected: (value: string) => void;
+}
+
+const DropDown = ({ selected, setSelected }: DropDownProps) => {
   const [visible, setVisible] = React.useState(false);
 
   const openMenu = () => setVisible(true);
@@ -44,7 +59,7 @@ const DropDown= ({ selected, setSelected }) => {
           visible={visible}
           onDismiss={closeMenu}
           anchor={
-            <Button mode="outlined" onPress={openMenu}  contentStyle={{ flexDirection: 'row', justifyContent: 'space-between',  alignItems: 'center'}} style={{ width: "70%" }}>  
+            <Button onPress={openMenu} style={{ width: "70%" }}>  
             {selected || 'Auswählen'}
             {visible ? (
               <View style={{ justifyContent: 'center', marginTop:20 }}>
@@ -70,8 +85,8 @@ const DropDown= ({ selected, setSelected }) => {
 
 export default function Todo() {
   const router = useRouter();
-  const newToDo = () => router.push("(todo)/newtodo");
-  const edit = () => router.push("(todo)/edit");
+  const newToDo = () => router.push("/(todo)/newtodo");
+  const edit = () => router.push("/(todo)/edit");
   return (
     <GluestackUIProvider config={config}>
       <SafeAreaView style={styles.container}>
