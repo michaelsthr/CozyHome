@@ -1,7 +1,7 @@
 import { getCalender } from "@/lib/appwrite/dbKalender";
 import { MONTH_NAMES } from "@/lib/constants/calendar";
 import { useFocusEffect } from "expo-router";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Dimensions, ScrollView, View } from "react-native";
 import { EventInterface } from "../../../lib/types/calendar";
 import { WeekView } from "./week_view";
@@ -11,6 +11,7 @@ export default function Timetable({ onMonthChange }: { onMonthChange: (month: st
     const [currentDate, setCurrentDate] = useState(new Date());
     const scrollViewRef = useRef<ScrollView>(null);
     const [viewWidth, setViewWidth] = useState(Dimensions.get("window").width);
+    const [pendingMonthChange, setPendingMonthChange] = useState<string | null>(null);
 
     const fetchEvents = async () => {
         try {
@@ -42,6 +43,13 @@ export default function Timetable({ onMonthChange }: { onMonthChange: (month: st
         }, [])
     );
 
+    useEffect(() => {
+        if (pendingMonthChange) {
+            onMonthChange(pendingMonthChange);
+            setPendingMonthChange(null);
+        }
+    }, [pendingMonthChange, onMonthChange]);
+
     const handleMomentumScrollEnd = (e: any) => {
         const contentOffsetX = e.nativeEvent.contentOffset.x;
         const newPage = Math.round(contentOffsetX / viewWidth);
@@ -54,7 +62,7 @@ export default function Timetable({ onMonthChange }: { onMonthChange: (month: st
         setCurrentDate((current) => {
             const newDate = new Date(current);
             newDate.setDate(current.getDate() + dateModifier);
-            onMonthChange(MONTH_NAMES[newDate.getMonth()]);
+            setPendingMonthChange(MONTH_NAMES[newDate.getMonth()]);
             return newDate;
         });
 
