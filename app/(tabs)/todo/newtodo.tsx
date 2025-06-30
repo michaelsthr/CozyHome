@@ -7,6 +7,8 @@ import { addTodo } from "../../../lib/appwrite/dbTodo"; //für db
 import styles, { containerWidth } from "./styles";
 import { router } from "expo-router";
 import { CalendarDays } from "lucide-react-native"; // oder deine Icon-Bibliothek
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 const isWeb = Platform.OS === 'web';
 
 interface ToDoItemProps {
@@ -228,6 +230,8 @@ export default function NewToDo() {
     if (selectedDate) setDate(selectedDate);
   };
 
+  const insets = useSafeAreaInsets();
+
   const showDatepicker = () => setShow(true);
   const cancel = () => { console.log("Cancel"); router.back(); };
   const [errorMessage, setErrorMessage] = useState("");
@@ -260,8 +264,7 @@ export default function NewToDo() {
   }
 
   return (
-    <SafeAreaView style={styles.container_box}>
-      <Text style={styles.heading}>Add new ToDo</Text>
+    <SafeAreaView style={[styles.container_box, { paddingBottom: insets.bottom + 32 }]}>      <Text style={styles.heading}>Add new ToDo</Text>
       {errorMessage !== "" && (
         <View style={{ position: "absolute", alignItems: "center", zIndex: 2000, marginTop: "20%", width: containerWidth }}>
           <Badge style={styles.badgeErrorMessage}><BadgeText style={styles.badgeErrorMessageText}>{errorMessage}</BadgeText></Badge>
@@ -291,10 +294,10 @@ export default function NewToDo() {
           <DatePickerField date={date} setDate={setDate} />
         </VStack>
       </Box>
-      <HStack style={styles.buttonContainer}>
+      <HStack style={[styles.buttonContainer, { marginBottom: insets.bottom + 16 }]}>        
         <Button style={[styles.buttons, { backgroundColor: "grey" }]} onPress={cancel}>
-          <Text style={styles.buttonText}>Cancel</Text>
-        </Button>
+        <Text style={styles.buttonText}>Cancel</Text>
+      </Button>
         <Button style={[styles.buttons, { backgroundColor: "blue" }]} onPress={() => saveNewTodo(todoName, selectedPerson, date, selectedRepeat, selectedLabel)}>
           <Text style={styles.buttonText}>Add</Text>
         </Button>

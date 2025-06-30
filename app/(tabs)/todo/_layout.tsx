@@ -4,7 +4,7 @@ export default function TodoLayout() {
   return (
     <Stack
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
         animation: "slide_from_right",
       }}
     />
