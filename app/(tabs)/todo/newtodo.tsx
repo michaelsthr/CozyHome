@@ -236,20 +236,20 @@ export default function NewToDo() {
   const cancel = () => { console.log("Cancel"); router.back(); };
   const [errorMessage, setErrorMessage] = useState("");
   const saveNewTodo = (
-    tile: string,
+    title: string,
     responsible: string,
     date: string,
     regularity: string,
     tag: string
   ) => {
-    if (!tile) {
+    if (!title) {
       setErrorMessage("Please fill in the title")
       return;
     }
     setErrorMessage("");
 
     const newTodo = {
-      name: tile,
+      name: title,
       // Todo: responsible: (responsible ? responsible : null),
       date: (date ? date.toISOString() : null),
       regularity: regularity || null,
