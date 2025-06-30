@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { fridgeItemsStyles as styles } from "./styles";
+import { fridgeItemsStyles as styles } from "../../../styles/fridge_styles";
 
 // Routes matching the screen file names
 const categories = [

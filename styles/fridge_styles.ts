@@ -225,9 +225,9 @@ export const fridgeStyles = StyleSheet.create({
     textAlign: "center",
     lineHeight: 20,
   },
-  checkButton: {
+  addButton: {
     marginHorizontal: 20,
-    marginVertical: 30,
+    marginBottom: 30,
     backgroundColor: "#059669",
     borderRadius: 16,
     paddingVertical: 18,
@@ -241,7 +241,7 @@ export const fridgeStyles = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 8,
   },
-  checkButtonText: {
+  addButtonText: {
     color: "#ffffff",
     fontSize: 18,
     fontWeight: "700",
@@ -249,7 +249,6 @@ export const fridgeStyles = StyleSheet.create({
   },
 });
 
-// Styles for Fridge Items screen
 export const fridgeItemsStyles = StyleSheet.create({
   container: {
     flex: 1,
@@ -389,8 +388,6 @@ export const fridgeItemsStyles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 });
-
-// Styles for Fridge Category screens
 export const fridgeCategoryStyles = StyleSheet.create({
   container: { 
     flex: 1, 
@@ -636,8 +633,6 @@ export const fridgeCategoryStyles = StyleSheet.create({
     lineHeight: 20,
   },
 });
-
-// Styles for Fridge Add screen
 export const fridgeAddStyles = StyleSheet.create({
   container: { 
     flex: 1, 

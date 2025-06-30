@@ -10,10 +10,10 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
+import { fridgeCategoryStyles as styles } from "../../../styles/fridge_styles";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { QuantityControls } from "./fridgeBack/components/QuantityControls";
 import { useQuantityManager } from "./fridgeBack/hooks/useQuantityManager";
-import { fridgeCategoryStyles as styles } from "./styles";
 
 export default function Meat() {
   const router = useRouter();

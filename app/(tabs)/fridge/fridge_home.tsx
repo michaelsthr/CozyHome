@@ -10,10 +10,10 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
+import { fridgeStyles } from "../../../styles/fridge_styles";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { QuantityControls } from "./fridgeBack/components/QuantityControls";
 import { useQuantityManager } from "./fridgeBack/hooks/useQuantityManager";
-import { fridgeStyles as styles } from "./styles";
 
 export default function Fridge() {
   const router = useRouter();
@@ -21,6 +21,8 @@ export default function Fridge() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const { handleQuantityChange, isUpdating } = useQuantityManager();
+
+  const styles = fridgeStyles;
 
   const fetchFridgeItems = useCallback(async () => {
     setLoading(true);
@@ -279,10 +281,10 @@ export default function Fridge() {
 
         {/* Check Fridge Button */}
         <TouchableOpacity
-          style={styles.checkButton}
+          style={styles.addButton}
           onPress={() => router.push("/(tabs)/fridge/fridge_items")}
         >
-          <Text style={styles.checkButtonText}>{"EXPLORE CATEGORIES"}</Text>
+          <Text style={styles.addButtonText}>{"EXPLORE CATEGORIES"}</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
