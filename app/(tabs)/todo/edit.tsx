@@ -18,7 +18,7 @@ const formatDate = (isoString: string) => {
   });
 };
 
-export default function EditTodo() {
+export default function EditTodos() {
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
   const [todos, setTodos] = useState<{ total: number; documents: any[] }>({
@@ -85,7 +85,7 @@ export default function EditTodo() {
           </ScrollView>
         </View>
         <Modal
-          animationType="slide"
+          animationType="fade"
           transparent={true}
           visible={modalVisible}
           onRequestClose={() => setModalVisible(false)}

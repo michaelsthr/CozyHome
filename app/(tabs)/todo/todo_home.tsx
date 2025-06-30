@@ -123,10 +123,10 @@ export default function Todo() {
         <Text style={styles.heading}>To Do Liste</Text>
         <HStack style={styles.buttonContainer}>
           <Button style={styles.button} onPress={newToDo}>
-            <Text style={styles.buttonText}>Neues ToDo</Text>
+            <Text style={styles.buttonText}>New Todo</Text>
           </Button>
           <Button style={styles.button} onPress={edit}>
-            <Text style={styles.buttonText}>Bearbeiten</Text>
+            <Text style={styles.buttonText}>Edit ToDos</Text>
           </Button>
         </HStack>
         <View style={{ marginBottom: 5, width: screenWidth }}>

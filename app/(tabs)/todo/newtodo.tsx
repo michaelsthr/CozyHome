@@ -30,6 +30,7 @@ const DropDownResponsible = ({ selectedPerson, setSelectedPerson }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(selectedPerson || null);
   const [items, setItems] = useState([
+    { label: 'None', value: 'None' },
     { label: 'Bewohner 1', value: 'Bewohner 1' },
     { label: 'Bewohner 2', value: 'Bewohner 2' },
     { label: 'Bewohner 3', value: 'Bewohner 3' },
@@ -101,7 +102,9 @@ const DropDownLabel = ({ selectedLabel, setSelectedLabel }) => {
 };
 const DropDownRepeat = ({ selectedRepeat, setSelectedRepeat }) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(selectedRepeat || null); const [items, setItems] = useState([
+  const [value, setValue] = useState(selectedRepeat || null);
+  const [items, setItems] = useState([
+    { label: 'None', value: 'None' },
     { label: 'daily', value: 'daily' },
     { label: 'weekly', value: 'weekly' },
     { label: 'monthly', value: 'monthly' },
@@ -120,7 +123,9 @@ const DropDownRepeat = ({ selectedRepeat, setSelectedRepeat }) => {
       setOpen={setOpen}
       setValue={setValue}
       setItems={setItems}
-      placeholder="Wiederholung"
+      zIndex={3000}
+      zIndexInverse={1000}
+      placeholder="None"
       style={{
         borderColor: '#ccc',
         borderRadius: 8,
@@ -141,6 +146,13 @@ const DropDownRepeat = ({ selectedRepeat, setSelectedRepeat }) => {
 const DatePickerField = ({ date, setDate }) => {
   const [showPicker, setShowPicker] = useState(false);
   const [hasSelected, setHasSelected] = useState(false);
+  const isWeb = Platform.OS == "web";
+
+  useEffect(() => {
+    if (date) {
+      setHasSelected(true);
+    }
+  }, [date]);
 
   const handleChange = (event, date) => {
     if (date) {
@@ -148,6 +160,12 @@ const DatePickerField = ({ date, setDate }) => {
       setHasSelected(true);
     }
     setShowPicker(false);
+  };
+
+  const handleWebChange = (e) => {
+    const selectedDate = new Date(e.target.value);
+    setDate(selectedDate);
+    setHasSelected(true);
   };
   return (
     <View style={{ width: '100%', marginBottom: '10%' }}>
@@ -159,8 +177,9 @@ const DatePickerField = ({ date, setDate }) => {
           borderRadius: 8,
           paddingVertical: 12,
           paddingHorizontal: 16,
-          justifyContent: 'center',
-          height: 44
+          justifyContent: 'space-between',
+          height: 44,
+          flexDirection: "row",
         }}
       >
         {isWeb ? (
@@ -210,7 +229,7 @@ export default function NewToDo() {
   };
 
   const showDatepicker = () => setShow(true);
-  const cancel = () => { console.log("Abbrechen"); router.back(); };
+  const cancel = () => { console.log("Cancel"); router.back(); };
   const [errorMessage, setErrorMessage] = useState("");
   const saveNewTodo = (
     tile: string,
