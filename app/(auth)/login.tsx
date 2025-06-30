@@ -29,10 +29,17 @@ export default function Auth() {
           username: userDoc.username,
           password: userDoc.password,
           groupID: "",
+          $id: userDoc.$id,
+          $collectionId: userDoc.$collectionId,
+          $databaseId: userDoc.$databaseId,
+          $createdAt: userDoc.$createdAt,
+          $updatedAt: userDoc.$updatedAt,
+          $permissions: []
         };
         setLoggedInUser(user);
         setIsAuthenticated(true);
         router.push("/(tabs)");
+        console.log("LoggedInUser: ", loggedInUser);
       } else {
         alert("Benutzername oder Passwort ist falsch.");
       }

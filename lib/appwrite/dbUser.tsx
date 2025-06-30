@@ -8,7 +8,7 @@ const databaseId = '681cc676001b5505b333';
 const userCollectionId = '685a80c70031828d1b20';
 
 
-export interface User {
+export interface User extends Models.Document{
     username: string;
     password: string;
     groupID: string;
@@ -57,4 +57,26 @@ export const checkUserValid = async function (username: string): Promise<Models.
     return null;
   }
 };
+
+
+export async function updateUser(user: User, newGroupID: string) {
+  try {
+    const updatedUser = await databases.updateDocument(
+      databaseId,
+      userCollectionId,
+      user.$id,
+      {
+        groupID: newGroupID,
+      }
+    );
+
+    alert("Benutzergruppe erfolgreich aktualisiert.");
+    return updatedUser;
+  } catch (error) {
+    console.error('Fehler beim Aktualisieren der Benutzergruppe:', error);
+    throw error;
+  }
+}
+
+
 
