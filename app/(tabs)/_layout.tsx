@@ -37,7 +37,7 @@ export default function TabLayout() {
       <Tabs.Screen 
         name="todo"
         options={{
-          title: "Todos",
+          title: "To Dos",
           headerShown: false,
           tabBarIcon: () => (
             <Image

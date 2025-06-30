@@ -1,4 +1,4 @@
-import { Badge, BadgeText, Box, Button, HStack, VStack } from "@gluestack-ui/themed";
+import { Badge, BadgeText, Box, Button, ButtonText, HStack, VStack } from "@gluestack-ui/themed";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { router } from "expo-router";
 import { CalendarDays } from "lucide-react-native"; // oder deine Icon-Bibliothek
@@ -296,10 +296,10 @@ export default function NewToDo() {
       </Box>
       <HStack style={[styles.buttonsContainer, { marginBottom: insets.bottom + 16 }]}>        
         <Button style={[styles.buttons, { backgroundColor: "grey" }]} onPress={cancel}>
-        <Text style={styles.buttonText}>Cancel</Text>
+        <ButtonText style={styles.buttonText}>Cancel</ButtonText>
       </Button>
         <Button style={[styles.buttons, { backgroundColor: "blue" }]} onPress={() => saveNewTodo(todoName, selectedPerson, date, selectedRepeat, selectedLabel)}>
-          <Text style={styles.buttonText}>Add</Text>
+          <ButtonText style={styles.buttonText}>Add</ButtonText>
         </Button>
       </HStack>
     </SafeAreaView>

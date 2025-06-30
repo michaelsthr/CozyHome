@@ -134,18 +134,22 @@ export default function Todo() {
         </View>
         <View style={{ height: screenHeight / 1.5 }}>
           <ScrollView contentContainerStyle={{ paddingBottom: 120 }} >
-            {filteredTodos?.map((item, index) => (
-              <ToDoItem
-                key={index}
-                id={item.$id}
-                title={item.name}
-                date={item.date ? formatDate(item.date) : null}
-                routine={item.regularity ? item.regularity : null}
-                isChecked={item.done}
-                changeToDoStatus={changeToDoStatus}
-                tag={item.tag ? item.tag : null}
-              />
-            ))}
+            {filteredTodos &&filteredTodos.length > 0 ? (
+              filteredTodos?.map((item, index) => (
+                <ToDoItem
+                  key={index}
+                  id={item.$id}
+                  title={item.name}
+                  date={item.date ? formatDate(item.date) : null}
+                  routine={item.regularity ? item.regularity : null}
+                  isChecked={item.done}
+                  changeToDoStatus={changeToDoStatus}
+                  tag={item.tag ? item.tag : null}
+                />
+            ))
+          ) : (
+            <Text style= {{textAlign:"center", fontSize:20, marginTop: 220}}> No To Dos yet</Text>
+          )}
           </ScrollView>
         </View>
       </SafeAreaView>

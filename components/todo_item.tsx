@@ -91,12 +91,12 @@ export const EditToDoItem = ({
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
             {responsible ? (
             <Badge style={styles.badge}>
-              <Text style={styles.badgeText}>{responsible}</Text>
+              <BadgeText style={styles.badgeText}>{responsible}</BadgeText>
             </Badge>
           ) : null} 
           {tag ? (
             <Badge style={styles.badge}>
-              <Text style={styles.badgeText}>{tag}</Text>
+              <BadgeText style={styles.badgeText}>{tag}</BadgeText>
             </Badge>
           ) : null}
           </HStack>

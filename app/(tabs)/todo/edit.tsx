@@ -4,7 +4,6 @@ import { useIsFocused } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Modal, SafeAreaView, ScrollView, Text, View } from "react-native";
-import { EditToDoItem } from "../../../components/todo_item";
 import { deleteTodo, getTodos } from "../../../lib/appwrite/dbTodo"; //für db
 import styles, { containerWidth } from "./styles";
 
@@ -72,18 +71,22 @@ export default function EditTodos() {
         )}
         <View style={{ flex: 1, marginTop: "10%" }}>
           <ScrollView>
-            {todos?.documents?.map((item, index) => (
-              <EditToDoItem
-                key={index}
-                id={item.$id}
-                title={item.name}
-                date={formatDate(item.date) || null}
-                routine={item.regularity || null}
-                isChecked={item.done}
-                onTrashPress={() => handleDeletePress(item.$id, item.name)}
-                tag={item.tag || null}
-              />
-            ))}
+            {todos &&todos.length > 0 ? (
+              todos?.map((item, index) => (
+                <ToDoItem
+                  key={index}
+                  id={item.$id}
+                  title={item.name}
+                  date={item.date ? formatDate(item.date) : null}
+                  routine={item.regularity ? item.regularity : null}
+                  isChecked={item.done}
+                  changeToDoStatus={changeToDoStatus}
+                  tag={item.tag ? item.tag : null}
+                />
+              ))
+            ) : (
+              <Text style= {{textAlign:"center", fontSize:20, marginTop: 300}}> No To Dos yet</Text>
+          )}
           </ScrollView>
         </View>
         <Modal
