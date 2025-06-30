@@ -1,7 +1,9 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { router, useNavigation } from 'expo-router';
 import { getGroups } from "../../lib/appwrite/dbGroup";
+import { Group, useSession } from '@/lib/context/SessionContext';
+
 
 interface GroupProps {
   name: string;
@@ -12,6 +14,8 @@ interface GroupProps {
 export default function EnterGroupKey() {
   const navigation = useNavigation();
   const [groupKey, setGroupKey] = useState('');
+  const { user, group, setGroup } = useSession();
+
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -31,7 +35,9 @@ export default function EnterGroupKey() {
       Alert.alert('Enter a valid Group Key');
       return;
     }
-    console.log(foundGroup);
+    setGroup(foundGroup);
+    console.log(group?.groupKey);
+
     router.replace('/(tabs)');
 
     // ToDo: add Group to user
