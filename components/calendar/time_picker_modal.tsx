@@ -25,9 +25,8 @@
  * // https://github.com/react-native-datetimepicker/datetimepicker/issues/483
  */
 
-import { ContainerStyles } from "@/styles/container_styles";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { Text, View } from "react-native";
+import { Button, View } from "react-native";
 import { Modal } from "react-native-paper";
 
 type TimePickerModalProps = {
@@ -44,9 +43,11 @@ const TimePickerModal = (props: TimePickerModalProps) => {
         <Modal
             style={{
                 backgroundColor: "transparent",
-                padding: 10
+                padding: 10,
             }}
             contentContainerStyle={{}}
+            dismissable={true}
+            dismissableBackButton={true}
             visible={showStartDatePicker}
             onDismiss={onDismiss}>
             <View
@@ -55,7 +56,7 @@ const TimePickerModal = (props: TimePickerModalProps) => {
                         backgroundColor: "#FFF",
                         borderRadius: 8,
                         padding: 20,
-                    }
+                    },
                 ]}>
                 <DateTimePicker
                     themeVariant='light'
@@ -65,6 +66,7 @@ const TimePickerModal = (props: TimePickerModalProps) => {
                     onChange={onDateChanges}
                     minimumDate={new Date()}
                 />
+                <Button title='Today' onPress={() => onDateChanges(null, new Date())} />
             </View>
         </Modal>
     );

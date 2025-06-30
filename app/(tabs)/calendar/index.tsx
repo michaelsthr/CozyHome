@@ -28,13 +28,11 @@ export default function Calendar() {
     return (
         <SafeAreaView style={{ height: "100%" }}>
             <Header currentMonth={currentMonth} onCalendarPress={handleCalendarPress} />
-
             <Timetable ref={timetableRef} onMonthChange={setCurrentMonth} />
-
             <TimePickerModal
                 showStartDatePicker={showDatePicker}
                 value={selectedDate}
-                onDateChanges={(event, date) => handleDateChange(date)}
+                onDateChanges={(event, date) => handleDateChange(event, date)}
                 title='Select a date'
                 onDismiss={() => setShowDatePicker(false)}
             />
