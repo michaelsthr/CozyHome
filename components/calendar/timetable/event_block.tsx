@@ -58,7 +58,7 @@ export function EventBlock({ event, startOfWeek }: { event: EventInterface; star
                 },
             ]}>
             <View>
-                <Text style={styles.eventText} numberOfLines={1} ellipsizeMode='tail'>
+                <Text style={styles.eventText} numberOfLines={5} ellipsizeMode="clip">
                     {event.name}
                 </Text>
             </View>
@@ -69,7 +69,7 @@ export function EventBlock({ event, startOfWeek }: { event: EventInterface; star
 const styles = StyleSheet.create({
     eventBlock: {
         position: "absolute",
-        opacity: 0.9,
+        opacity: 0.8,
         borderRadius: 10,
         padding: 5,
         alignItems: "center",
@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         flex: 1,
         flexWrap: "wrap",
+        textAlign: "center"
     },
     eventText: {
         color: "white",
