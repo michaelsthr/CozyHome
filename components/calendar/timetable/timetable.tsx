@@ -1,11 +1,12 @@
 import { getCalender } from "@/lib/appwrite/dbKalender";
+import { MONTH_NAMES } from "@/lib/constants/calendar";
 import { useFocusEffect } from "expo-router";
 import React, { useCallback, useRef, useState } from "react";
 import { Dimensions, ScrollView, View } from "react-native";
 import { EventInterface } from "../../../lib/types/calendar";
 import { WeekView } from "./week_view";
 
-export default function Timetable() {
+export default function Timetable({ onMonthChange }: { onMonthChange: (month: string) => void }) {
     const [events, setEvents] = useState<EventInterface[]>([]);
     const [currentDate, setCurrentDate] = useState(new Date());
     const scrollViewRef = useRef<ScrollView>(null);
@@ -53,6 +54,7 @@ export default function Timetable() {
         setCurrentDate((current) => {
             const newDate = new Date(current);
             newDate.setDate(current.getDate() + dateModifier);
+            onMonthChange(MONTH_NAMES[newDate.getMonth()]);
             return newDate;
         });
 
