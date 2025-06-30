@@ -1,6 +1,6 @@
 import {getDatabases } from './initializer'; //für db
 import { Databases, Models, Query } from 'react-native-appwrite';
-import bcrypt from "bcryptjs";
+import * as Crypto from 'expo-crypto';
 
 
 const databases = getDatabases();
@@ -11,26 +11,29 @@ const userCollectionId = '685a80c70031828d1b20';
 export interface User {
     username: string;
     password: string;
+    groupID: string;
 }
 
-export const createNewUser = async function (userInfo: User): Promise<Models.Document> {
+export const createNewUser = async function (username: string, password: string): Promise<Models.Document> {
   try {
     // Prüfen, ob Benutzername bereits existiert
     const existingUsers = await databases.listDocuments(databaseId, userCollectionId, [
-      Query.equal("username", userInfo.username),
+      Query.equal("username", username),
     ]);
 
     if (existingUsers.total > 0) {
       throw new Error("Benutzername existiert bereits.");
     }
-
     // Passwort hashen
-    const hashedPassword = await bcrypt.hash(userInfo.password, 10);
-
+    const hashedPassword = await Crypto.digestStringAsync(
+      Crypto.CryptoDigestAlgorithm.SHA256,
+      password
+    );
     // Benutzer mit gehashtem Passwort anlegen
     return await databases.createDocument(databaseId, userCollectionId, 'unique()', {
-      username: userInfo.username,
+      username: username,
       password: hashedPassword,
+      groupID: "",
     });
   } catch (error) {
     console.error("Fehler beim Erstellen des Benutzers:", error);

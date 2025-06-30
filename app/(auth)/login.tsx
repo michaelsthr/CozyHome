@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Button } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useRouter } from 'expo-router';
-import bcrypt from 'bcryptjs';
 
 import CozyInput from '@/components/cozy_input';
 import { createNewUser, checkUserValid, User } from '@/lib/appwrite/dbUser';
+import {any} from "zod";
+import * as Crypto from "expo-crypto";
 
 export default function Auth() {
   const [username, setUsername] = useState('');
@@ -19,14 +20,19 @@ export default function Auth() {
     try {
       const userDoc = await checkUserValid(username);
 
-      if (userDoc && await bcrypt.compare(password, userDoc.password)) {
+      const hashedInput = await Crypto.digestStringAsync(
+      Crypto.CryptoDigestAlgorithm.SHA256,
+      password
+    );
+      if (userDoc && (hashedInput === userDoc.password)) {
         const user: User = {
           username: userDoc.username,
-          password: userDoc.password
+          password: userDoc.password,
+          groupID: "",
         };
         setLoggedInUser(user);
         setIsAuthenticated(true);
-        router.push("/(tabs)/calendar");
+        router.push("/(tabs)");
       } else {
         alert("Benutzername oder Passwort ist falsch.");
       }
@@ -38,7 +44,7 @@ export default function Auth() {
 
   async function register(username: string, password: string) {
     try {
-      await createNewUser({ username, password });
+      await createNewUser(username, password);
       alert("Registrierung erfolgreich");
       await login(username, password);
     } catch (error) {
@@ -60,6 +66,7 @@ export default function Auth() {
       <CozyInput
         placeholder="Username"
         placeholderTextColor="black"
+        autoCapitalize="none"
         value={username}
         onChangeText={setUsername}
       />
@@ -67,6 +74,7 @@ export default function Auth() {
       <CozyInput
         placeholder="Passwort"
         placeholderTextColor="black"
+        autoCapitalize="none"
         secureTextEntry={true}
         value={password}
         onChangeText={setPassword}
