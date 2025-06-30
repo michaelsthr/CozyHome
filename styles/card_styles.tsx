@@ -1,5 +1,3 @@
 import { StyleSheet } from "react-native";
 
-export const cardStyles = StyleSheet.create({
-
-})
+export const cardStyles = StyleSheet.create({});

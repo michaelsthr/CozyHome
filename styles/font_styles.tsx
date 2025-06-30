@@ -7,4 +7,18 @@ export const fontStyles = StyleSheet.create({
         textAlign: "center",
         marginRight: "auto",
     },
+    h2: {
+        fontSize: 24,
+        fontWeight: "bold",
+    },
+    large: {
+        fontSize: 18,
+    },
+    medium: {
+        fontSize: 14,
+    },
+    light: {
+        color: "gray",
+        fontSize: 11,
+    },
 });

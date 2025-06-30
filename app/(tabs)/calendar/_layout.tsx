@@ -1,6 +1,5 @@
 import { Stack } from "expo-router";
 import React from "react";
-import { StyleSheet } from "react-native";
 
 const CalendarLayout = () => {
     return (
@@ -9,25 +8,32 @@ const CalendarLayout = () => {
                 name='index'
                 options={{
                     headerShown: false,
-                    contentStyle: { backgroundColor: "white" },
                 }}
             />
             <Stack.Screen
-                name='add_event'
+                name='category_view'
                 options={{
                     headerShown: false,
                     presentation: "formSheet",
                 }}
             />
             <Stack.Screen
-                name='category'
+                name='category_form'
+                options={{
+                    headerShown: false,
+                    presentation: "formSheet",
+                }}
+            />
+
+            <Stack.Screen
+                name='event_view'
                 options={{
                     headerShown: false,
                     presentation: "formSheet",
                 }}
             />
             <Stack.Screen
-                name='add_category'
+                name='event_form'
                 options={{
                     headerShown: false,
                     presentation: "formSheet",
@@ -38,5 +44,3 @@ const CalendarLayout = () => {
 };
 
 export default CalendarLayout;
-
-const styles = StyleSheet.create({});
