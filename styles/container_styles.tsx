@@ -8,12 +8,12 @@ export const ContainerStyles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: "#eee",
     },
-    eventFormContainer: {
+    ModalContainer: {
         alignContent: "center",
-        height: "30%",
         flexGrow: 1,
         justifyContent: "center",
         marginHorizontal: 30,
+        marginVertical: 30,
     },
     timePickerContainer: {
         flexDirection: "row",

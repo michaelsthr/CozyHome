@@ -6,6 +6,7 @@ import React, { useCallback, useState } from "react";
 import { FlatList, Image, Pressable, SafeAreaView, Text, View } from "react-native";
 import { Models } from "react-native-appwrite";
 import { getCategory } from "../../../lib/appwrite/dbKalender";
+import { ContainerStyles } from "@/styles/container_styles";
 
 const CategoryView = () => {
     const [categories, setCategories] = useState<Models.Document[]>([]);
@@ -26,8 +27,8 @@ const CategoryView = () => {
     );
 
     return (
-        <SafeAreaView>
-            <View>
+        <SafeAreaView style={ContainerStyles.ModalContainer}>
+            <View style={{flexDirection: "row", justifyContent: "center", alignContent: "center"}}>
                 <Text style={fontStyles.h1}>Categories</Text>
                 <Link href='/(tabs)/calendar/category_form' push asChild>
                     <Pressable>

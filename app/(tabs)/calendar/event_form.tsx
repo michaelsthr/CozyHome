@@ -86,15 +86,14 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
     };
 
     return (
-        <View style={ContainerStyles.eventFormContainer}>
+        <View style={ContainerStyles.ModalContainer}>
             <TextInput
-                style={inputStyles.titleInput}
+                style={inputStyles.input}
                 placeholder='Titel'
                 placeholderTextColor={"grey"}
                 onChangeText={(text) => setName(text)}
                 value={name}
             />
-            <View style={globalStyles.separator} />
             <View style={{}}>
                 <View style={ContainerStyles.timePickerContainer}>
                     <DateTimePicker

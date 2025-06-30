@@ -6,6 +6,7 @@ import {
     deleteCategory,
     updateCategory,
 } from "@/lib/appwrite/dbKalender";
+import { ContainerStyles } from "@/styles/container_styles";
 import { inputStyles } from "@/styles/input_styles";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useState } from "react";
@@ -58,7 +59,7 @@ const CategoryForm = () => {
     };
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={ContainerStyles.ModalContainer}>
             <TextInput
                 placeholder='Titel'
                 placeholderTextColor={"grey"}

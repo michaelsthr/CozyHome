@@ -6,11 +6,9 @@ export const inputStyles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: "left",
         width: "100%",
-    },
-    titleInput: {
-        fontSize: 25,
-        fontWeight: "bold",
-        textAlign: "left",
+        borderBottomColor: "grey",
+        borderBottomWidth: 1,
+        marginVertical: 10,
     },
     descriptionInput: {
         borderRadius: 10,

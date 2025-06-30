@@ -4,7 +4,7 @@ export const swatchStyles = StyleSheet.create({
     colorSwatch: {
         width: 50,
         height: 50,
-        borderRadius: 25,
+        borderRadius: 20,
         margin: 5,
         borderWidth: 2,
     },

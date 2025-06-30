@@ -19,7 +19,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ colors, selectedColor, onSele
                         swatchStyles.colorSwatch,
                         {
                             backgroundColor: item,
-                            borderColor: selectedColor === item ? "black" : "white",
+                            borderColor: selectedColor === item ? "black" : "transparent",
                         },
                     ]}
                     onPress={() => onSelectColor(item)}
