@@ -27,6 +27,7 @@ export default function EditTodos() {
   });
   const [loading, setLoading] = useState(true);
   const [selectedTodoId, setSelectedTodoId] = useState<string | null>(null);
+  const [selectedTodoTitle, setSelectedTodoTitle] = useState<string | null>(null);
 
   const fetchTodos = async () => {
     try {
@@ -53,8 +54,9 @@ export default function EditTodos() {
       }
     }, [isFocused]);
 
-  const handleDeletePress = (id: string) => {
+  const handleDeletePress = (id: string, title:string) => {
     setSelectedTodoId(id);
+    setSelectedTodoTitle(title);
     setModalVisible(true);
   };
   const [successMessage, setSuccessMessage] = useState("");
@@ -62,7 +64,7 @@ export default function EditTodos() {
   return (
     <GluestackUIProvider config={config}>
       <SafeAreaView style={styles.container}>
-        <Text style={styles.heading}>Edit ToDo</Text>
+        <Text style={styles.heading}>Edit To Do</Text>
         {successMessage !== "" && (
           <View style={{ position: "absolute", alignItems: "center", zIndex: 2000, marginTop: "20%", width: containerWidth, alignSelf: "center" }}>
             <Badge style={styles.badgeSuccessMessage}><BadgeText style={styles.badgeSuccessMessageText}>{successMessage}</BadgeText></Badge>
@@ -78,7 +80,7 @@ export default function EditTodos() {
                 date={formatDate(item.date) || null}
                 routine={item.regularity || null}
                 isChecked={item.done}
-                onTrashPress={() => handleDeletePress(item.$id)}
+                onTrashPress={() => handleDeletePress(item.$id, item.name)}
                 tag={item.tag || null}
               />
             ))}
@@ -92,8 +94,8 @@ export default function EditTodos() {
         >
           <SafeAreaView style={styles.modalOverlay}>
             <View style={styles.modalContent}>
-              <Text style={styles.modalText}>Delete this ToDo?:</Text>
-              <Text style={styles.modalText}>title</Text>
+              <Text style={styles.modalText}>Delete this To Do?:</Text>
+              <Text style={styles.modalText}>{selectedTodoTitle}</Text>
               <HStack style={styles.buttonContainer_edit}>
                 <Button style={[styles.buttons, { backgroundColor: "grey" }]} onPress={() => setModalVisible(false)}>
                   <Text style={styles.buttonText}>Cancel</Text>

@@ -293,7 +293,7 @@ export default function edit_ToDo() {
 
   return (
     <SafeAreaView style={styles.container_box}>
-      <Text style={styles.heading}>Edit ToDo</Text>
+      <Text style={styles.heading}>Edit To Do</Text>
       <Box style={styles.box}>
         <VStack>
           <Text> Title </Text>

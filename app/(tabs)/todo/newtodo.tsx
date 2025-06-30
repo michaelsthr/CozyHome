@@ -1,13 +1,13 @@
 import { Badge, BadgeText, Box, Button, HStack, VStack } from "@gluestack-ui/themed";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { router } from "expo-router";
+import { CalendarDays } from "lucide-react-native"; // oder deine Icon-Bibliothek
 import React, { useEffect, useState } from "react";
 import { Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { addTodo } from "../../../lib/appwrite/dbTodo"; //für db
 import styles, { containerWidth } from "./styles";
-import { router } from "expo-router";
-import { CalendarDays } from "lucide-react-native"; // oder deine Icon-Bibliothek
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const isWeb = Platform.OS === 'web';
 
@@ -264,7 +264,7 @@ export default function NewToDo() {
   }
 
   return (
-    <SafeAreaView style={[styles.container_box, { paddingBottom: insets.bottom + 32 }]}>      <Text style={styles.heading}>Add new ToDo</Text>
+    <SafeAreaView style={[styles.container_box, { paddingBottom: insets.bottom + 32 }]}>      <Text style={styles.heading}>Add new To Do</Text>
       {errorMessage !== "" && (
         <View style={{ position: "absolute", alignItems: "center", zIndex: 2000, marginTop: "20%", width: containerWidth }}>
           <Badge style={styles.badgeErrorMessage}><BadgeText style={styles.badgeErrorMessageText}>{errorMessage}</BadgeText></Badge>
@@ -294,7 +294,7 @@ export default function NewToDo() {
           <DatePickerField date={date} setDate={setDate} />
         </VStack>
       </Box>
-      <HStack style={[styles.buttonContainer, { marginBottom: insets.bottom + 16 }]}>        
+      <HStack style={[styles.buttonsContainer, { marginBottom: insets.bottom + 16 }]}>        
         <Button style={[styles.buttons, { backgroundColor: "grey" }]} onPress={cancel}>
         <Text style={styles.buttonText}>Cancel</Text>
       </Button>

@@ -120,13 +120,13 @@ export default function Todo() {
   return (
     <GluestackUIProvider config={config}>
       <SafeAreaView style={styles.container}>
-        <Text style={styles.heading}>To Do Liste</Text>
+        <Text style={styles.heading}>To Do List</Text>
         <HStack style={styles.buttonContainer}>
           <Button style={styles.button} onPress={newToDo}>
-            <Text style={styles.buttonText}>New Todo</Text>
+            <Text style={styles.buttonText}>New To Do</Text>
           </Button>
           <Button style={styles.button} onPress={edit}>
-            <Text style={styles.buttonText}>Edit ToDos</Text>
+            <Text style={styles.buttonText}>Edit To Do</Text>
           </Button>
         </HStack>
         <View style={{ marginBottom: 5, width: screenWidth }}>
