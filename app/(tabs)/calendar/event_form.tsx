@@ -1,6 +1,8 @@
 import CategoryModal from "@/components/calendar/category_modal";
 import { useUser } from "@/components/UserContext";
 import { getCategory } from "@/lib/appwrite/dbKalender";
+import { checkUserValid } from "@/lib/appwrite/dbUser";
+import { useSession } from "@/lib/context/SessionContext";
 import { Event } from "@/lib/types/calendar";
 import { ContainerStyles } from "@/styles/container_styles";
 import { globalStyles } from "@/styles/global_styles";
@@ -17,7 +19,8 @@ interface EventFormProps {
 }
 
 const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) => {
-    const { userId } = useUser();
+    const { user } = useSession()
+    const userId = user?.userId
     const creator: string = userId || "";
 
     const [name, setName] = useState(event?.name || "");
@@ -91,6 +94,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
             repeat: repeat,
             wholeday: wholeday,
         };
+
         console.log(eventData);
         onSubmit(eventData);
     };

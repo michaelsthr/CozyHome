@@ -38,7 +38,14 @@ export default function Auth() {
         };
         setLoggedInUser(currentUser);
         setIsAuthenticated(true);
-        setUser(currentUser)
+        
+        const sessionUser = {
+          username: userDoc.username,
+          password: userDoc.password,
+          groupID: userDoc.groupID,
+          userId: userDoc.$id
+        };
+        setUser(sessionUser);
         if (currentUser.groupID === null) {
           router.push("/(group)");
           return;

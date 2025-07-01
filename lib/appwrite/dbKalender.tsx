@@ -1,7 +1,8 @@
-import { Event } from "@/lib/types/calendar";
-import { Models } from "react-native-appwrite";
+import { Category, Event } from "@/lib/types/calendar";
+import { Models, Query } from "react-native-appwrite";
+import { getGlobalGroup } from '../context/SessionContext';
 import { getDatabases } from "./initializer"; //für db
-import { Category } from "@/lib/types/calendar";
+
 
 const databases = getDatabases();
 const databaseId = "681cc676001b5505b333";
@@ -10,31 +11,50 @@ const categoryCollectionId = "682c34aa0009f5819539";
 
 export const getCalender = async function (): Promise<Models.DocumentList<any>> {
     try {
-        var test = await databases.listDocuments(databaseId, calenderCollectionId);
+        const group = getGlobalGroup();
+        if (group === null) {
+            throw new Error("Group is not set.");
+        }
+
+        var test = await databases.listDocuments(databaseId, calenderCollectionId, [Query.equal("group", group.$id)]);
         return test;
     } catch (error) {
-        console.error("Error fetching documents:", error);
+        console.error("Error fetching getCalender:", error);
         throw error;
     }
 };
 
 export const getCategory = async function (): Promise<Models.DocumentList<any>> {
     try {
-        const result = await databases.listDocuments(databaseId, categoryCollectionId);
+        const group = getGlobalGroup();
+        if (group === null) {
+            throw new Error("Group is not set.");
+        }
+        const result = await databases.listDocuments(databaseId, categoryCollectionId, [Query.equal("group", group.$id)]);
         return result;
     } catch (error) {
-        console.error("Error fetching documents:", error);
+        console.error("Error fetching getCategory:", error);
         throw error;
     }
 };
 
 export const createNewEvent = async function (eventInfo: Event): Promise<Models.Document> {
     try {
+        const group = getGlobalGroup();
+        if (group === null) {
+            throw new Error("Group is not set.");
+        }
+
+        const eventWithGroup = {
+            ...eventInfo, 
+            group: group.$id
+        }
+
         const result = await databases.createDocument(
             databaseId,
             calenderCollectionId,
             "unique()",
-            eventInfo
+            eventWithGroup
         );
         return result;
     } catch (error) {
@@ -73,11 +93,21 @@ export const getEvent = async function (documentId: string): Promise<Models.Docu
 
 export const createNewCategory = async function (categoryInfo: Category): Promise<Models.Document> {
     try {
+        const group = getGlobalGroup();
+        if (group === null) {
+            throw new Error("Group is not set.");
+        }
+
+        const CategoryWithGroup = {
+            ...categoryInfo, 
+            group: group.$id
+        }
+
         const result = await databases.createDocument(
             databaseId,
             categoryCollectionId,
             "unique()",
-            categoryInfo
+            CategoryWithGroup,
         );
         return result;
     } catch (error) {

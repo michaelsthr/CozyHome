@@ -20,6 +20,7 @@ export interface User {
     username: string;
     password: string; // hashed
     groupID: string;
+    userId: string;
 }
 
 export interface Group {
