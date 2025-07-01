@@ -57,9 +57,9 @@ const styles = StyleSheet.create({
         borderRadius: 14,
     },
     todayCircle: {
-        backgroundColor: "#007AFF",
+        backgroundColor: "#7749f8",
         borderWidth: 2,
-        borderColor: "#007AFF",
+        borderColor: "#7749f8",
     },
     todayText: {
         color: "white",

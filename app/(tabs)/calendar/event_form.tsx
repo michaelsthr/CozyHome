@@ -1,13 +1,18 @@
 import CategoryModal from "@/components/calendar/category_modal";
+import CustomDateTimePicker from "@/components/calendar/custom_date_time_picker";
+import TimeRangePicker from "@/components/calendar/time_range_picker";
 import { getAllCategory } from "@/lib/appwrite/dbKalender";
+import { getUserById } from "@/lib/appwrite/dbUser";
 import { useSession } from "@/lib/context/SessionContext";
 import { Event } from "@/lib/types/calendar";
+import { buttonStyles } from "@/styles/button_styles";
+import { cardStyles } from "@/styles/card_styles";
 import { ContainerStyles } from "@/styles/container_styles";
+import { fontStyles } from "@/styles/font_styles";
 import { globalStyles } from "@/styles/global_styles";
 import { inputStyles } from "@/styles/input_styles";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useEffect, useState } from "react";
-import { Button, Pressable, Text, TextInput, View } from "react-native";
+import { Pressable, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Models } from "react-native-appwrite";
 
 interface EventFormProps {
@@ -27,9 +32,15 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
     const [repeat] = useState(event?.repeat || false);
     const [date, setDate] = useState(event ? new Date(event.startDate) : new Date());
     const [startTime, setStartTime] = useState(event ? new Date(event.startDate) : new Date());
-    const [endTime, setEndTime] = useState(event ? new Date(event.endDate) : new Date());
+    const [endTime, setEndTime] = useState(() => {
+        if (event) return new Date(event.endDate);
+        const date = new Date();
+        date.setHours(date.getHours() + 1);
+        return date;
+    });
     const [categoryModalVisible, setCategoryModalVisible] = useState(false);
     const [categories, setCategories] = useState<Models.Document[]>([]);
+    const [creatorName, setCreatorName] = useState<string>("");
 
     useEffect(() => {
         getAllCategory()
@@ -45,7 +56,21 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
             .catch((error) => {
                 console.error("Error fetching categories:", error);
             });
-    }, [event?.category]);
+
+        if (event?.creator) {
+            getUserById(event.creator)
+                .then((creatorUser) => {
+                    if (creatorUser) {
+                        setCreatorName(creatorUser.username);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error fetching creator:", error);
+                });
+        } else {
+            setCreatorName(user?.username || "");
+        }
+    }, [event?.category, event?.creator, user?.username]);
 
     const handleDateTimeChange = (type: 'date' | 'startTime' | 'endTime') => 
         (event: any, selectedDate?: Date) => {
@@ -102,7 +127,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
     const selectedCategory = categories.find((c) => c.$id === categoryId);
 
     return (
-        <View style={ContainerStyles.ModalContainer}>
+        <>
             <TextInput
                 style={inputStyles.input}
                 placeholder='Titel'
@@ -110,35 +135,28 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
                 onChangeText={(text) => setName(text)}
                 value={name}
             />
-            <View style={{}}>
-                <View style={ContainerStyles.timePickerContainer}>
-                    <DateTimePicker
-                        value={startTime}
-                        mode={"time"}
-                        is24Hour={true}
-                        onChange={handleDateTimeChange('startTime')}
-                        themeVariant='light'
-                    />
-                    <Text style={globalStyles.timePickerArrow}>→</Text>
-                    <DateTimePicker
-                        value={endTime}
-                        mode={"time"}
-                        is24Hour={true}
-                        onChange={handleDateTimeChange('endTime')}
-                        themeVariant='light'
-                    />
-                </View>
-                <DateTimePicker
+            
+            <View style={{marginVertical: 10}}>
+                <CustomDateTimePicker
                     value={date}
-                    mode={"date"}
-                    is24Hour={true}
+                    mode="date"
                     onChange={handleDateTimeChange('date')}
-                    themeVariant='light'
-                />
-                <View style={globalStyles.separator} />
+                    display="inline"
+                    />
+            </View>
+            
+            <TimeRangePicker
+                startTime={startTime}
+                endTime={endTime}
+                onStartTimeChange={handleDateTimeChange('startTime')}
+                onEndTimeChange={handleDateTimeChange('endTime')}
+                display="spinner"
+            />
+            
+            <View style={cardStyles.BasicCard}>
                 <Pressable
                     onPress={() => setCategoryModalVisible(true)}
-                    style={ContainerStyles.categoryPicker}>
+                    style={{ flexDirection: "row", alignItems: "center" }}>
                     <Text style={ContainerStyles.categoryPickerText}>Category:</Text>
                     {selectedCategory ?
                         <View style={ContainerStyles.categoryPickerValueContainer}>
@@ -149,7 +167,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
                                         backgroundColor: selectedCategory.color || "#ccc",
                                     },
                                 ]}
-                            />
+                                />
                             <Text style={ContainerStyles.categoryPickerValueText}>
                                 {selectedCategory.name}
                             </Text>
@@ -159,23 +177,39 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
                         </Text>
                     }
                 </Pressable>
+            </View>
                 <CategoryModal
                     visible={categoryModalVisible}
                     categories={categories}
                     onClose={() => setCategoryModalVisible(false)}
                     onSelectCategory={handleCategorySelect}
                 />
-                <View style={globalStyles.separator} />
                 <TextInput
                     placeholder='Description'
                     placeholderTextColor={"black"}
                     onChangeText={setDescription}
                     value={description}
-                    style={inputStyles.descriptionInput}
+                    style={[inputStyles.input, {
+                        height: 80,
+                        textAlignVertical: 'top',
+                        paddingTop: 10,
+                    }]}
+                    multiline={true}
+                    numberOfLines={4}
                 />
-                <Button title={isEditMode ? "Update Event" : "Add Event"} onPress={handleSubmit} />
-            </View>
-        </View>
+                <Text
+                    style={[
+                        fontStyles.subtitle,
+                        { textAlign: "left", marginTop: 10, marginBottom: 40},
+                    ]}>
+                    {"The Creator of this Event is: " + creatorName || "Unknown"}
+                </Text>
+                <TouchableOpacity style={buttonStyles.button} onPress={handleSubmit}>
+                    <Text style={fontStyles.buttonText}>
+                        {isEditMode ?  "Update Event" : "Add Event"}
+                    </Text>
+            </TouchableOpacity>
+        </>
     );
 };
 
