@@ -100,15 +100,6 @@ export default function Fridge() {
     handleQuantityChange(item, change, setFridgeItems, fridgeItems);
   };
 
-  const homeQuantityStyles = {
-    quantityControls: styles.homeQuantityControls,
-    quantityButton: styles.homeQuantityButton,
-    quantityButtonDisabled: { backgroundColor: "#94a3b8" },
-    quantityButtonText: styles.homeQuantityButtonText,
-    countContainer: styles.homeQuantityDisplay,
-    itemCount: styles.homeQuantityText,
-    quantityInput: styles.quantityInput,
-  };
   
   const getStatusIcon = (mhd?: string) => {
     if (!mhd) return require("../../../assets/images/fridge_icons/eatable.png");
@@ -220,7 +211,7 @@ export default function Fridge() {
               source={require("../../../assets/images/fridge_icons/fridge.png")}
               style={styles.fridgeIcon}
             />
-            <Text style={styles.title}>{"Your Fridge"}</Text>
+            <Text style={styles.homeTitle}>{"Your Fridge"}</Text>
           </View>
           <Text style={styles.subtitle}>
             {fridgeItems.length > 0 ? `${fridgeItems.length} items in your fridge` : "Your fridge is empty"}
@@ -236,12 +227,12 @@ export default function Fridge() {
               {fridgeItems.map((item) => {
                 const { days, label } = getDaysLeft(item.mhd);
                 return (
-                  <View key={item.$id} style={styles.itemCard}>
+                  <View key={item.$id} style={styles.carouselItemCard}>
                     <Image 
                       source={getCategoryImage(item.kategorie)} 
                       style={styles.itemImage} 
                     />
-                    <View style={styles.statusRow}>
+                    <View style={styles.statusRow}> 
                       <View style={styles.statusIconContainer}>
                         <Image
                           source={getStatusIcon(item.mhd)}
@@ -258,7 +249,7 @@ export default function Fridge() {
                         item={item}
                         onQuantityChange={onQuantityChange}
                         isUpdating={isUpdating}
-                        styles={homeQuantityStyles}
+                        styles={fridgeStyles}
                       />
                     </View>
                   </View>

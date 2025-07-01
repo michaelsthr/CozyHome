@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import { FridgeCategories, FridgeCategoryType, getAllFridgeCategories } from "../../../lib/constants/categories";
 import { setKuehlschrankInhalt } from "./fridgeBack/components/dbKuehlschrank";
-import { fridgeAddStyles as styles } from "../../../styles/fridge_styles";
+import { fridgeStyles as styles } from "../../../styles/fridge_styles";
 
 export default function AddItem() {
   const router = useRouter();  const [name, setName] = useState("");

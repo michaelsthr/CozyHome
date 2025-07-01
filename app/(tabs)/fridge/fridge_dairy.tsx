@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { fridgeCategoryStyles as styles } from "../../../styles/fridge_styles";
+import { fridgeStyles as styles } from "../../../styles/fridge_styles";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { QuantityControls } from "./fridgeBack/components/QuantityControls";
 import { useQuantityManager } from "./fridgeBack/hooks/useQuantityManager";
@@ -126,14 +126,14 @@ export default function Dairy() {
               source={require("../../../assets/images/fridge_icons/dairy.png")}
               style={styles.emptyIcon}
             />
-            <Text style={styles.emptyText}>{"No dairy items found"}</Text>
-            <Text style={styles.emptySubtext}>{"Add some dairy items to your fridge"}</Text>
+            <Text style={styles.emptyText}>{"No dairy products found"}</Text>
+            <Text style={styles.emptySubtext}>{"Add some dairy to your fridge"}</Text>
           </View> ) : (
           <View style={styles.itemsList}>
             {filteredItems.map((item) => (
-              <View key={item.$id} style={styles.row}>
-                <Image source={require("../../../assets/images/fridge_icons/dairy.png")} style={styles.itemImage} />
-                <View style={styles.info}>
+              <View key={item.$id} style={styles.listItemCard}>
+                <Image source={require("../../../assets/images/fridge_icons/dairy.png")} style={styles.listItemImage} />
+                <View style={styles.itemInfo}>
                   <View style={styles.statusRow}>
                     <Image source={getStatusIcon(item.mhd)} style={styles.statusIcon} />
                     <Text style={styles.statusText}>
@@ -143,7 +143,7 @@ export default function Dairy() {
                       })()}
                     </Text>
                   </View>
-                  <Text style={styles.itemName}>{item.name}</Text>
+                  <Text style={styles.listItemName}>{item.name}</Text>
                 </View>
                 <QuantityControls
                   item={item}

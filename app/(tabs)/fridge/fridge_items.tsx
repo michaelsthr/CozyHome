@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { fridgeItemsStyles as styles } from "../../../styles/fridge_styles";
+import { fridgeStyles as styles } from "../../../styles/fridge_styles";
 
 // Routes matching the screen file names
 const categories = [
@@ -47,12 +47,12 @@ export default function FridgeItems() {
           {categories.map((item) => (
             <TouchableOpacity
               key={item.id}
-              style={styles.itemCard}
+              style={styles.gridItemCard}
               disabled={!item.route}
               onPress={() => router.push(item.route as any)}
             >
               <Image source={item.img} style={styles.itemImage} />
-              <Text style={styles.itemText}>{item.name}</Text>
+              <Text style={styles.itemName}>{item.name}</Text>
             </TouchableOpacity>
           ))}
         </View>
