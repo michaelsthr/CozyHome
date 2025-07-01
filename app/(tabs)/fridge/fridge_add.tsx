@@ -1,7 +1,4 @@
 import TimePickerModal from "@/components/calendar/time_picker_modal";
-import { ContainerStyles } from "@/styles/container_styles";
-import { fontStyles } from "@/styles/font_styles";
-import { inputStyles } from "@/styles/input_styles";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -22,7 +19,6 @@ import {
     getAllFridgeCategories,
 } from "../../../lib/constants/categories";
 import { fridgeStyles as styles } from "../../../styles/fridge_styles";
-import { setKuehlschrankInhalt } from "./fridgeBack/components/dbKuehlschrank";
 import { inputStyles } from "@/styles/input_styles";
 import { setKuehlschrankInhalt } from "../../../lib/appwrite/dbKuehlschrank";
 
