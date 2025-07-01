@@ -22,7 +22,7 @@ export const createNewUser = async function (username: string, password: string)
     ]);
 
     if (existingUsers.total > 0) {
-      throw new Error("Benutzername existiert bereits.");
+      throw new Error("Username already exists. Please choose another one.");
     }
     // Passwort hashen
     const hashedPassword = await Crypto.digestStringAsync(
@@ -36,7 +36,7 @@ export const createNewUser = async function (username: string, password: string)
       groupID: "",
     });
   } catch (error) {
-    console.error("Fehler beim Erstellen des Benutzers:", error);
+    console.error("Creating new user failed.", error);
     throw error;
   }
 };
@@ -53,7 +53,7 @@ export const checkUserValid = async function (username: string): Promise<Models.
 
     return null; // Kein Benutzer gefunden
   } catch (error) {
-    console.error("Fehler beim Benutzercheck:", error);
+    console.error("Uservalidation failed.", error);
     return null;
   }
 };
@@ -70,10 +70,10 @@ export async function updateUser(user: User, newGroupID: string) {
       }
     );
 
-    alert("Benutzergruppe erfolgreich aktualisiert.");
+    alert("Group updated successfully.");
     return updatedUser;
   } catch (error) {
-    console.error('Fehler beim Aktualisieren der Benutzergruppe:', error);
+    console.error('Group update failed', error);
     throw error;
   }
 }
