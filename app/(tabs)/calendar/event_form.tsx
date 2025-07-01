@@ -98,6 +98,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
     };
 
     const selectedCategory = categories.find((c) => c.$id === categoryId);
+    console.log(selectedCategory)
 
     return (
         <View style={ContainerStyles.ModalContainer}>

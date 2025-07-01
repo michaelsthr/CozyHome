@@ -49,7 +49,7 @@ export function EventBlock({
                         repeat: String(event.repeat),
                         creator: event.creator,
                         description: event.description,
-                        category: event.category,
+                        category: (event.category as any)?.$id || '',
                     },
                 })
             }

@@ -59,10 +59,7 @@ export const WeekView: React.FC<WeekViewProps> = ({ dateForWeek, events, viewWid
                     <View style={{ position: "relative", flex: 1 }}>
                         <Grid />
                         {weekEvents.map((event, index) => {
-                            console.log(categoryColorMap)
-                            console.log(event.category)
                             const categoryColor = (event.category as any)?.color || '#000000';
-                            console.log(categoryColor)
                             return (
                                 <EventBlock
                                     key={index}
