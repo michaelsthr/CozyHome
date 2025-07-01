@@ -1,5 +1,5 @@
-import { useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { useFocusEffect, useRouter } from "expo-router";
+import React, { useCallback, useState } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -8,45 +8,63 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
+import { fridgeStyles } from "../../../styles/fridge_styles";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
-import { fridgeStyles as styles } from "./styles";
+import { QuantityControls } from "./fridgeBack/components/QuantityControls";
+import { useQuantityManager } from "./fridgeBack/hooks/useQuantityManager";
 
 export default function Fridge() {
   const router = useRouter();
   const [fridgeItems, setFridgeItems] = useState<KuehlschrankItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const { handleQuantityChange, isUpdating } = useQuantityManager();
 
-  useEffect(() => {
-    const fetchFridgeItems = async () => {
-      try {
-        const items = await getKuehlschrankInhalt();
-        setFridgeItems(items.documents);
-      } catch (error) {
-        console.error("Error fetching fridge items:", error);
-      } finally {
-        setLoading(false);
-      }
-    };    fetchFridgeItems();
+  const styles = fridgeStyles;
+
+  const fetchFridgeItems = useCallback(async () => {
+    setLoading(true);
+    try {
+      const items = await getKuehlschrankInhalt();
+      setFridgeItems(items.documents);
+    } catch (error) {
+      console.error("Error fetching fridge items:", error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  // Map German categories to route names
+  useFocusEffect(
+    useCallback(() => {
+      fetchFridgeItems();
+    }, [fetchFridgeItems])
+  );
+
+  // Map categories to route names
   const getCategoryRoute = (category: string) => {
     switch (category) {
+      case "Fruits":
       case "Obst":
         return "/(tabs)/fridge/fridge_fruits";
+      case "Vegetables":
       case "Gemüse":
         return "/(tabs)/fridge/fridge_vegetables";
+      case "Dairy":
       case "Milchprodukte":
         return "/(tabs)/fridge/fridge_dairy";
+      case "Meat & Fish":
+      case "Fleisch/Fisch":
       case "Fleisch":
         return "/(tabs)/fridge/fridge_meat";
+      case "Drinks":
       case "Getränke":
         return "/(tabs)/fridge/fridge_drinks";
+      case "Frozen":
       case "Tiefkühlkost":
         return "/(tabs)/fridge/fridge_frozen";
+      case "Other":
       case "Sonstige":
         return "/(tabs)/fridge/fridge_other";
       default:
@@ -56,7 +74,6 @@ export default function Fridge() {
 
   const handleSearch = () => {
     if (!searchTerm.trim()) return;
-
     // Find items that match the search term
     const matchingItems = fridgeItems.filter(item => 
       item.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -66,18 +83,24 @@ export default function Fridge() {
       // If no items found, go to general fridge items page
       router.push("/(tabs)/fridge/fridge_items");
       return;
-    }    // Get the category of the first matching item
+    }
+    
     const firstMatch = matchingItems[0];
     const categoryRoute = getCategoryRoute(firstMatch.kategorie || "Sonstige");
-      // Navigate to the category page with search parameter
+    
     router.push({
       pathname: categoryRoute as any,
       params: { search: searchTerm }
     });
     
-    // Clear search after navigation
     setSearchTerm("");
   };
+
+  const onQuantityChange = (item: KuehlschrankItem, change: number) => {
+    handleQuantityChange(item, change, setFridgeItems, fridgeItems);
+  };
+
+  
   const getStatusIcon = (mhd?: string) => {
     if (!mhd) return require("../../../assets/images/fridge_icons/eatable.png");
     const today = new Date();
@@ -101,25 +124,35 @@ export default function Fridge() {
     const diffTime = expDate.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDays < 0) {
-      return { days: -diffDays, label: "Days over" };
+   if (diffDays < 0) {
+      return { days: Math.abs(diffDays), label: diffDays === -1 ? "day over" : "days over" };
     } else {
-      return { days: diffDays, label: "Days left" };
+      return { days: diffDays, label: diffDays === 1 ? "day left" : "days left" };
     }
-  };  const getCategoryImage = (category?: string) => {
+  };
+  
+  const getCategoryImage = (category?: string) => {
     switch (category) {
+      case "Fruits":
       case "Obst":
         return require("../../../assets/images/fridge_icons/fruits.png");
+      case "Vegetables":
       case "Gemüse":
         return require("../../../assets/images/fridge_icons/vegetables.png");
+      case "Dairy":
       case "Milchprodukte":
         return require("../../../assets/images/fridge_icons/dairy.png");
+      case "Meat & Fish":
+      case "Fleisch/Fisch":
       case "Fleisch":
         return require("../../../assets/images/fridge_icons/meat-fish.png");
+      case "Drinks":
       case "Getränke":
         return require("../../../assets/images/fridge_icons/drinks.png");
+      case "Frozen":
       case "Tiefkühlkost":
         return require("../../../assets/images/fridge_icons/freezer.png");
+      case "Other":
       case "Sonstige":
         return require("../../../assets/images/fridge_icons/fridge.png");
       default:
@@ -130,7 +163,7 @@ export default function Fridge() {
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#8B5CF6" />
       </SafeAreaView>
     );
   }
@@ -154,9 +187,10 @@ export default function Fridge() {
 
         {/* Greeting Section */}
         <View style={styles.greetingSection}>
-          <Text style={styles.greeting}>Good morning!</Text>
-          <Text style={styles.username}>Max Mustermann</Text>
+          <Text style={styles.greeting}>{"Good morning!"}</Text>
+          <Text style={styles.username}>{"Max Mustermann"}</Text>
         </View>
+        
         {/* Search Bar */}
         <View style={styles.searchContainer}>
           <TextInput
@@ -177,12 +211,10 @@ export default function Fridge() {
               source={require("../../../assets/images/fridge_icons/fridge.png")}
               style={styles.fridgeIcon}
             />
-            <Text style={styles.title}>Your Fridge</Text>
+            <Text style={styles.homeTitle}>{"Your Fridge"}</Text>
           </View>
           <Text style={styles.subtitle}>
-            {fridgeItems.length > 0 
-              ? `${fridgeItems.length} items in your fridge` 
-              : "Your fridge is empty"}
+            {fridgeItems.length > 0 ? `${fridgeItems.length} items in your fridge` : "Your fridge is empty"}
           </Text>
 
           {/* Items Carousel */}
@@ -195,10 +227,10 @@ export default function Fridge() {
               {fridgeItems.map((item) => {
                 const { days, label } = getDaysLeft(item.mhd);
                 return (
-                  <View key={item.$id} style={styles.itemCard}>
-                    <Image 
-                      source={getCategoryImage(item.kategorie)} 
-                      style={styles.itemImage} 
+                  <View key={item.$id} style={styles.carouselItemCard}>
+                    <Image
+                      source={getCategoryImage(item.kategorie)}
+                      style={styles.itemImage}
                     />
                     <View style={styles.statusRow}>
                       <View style={styles.statusIconContainer}>
@@ -210,34 +242,42 @@ export default function Fridge() {
                           {`${days} ${label}`}
                         </Text>
                       </View>
+                    </View>
+                    <View style={styles.itemDetailsRow}>
                       <Text style={styles.itemName} numberOfLines={2}>
                         {item.name}
                       </Text>
+                      <QuantityControls
+                        item={item}
+                        onQuantityChange={onQuantityChange}
+                        isUpdating={isUpdating}
+                        styles={fridgeStyles}
+                      />
                     </View>
                   </View>
                 );
-              })}
-            </ScrollView>
-          ) : (
+              })} 
+          </ScrollView> ) : (
             <View style={styles.emptyState}>
               <Image
                 source={require("../../../assets/images/fridge_icons/fridge.png")}
                 style={styles.emptyIcon}
               />
-              <Text style={styles.emptyText}>Your fridge is empty!</Text>
+              <Text style={styles.emptyText}>{"Your fridge is empty!"}</Text>
               <Text style={styles.emptySubtext}>
-                Start adding items to keep track of{'\n'}your food and expiration dates
+                {"Start adding items to keep track of\nyour food and expiration dates"}
               </Text>
             </View>
-          )}
+            )
+          }
         </View>
 
         {/* Check Fridge Button */}
         <TouchableOpacity
-          style={styles.checkButton}
+          style={styles.addButton}
           onPress={() => router.push("/(tabs)/fridge/fridge_items")}
         >
-          <Text style={styles.checkButtonText}>EXPLORE CATEGORIES</Text>
+          <Text style={styles.addButtonText}>{"EXPLORE CATEGORIES"}</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

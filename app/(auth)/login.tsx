@@ -1,72 +1,108 @@
-import { useUser } from "@/components/UserContext";
-import { Redirect } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { Account, Client, ID, Models } from "react-native-appwrite";
+import React, { useState } from 'react';
+import { StyleSheet, View, Button, TextInput } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { useRouter } from 'expo-router';
 
-const client = new Client()
-    .setEndpoint("https://fra.cloud.appwrite.io/v1")
-    .setProject("681cc5b8000a49689753")
-    .setPlatform("com.rubberduck.cozyhome");
-
-const account = new Account(client);
+import { createNewUser, checkUserValid, User } from '@/lib/appwrite/dbUser';
+import * as Crypto from "expo-crypto";
 
 export default function Auth() {
-    const { setUserId } = useUser();
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [loggedInUser, setLoggedInUser] = useState<Models.User<Models.Preferences> | null>(null);
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [name, setName] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
-    async function login(email: string, password: string) {
-        try {
-            await account.createEmailPasswordSession(email, password);
-            const user = await account.get();
-            setLoggedInUser(user);
-            setUserId(user.$id);
-            setIsAuthenticated(true);
-        } catch (error) {
-            console.error("Login failed:", error);
-        }
-    }
+  const router = useRouter();
 
-    async function register(email: string, password: string, name: string) {
-        await account.create(ID.unique(), email, password, name);
-        await login(email, password);
-    }
+  async function login(username: string, password: string) {
+    try {
+      const userDoc = await checkUserValid(username);
 
-    if (isAuthenticated) {
-        return <Redirect href='/(tabs)/calendar' />;
-    }
-
-    return (
-        <View style={styles.container}>
-            <StatusBar style='auto' />
-            <TextInput placeholder='Email' value={email} onChangeText={setEmail} />
-            <TextInput
-                placeholder='Password'
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-            />
-            <TextInput placeholder='Name (for registration)' value={name} onChangeText={setName} />
-            <TouchableOpacity onPress={() => login(email, password)}>
-                <Text>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => register(email, password, name)}>
-                <Text>Register</Text>
-            </TouchableOpacity>
-            {loggedInUser && <Text>Logged in as: {loggedInUser.name}</Text>}
-        </View>
+      const hashedInput = await Crypto.digestStringAsync(
+      Crypto.CryptoDigestAlgorithm.SHA256,
+      password
     );
+      if (userDoc && (hashedInput === userDoc.password)) {
+        const user: User = {
+          username: userDoc.username,
+          password: userDoc.password,
+          groupID: "",
+          $id: userDoc.$id,
+          $collectionId: userDoc.$collectionId,
+          $databaseId: userDoc.$databaseId,
+          $createdAt: userDoc.$createdAt,
+          $updatedAt: userDoc.$updatedAt,
+          $permissions: []
+        };
+        setLoggedInUser(user);
+        setIsAuthenticated(true);
+        router.push("/(tabs)");
+        console.log("LoggedInUser: ", loggedInUser);
+      } else {
+        alert("Benutzername oder Passwort ist falsch.");
+      }
+    } catch (error) {
+      console.error("Login fehlgeschlagen:", error);
+      alert("Login fehlgeschlagen.");
+    }
+  }
+
+  async function register(username: string, password: string) {
+    try {
+      await createNewUser(username, password);
+      alert("Registrierung erfolgreich");
+      await login(username, password);
+    } catch (error) {
+      console.error("Registrierung fehlgeschlagen:", error);
+      alert("Registrierung fehlgeschlagen.");
+    }
+  }
+
+  async function logout() {
+    setLoggedInUser(null);
+    setIsAuthenticated(false);
+    router.push("/(auth)/login");
+  }
+
+  return (
+    <View style={styles.container}>
+      <StatusBar style="auto" />
+
+      <TextInput
+        placeholder="Username"
+        placeholderTextColor="black"
+        autoCapitalize="none"
+        value={username}
+        onChangeText={setUsername}
+      />
+
+      <TextInput
+        placeholder="Passwort"
+        placeholderTextColor="black"
+        autoCapitalize="none"
+        secureTextEntry={true}
+        value={password}
+        onChangeText={setPassword}
+      />
+
+      <Button
+        title="Login"
+        onPress={() => login(username, password)}
+      />
+
+      <Button
+        title="Registrieren"
+        onPress={() => register(username, password)}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 12,
+  },
 });

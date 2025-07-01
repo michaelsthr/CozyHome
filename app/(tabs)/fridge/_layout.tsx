@@ -1,63 +1,58 @@
 import { Stack } from "expo-router";
 import React from "react";
+import BackButton from "../../../components/BackButton";
 
 export default function FridgeStack() {
   return (
     <Stack>
-      {/* this will render fridge_home.tsx on /fridge or /fridge/fridge_home */}
       <Stack.Screen 
         name="fridge_home" 
         options={{ headerTitle: "Home" }} 
       />
 
-      {/* screen for the “Check Fridge” grid */}
       <Stack.Screen 
         name="fridge_items" 
-        options={{ headerTitle: "Fridge" }} 
-      />      {/* screen for Fruits detail */}
+        options={{ headerTitle: "Fridge", presentation: "formSheet" }} 
+      />
+      
       <Stack.Screen 
         name="fridge_fruits" 
-        options={{ headerTitle: "Fruits" }} 
+        options={{ headerTitle: "Fruits", presentation: "formSheet" }} 
       />
 
-      {/* screen for Vegetables detail */}
       <Stack.Screen 
         name="fridge_vegetables" 
-        options={{ headerTitle: "Vegetables" }} 
+        options={{ headerTitle: "Vegetables", presentation: "formSheet" }} 
       />
 
-      {/* screen for Dairy detail */}
       <Stack.Screen 
         name="fridge_dairy" 
-        options={{ headerTitle: "Dairy" }} 
-      />      {/* screen for Meat & Fish detail */}
+        options={{ headerTitle: "Dairy", presentation: "formSheet" }} 
+      />
+      
       <Stack.Screen 
         name="fridge_meat" 
-        options={{ headerTitle: "Meat & Fish" }} 
+        options={{ headerTitle: "Meat & Fish", presentation: "formSheet" }} 
       />
 
-      {/* screen for Drinks detail */}
       <Stack.Screen 
         name="fridge_drinks" 
-        options={{ headerTitle: "Drinks" }} 
+        options={{ headerTitle: "Drinks", presentation: "formSheet" }} 
       />
 
-      {/* screen for Frozen Foods detail */}
       <Stack.Screen 
         name="fridge_frozen" 
-        options={{ headerTitle: "Frozen Foods" }} 
+        options={{ headerTitle: "Frozen Foods", presentation: "formSheet" }} 
       />
 
-      {/* screen for Other Items detail */}
       <Stack.Screen 
         name="fridge_other" 
-        options={{ headerTitle: "Other Items" }} 
+        options={{ headerTitle: "Other Items", presentation: "formSheet" }} 
       />
 
-      {/* screen for adding new item */}
       <Stack.Screen 
         name="fridge_add" 
-        options={{ headerTitle: "Add Item" }} 
+        options={{ headerTitle: "Add Item", presentation: "formSheet" }} 
       />
     </Stack>
   );
