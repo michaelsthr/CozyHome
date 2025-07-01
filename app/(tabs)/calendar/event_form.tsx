@@ -17,7 +17,7 @@ interface EventFormProps {
 }
 
 const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) => {
-    const { userId } = useUser();
+    const userId = "user";
     const creator: string = userId || "";
 
     const [name, setName] = useState(event?.name || "");

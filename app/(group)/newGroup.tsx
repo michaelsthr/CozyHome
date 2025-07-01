@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'reac
 import { useNavigation, router } from 'expo-router';
 import { addGroup, getGroups } from "../../lib/appwrite/dbGroup";
 import { Group, useSession } from '@/lib/context/SessionContext';
+import { updateUser } from '@/lib/appwrite/dbUser';
 
 interface GroupProps {
     name: string;
@@ -35,7 +36,7 @@ export default function NewGroup() {
     const [groupName, setGroupName] = useState('');
     const [groupType, setGroupType] = useState('');
     const [groupKey, setGroupKey] = useState('');
-    const { user, group, setGroup } = useSession();
+    const { user, setUser, group, setGroup } = useSession();
 
     useEffect(() => {
         const loadKey = async () => {
@@ -57,6 +58,11 @@ export default function NewGroup() {
             return;
         }
 
+        if (!user) {
+            Alert.alert("No logged-in user found.");
+            return;
+        }
+
         const newGroup: GroupProps = {
             name: groupName,
             groupKey: groupKey,
@@ -65,6 +71,7 @@ export default function NewGroup() {
 
         try {
             const createdGroup = await addGroup(newGroup);
+
             const groupForContext: Group = {
                 $id: createdGroup.$id,
                 name: createdGroup.name,
@@ -72,14 +79,16 @@ export default function NewGroup() {
                 type: createdGroup.type,
             };
             setGroup(groupForContext);
+
+            const updatedUser = await updateUser(user, createdGroup.$id);
+            setUser(updatedUser);
+
             Alert.alert('Group created successfully!');
             router.replace('/(tabs)');
-            // ToDo: add Group ID to current user
         } catch (error) {
-            console.error('Failed to create group:', error);
+            console.error('Error while creating group or updating user:', error);
             Alert.alert('Failed to create group. Please try again.');
         }
-
     };
 
     return (
