@@ -62,3 +62,7 @@ export const buttonStyles = StyleSheet.create({
         fontWeight: "700",
       },
 })
+    button: {
+        borderRadius: 10,
+    },
+});
