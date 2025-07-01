@@ -43,12 +43,6 @@ export const fontStyles = StyleSheet.create({
         textAlign: "center",
         lineHeight: 20,
       },
-      addButtonText: {
-        color: "#ffffff",
-        fontSize: 18,
-        fontWeight: "700",
-        letterSpacing: 0.5,
-      },
       quantityButtonText: {
         color: "#ffffff",
         fontSize: 18,
@@ -84,5 +78,11 @@ export const fontStyles = StyleSheet.create({
     light: {
         color: "gray",
         fontSize: 11,
+    },
+    buttonText: {
+        color: "#ffffff",
+        fontSize: 18,
+        fontWeight: "700",
+        letterSpacing: 0.5,
     },
 });

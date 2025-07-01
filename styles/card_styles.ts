@@ -17,4 +17,14 @@ export const cardStyles = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 6,
   },
+
+  BasicCard: {
+      backgroundColor: "#ffffff",
+      borderRadius: 12,
+      paddingHorizontal: 15,
+      paddingVertical: 12,
+      borderWidth: 1,
+      borderColor: "#e2e8f0",
+      marginVertical: 10
+  }
 });

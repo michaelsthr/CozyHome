@@ -11,15 +11,12 @@ const EventView = () => {
     const params = useLocalSearchParams();
     const isEdit = !!params.id;
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-    // Helper function to safely extract string parameter
     const getStringParam = (param: string | string[] | undefined): string => {
         if (typeof param === "string") return param;
         if (Array.isArray(param)) return param[0] || "";
         return "";
     };
 
-    // Helper function to safely extract boolean parameter
     const getBooleanParam = (param: string | string[] | undefined): boolean => {
         return getStringParam(param) === "true";
     };

@@ -26,7 +26,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ colors, selectedColor, onSele
                 />
             )}
             keyExtractor={(item) => item}
-            numColumns={4}
+            numColumns={5}
         />
     );
 };
