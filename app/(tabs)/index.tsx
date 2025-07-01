@@ -27,22 +27,17 @@ interface GroupMember {
 export default function HomePage() {
   const { user, group } = useSession();
   const router = useRouter();
-  const [groupDetails, setGroupDetails] = useState<Models.Document | null>(null);
   const [groupMembers, setGroupMembers] = useState<GroupMember[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchGroupData = async () => {
+    const fetchGroupMembers = async () => {
       if (!user?.groupID) {
         setLoading(false);
         return;
       }
 
       try {
-        // Fetch group details
-        const groupData = await getGroupById(user.groupID.$id);
-        setGroupDetails(groupData);
-
         // Fetch group members
         const membersData = await getUsersByGroupId(user.groupID.$id);
         setGroupMembers(membersData.documents.map(doc => ({
@@ -58,7 +53,7 @@ export default function HomePage() {
       }
     };
 
-    fetchGroupData();
+    fetchGroupMembers();
   }, [user?.groupID]);
 
   if (loading) {
@@ -100,50 +95,36 @@ export default function HomePage() {
       <View style={ContainerStyles.greetingSection}>
         <Text style={fontStyles.greeting}>Welcome back,</Text>
         <Text style={fontStyles.username}>{user.username}!</Text>
-        <Text style={fontStyles.subtitle}>Manage your shared living space</Text>
+        <Text style={fontStyles.subtitle}>Manage your {group?.type}.</Text>
       </View>
 
       {/* Group Information Card */}
-      <View style={[cardStyles.Card, { marginHorizontal: 20 }]}>
-        <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 15 }}>
-          <View
-            style={{
-              width: 50,
-              height: 50,
-              backgroundColor: "#3b82f6",
-              borderRadius: 25,
-              justifyContent: "center",
-              alignItems: "center",
-              marginRight: 15,
-            }}
-          >
-            <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
-              {groupDetails?.name?.charAt(0)?.toUpperCase() || "G"}
-            </Text>
-          </View>
-          <View style={{ flex: 1 }}>
-            <Text style={fontStyles.title}>{groupDetails?.name || "Unknown Group"}</Text>
-            <Text style={[fontStyles.medium, { color: "#64748b", marginTop: 2 }]}>
-              Group ID: {groupDetails?.$id || "N/A"}
-            </Text>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <View style={[cardStyles.Card, { marginHorizontal: 20, width: "90%" }]}>
+          <View style={{ flexDirection: "row", alignItems: "center", alignContent: "center", marginBottom: 15}}>
+            <View
+              style={{
+                width: 50,
+                height: 50,
+                backgroundColor: "#3b82f6",
+                borderRadius: 25,
+                justifyContent: "center",
+                alignItems: "center",
+                marginRight: 15,
+              }}
+            >
+              <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
+                {group?.name?.charAt(0)?.toUpperCase() || "G"}
+              </Text>
+            </View>
+            <View style={{ flex: 1}}>
+              <Text style={fontStyles.title}>{group?.name || "Unknown Group"}</Text>
+              <Text style={[fontStyles.large, { color: "#64748b", marginTop: 5}]}>
+                Group Key: {group?.groupKey || "N/A"}
+              </Text>
+            </View>
           </View>
         </View>
-
-        {groupDetails?.type && (
-          <View
-            style={{
-              backgroundColor: "#f1f5f9",
-              paddingHorizontal: 12,
-              paddingVertical: 6,
-              borderRadius: 20,
-              alignSelf: "flex-start",
-            }}
-          >
-            <Text style={[fontStyles.medium, { color: "#475569" }]}>
-              {groupDetails.type}
-            </Text>
-          </View>
-        )}
       </View>
 
       {/* Group Members Section */}
@@ -179,9 +160,6 @@ export default function HomePage() {
                   {member.$id === user.userId && (
                     <Text style={{ color: "#22c55e", fontWeight: "normal" }}> (You)</Text>
                   )}
-                </Text>
-                <Text style={[fontStyles.light, { marginTop: 2 }]}>
-                  Member since joining the group
                 </Text>
               </View>
             </View>
