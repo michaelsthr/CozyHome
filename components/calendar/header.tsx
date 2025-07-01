@@ -12,18 +12,13 @@ interface HeaderProps {
 export default function Header({ currentMonth, onCalendarPress }: HeaderProps) {
     return (
         <View style={headerStyles.container}>
-            <View style={headerStyles.leftContainer}>
-                <Pressable onPress={onCalendarPress}>
-                    <Image
-                        source={require("@/assets/images/calendar.png")}
-                        style={iconStyles.icon1}
-                    />
-                </Pressable>
-                <Text style={fontStyles.h2}>{currentMonth}</Text>
-            </View>
+            <Pressable onPress={onCalendarPress} style={headerStyles.leftContainer} hitSlop={200}>
+                <Image source={require("@/assets/images/calendar.png")} style={iconStyles.icon1} />
+                <Text style={fontStyles.h3}>{currentMonth}</Text>
+            </Pressable>
             <View style={headerStyles.rightContainer}>
                 <Link href='/calendar/category_view' push asChild>
-                    <Pressable>
+                    <Pressable hitSlop={50}>
                         <Image
                             source={require("@/assets/images/inbox.png")}
                             style={iconStyles.icon1}
@@ -31,10 +26,10 @@ export default function Header({ currentMonth, onCalendarPress }: HeaderProps) {
                     </Pressable>
                 </Link>
                 <Link href='/calendar/event_view' push asChild>
-                    <Pressable>
+                    <Pressable hitSlop={5}>
                         <Image
                             source={require("@/assets/images/symbol-plus.png")}
-                            style={iconStyles.icon1}
+                            style={iconStyles.icon2}
                         />
                     </Pressable>
                 </Link>
@@ -47,7 +42,8 @@ const headerStyles = StyleSheet.create({
     container: {
         flexDirection: "row",
         justifyContent: "space-between",
-        paddingHorizontal: 10,
+        paddingHorizontal: 16,
+        paddingVertical: 10,
         alignItems: "center",
         width: "100%",
     },
@@ -59,6 +55,6 @@ const headerStyles = StyleSheet.create({
     rightContainer: {
         flexDirection: "row",
         alignItems: "center",
-        gap: 16,
+        gap: 30,
     },
 });

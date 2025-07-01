@@ -69,6 +69,11 @@ export const fontStyles = StyleSheet.create({
         fontSize: 24,
         fontWeight: "bold",
     },
+    h3: {
+        fontSize: 22,
+        fontWeight: "600",
+        letterSpacing: 1.3
+    },
     large: {
         fontSize: 18,
     },

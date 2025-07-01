@@ -41,7 +41,7 @@ const CategoryView = () => {
                         <Pressable>
                             <Image
                                 source={require("@/assets/images/symbol-plus.png")}
-                                style={iconStyles.icon1}
+                                style={iconStyles.icon2}
                             />
                         </Pressable>
                     </Link>

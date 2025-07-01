@@ -34,7 +34,6 @@ export default function TabLayout() {
                             style={{
                                 width: 24,
                                 height: 24,
-                                marginRight: "auto",
                                 alignItems: "center",
                                 justifyContent: "center",
                             }}
