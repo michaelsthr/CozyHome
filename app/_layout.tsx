@@ -1,13 +1,18 @@
+import { SessionProvider } from '@/lib/context/SessionContext';
 import { Stack } from "expo-router";
 import React from "react";
-import { UserProvider } from "../components/UserContext";
+
+
+export const unstable_settings = {
+  initialRouteName: "(group)/index",
+};
 
 export default function RootLayout() {
-    return (
-        <UserProvider>
-            <Stack>
-                <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />
-            </Stack>
-        </UserProvider>
-    );
+  return (
+    <SessionProvider>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(group)/index"  />
+      </Stack>
+    </SessionProvider>
+  );
 }
