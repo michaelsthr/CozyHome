@@ -44,11 +44,14 @@ const CategoryForm = () => {
         if (isEdit) {
             await updateCategory(params.id as string, { name, color: selectedColor });
             console.log("Category updated");
+            navigation.goBack();
         } else {
-            await createNewCategory({ name, color: selectedColor } as Category);
+            const newCat = await createNewCategory({ name, color: selectedColor } as Category);
             console.log("Category created");
+            if(newCat !== null) {
+                navigation.goBack();
+            }
         }
-        navigation.goBack();
     };
 
     const handleDeleteCategory = async () => {
