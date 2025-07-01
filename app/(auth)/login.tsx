@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Button } from 'react-native';
+import { StyleSheet, View, Button, TextInput } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useRouter } from 'expo-router';
 
-import CozyInput from '@/components/cozy_input';
 import { createNewUser, checkUserValid, User } from '@/lib/appwrite/dbUser';
 import * as Crypto from "expo-crypto";
 
@@ -69,7 +68,7 @@ export default function Auth() {
     <View style={styles.container}>
       <StatusBar style="auto" />
 
-      <CozyInput
+      <TextInput
         placeholder="Username"
         placeholderTextColor="black"
         autoCapitalize="none"
@@ -77,7 +76,7 @@ export default function Auth() {
         onChangeText={setUsername}
       />
 
-      <CozyInput
+      <TextInput
         placeholder="Passwort"
         placeholderTextColor="black"
         autoCapitalize="none"

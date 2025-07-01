@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import { FridgeCategories, FridgeCategoryType, getAllFridgeCategories } from "../../../lib/constants/categories";
 import { setKuehlschrankInhalt } from "./fridgeBack/components/dbKuehlschrank";
-import { fridgeAddStyles as styles } from "./styles";
+import { fridgeStyles as styles } from "../../../styles/fridge_styles";
 
 export default function AddItem() {
   const router = useRouter();  const [name, setName] = useState("");
@@ -57,7 +57,6 @@ export default function AddItem() {
         isToday: date.getTime() === today.getTime()
       });
     }
-    
     return days;
   };
 
@@ -90,6 +89,7 @@ export default function AddItem() {
     setSelectedMonth(today.getMonth());
     setSelectedYear(today.getFullYear());
   };
+  
   const formatDate = (date: Date | null) => {
     if (!date) return "Select expiration date";
     return date.toLocaleDateString('en-GB');
@@ -107,7 +107,8 @@ export default function AddItem() {
     }
 
     setIsSubmitting(true);
-      try {      await setKuehlschrankInhalt({
+      try {
+        await setKuehlschrankInhalt({
         name: name.trim(),
         anzahl: Number(quantity),
         kategorie: category,
@@ -123,7 +124,9 @@ export default function AddItem() {
     } finally {
       setIsSubmitting(false);
     }
-  };  return (
+  };
+  
+  return (
     <SafeAreaView style={styles.container}>
       <ScrollView 
         showsVerticalScrollIndicator={false}
@@ -139,25 +142,26 @@ export default function AddItem() {
 
         {/* Title Section */}
         <View style={styles.titleSection}>
-          <Text style={styles.title}>Add New Item</Text>
+          <Text style={styles.title}>{"Add New Item"}</Text>
         </View>        
         
         {/* Form Container */}
         <View style={styles.formContainer}>
           <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Product Name</Text>
+            <Text style={styles.inputLabel}>{"Product Name"}</Text>
             <TextInput
               placeholder="Enter product name..."
               placeholderTextColor="#9ca3af"
               style={styles.input}
               value={name}
               onChangeText={setName}
+              returnKeyType="done"
             />
           </View>
 
           {/* Quantity */}
           <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Quantity </Text>
+            <Text style={styles.inputLabel}>{"Quantity"} </Text>
             <TextInput
               placeholder="Enter quantity..."
               placeholderTextColor="#9ca3af"
@@ -165,12 +169,13 @@ export default function AddItem() {
               value={quantity}
               onChangeText={setQuantity}
               keyboardType="numeric"
+              returnKeyType="done"
             />
           </View>
 
           {/* Category */}
           <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Category</Text><TouchableOpacity
+            <Text style={styles.inputLabel}>{"Category"}</Text><TouchableOpacity
               style={styles.dropdownInput}
               onPress={() => setShowCategoryDropdown(!showCategoryDropdown)}>
               <Text style={styles.dropdownText}>
@@ -184,7 +189,7 @@ export default function AddItem() {
 
           {/* Expiration Date */}
           <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Expiration Date</Text>
+            <Text style={styles.inputLabel}>{"Expiration Date"}</Text>
             <TouchableOpacity
               style={styles.input}
               onPress={() => {
@@ -201,7 +206,7 @@ export default function AddItem() {
               <TouchableOpacity
                 style={styles.clearButton}
                 onPress={() => setExpDate(null)}>
-                <Text style={styles.clearButtonText}>Clear</Text>
+                <Text style={styles.clearButtonText}>{"Clear"}</Text>
               </TouchableOpacity>)}
           </View>
         </View>
@@ -215,11 +220,11 @@ export default function AddItem() {
           {isSubmitting ? (
             <View style={styles.buttonContent}>
               <ActivityIndicator size="small" color="#ffffff" style={{ marginRight: 10 }} />
-              <Text style={styles.addButtonText}>ADDING...</Text>
-            </View>):(<Text style={styles.addButtonText}>ADD TO FRIDGE</Text>
+              <Text style={styles.addButtonText}>{"ADDING..."}</Text>
+            </View>):(<Text style={styles.addButtonText}>{"ADD TO FRIDGE"}</Text>
           )}</TouchableOpacity>
           
-          {/* Date Picker Modal */}
+        {/* Date Picker Modal */}
         {showDatePicker && (
           <Modal
             visible={showDatePicker}
@@ -234,7 +239,7 @@ export default function AddItem() {
             >
               <TouchableOpacity activeOpacity={1}>
                 <View style={styles.calendarModalContent}>
-                  <Text style={styles.modalTitle}>Select Expiration Date</Text>
+                  <Text style={styles.modalTitle}>{"Select Expiration Date"}</Text>
                   
                   {/* Calendar Header with Month/Year Navigation */}
                   <View style={styles.calendarHeader}>
@@ -332,7 +337,7 @@ export default function AddItem() {
             onPress={() => setShowCategoryDropdown(false)}
           >
             <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Select Category</Text>
+              <Text style={styles.modalTitle}>{"Select Category"}</Text>
               <ScrollView showsVerticalScrollIndicator={false}>
                 {categories.map((cat, index) => (
                   <TouchableOpacity

@@ -2,121 +2,92 @@ import { config } from "@gluestack-ui/config";
 import { Button, GluestackUIProvider, HStack } from "@gluestack-ui/themed";
 import { useIsFocused } from '@react-navigation/native';
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import styles, { screenHeight, screenWidth } from "../(todo)/styles";
-import { ToDoItem, ToDoItemProps } from "../../components/todo_item";
-import { getTodos, updateTodo } from "../../lib/appwrite/dbTodo"; //für db
+import React from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Checkbox, Menu } from 'react-native-paper';
 
-const formatDate = (isoString: string) => {
-  if (!isoString) return null;
-  const date = new Date(isoString);
-  return date.toLocaleDateString("de-DE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-};
+interface ToDoItemProps {
+  title: string;
+  date: string;
+  responsible: string;
+  isChecked: boolean;
+  routine?: string;
+}
 
-type TabsProps = {
-  selectedTab: string;
-  setSelectedTab: (tab: string) => void;
-};
+const ToDoItem = ({ title, date, responsible, isChecked, routine }: ToDoItemProps) => (
+  <Box style={styles.todoItem}>
+    <VStack space="sm">
+      <HStack style={styles.titleRow}>
+        <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
+        <Badge style={styles.badge}>
+          <Text style={styles.badgeText}>{responsible}</Text>
+        </Badge>
+      </HStack>
+      <HStack style={styles.checkboxRow}>
+        <Checkbox status={isChecked ? "checked" : "unchecked"}>
+        </Checkbox>
+      </HStack>
+      <HStack style={styles.dateRow}>
+        <Text style={styles.dateText}>{date}</Text>
+        {routine ? (
+          <HStack style={styles.routineContainer}>
+            <RepeatIcon style={styles.icon} />
+            <Text style={styles.routineText}>{routine}</Text>
+          </HStack>
+        ) : null}
+      </HStack>
+    </VStack>
+  </Box>
+);
 
-const tabs = ['All', 'Tasks', 'Shopping'];
-const Tabs = ({ selectedTab, setSelectedTab }: TabsProps) => {
-  return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={styles.tabsContainer}
-    >
-      {tabs.map((tab) => (
-        <TouchableOpacity
-          key={tab}
-          onPress={() => {
-            console.log(`${tab} selected`);
-            setSelectedTab(tab);
-          }}
-          style={[
-            styles.tabItem,
-            selectedTab === tab && styles.tabItemSelected,
-          ]}
+interface DropDownProps {
+  selected: string;
+  setSelected: (value: string) => void;
+}
+
+const DropDown = ({ selected, setSelected }: DropDownProps) => {
+  const [visible, setVisible] = React.useState(false);
+
+  const openMenu = () => setVisible(true);
+  const closeMenu = () => setVisible(false);
+
+  const handleSelect = (value: string) => {
+    setSelected(value);
+    closeMenu();
+  };
+  return(
+    <Menu
+          visible={visible}
+          onDismiss={closeMenu}
+          anchor={
+            <Button onPress={openMenu} style={{ width: "70%" }}>  
+            {selected || 'Auswählen'}
+            {visible ? (
+              <View style={{ justifyContent: 'center', marginTop:20 }}>
+              <ChevronUpIcon size="md"/> 
+              </View>) :
+              (
+              <View style={{ justifyContent: 'center', marginTop:20 }}>
+              <ChevronDownIcon size="md"/> 
+              </View> )
+            }
+          </Button>
+
+          }
         >
-          <Text
-            style={[
-              styles.tabText,
-              selectedTab === tab && styles.tabTextSelected,
-            ]}
-          >
-            {tab}
-          </Text>
-        </TouchableOpacity>
-      ))}
-    </ScrollView>
-  );
-};
+          <Menu.Item onPress={() => handleSelect('Bewohner 1')} title="Bewohner 1" />
+          <Menu.Item onPress={() => handleSelect('Bewohner 2')} title="Bewohner 2" />
+          <Menu.Item onPress={() => handleSelect('Bewohner 3')} title="Bewohner 3" />
+        </Menu>
+  )
+}
+
+
 
 export default function Todo() {
   const router = useRouter();
-  const [todos, setTodos] = useState<{ total: number; documents: any[] }>({
-    total: 0,
-    documents: [],
-  });
-
-  const [loading, setLoading] = useState(true);
-  const newToDo = () => router.push("../(todo)/newtodo");
-  const edit = () => router.push("../(todo)/edit")
-  const [selectedTab, setSelectedTab] = useState('All');
-  const filteredTodos = todos?.documents?.filter((todo) => {
-    if (selectedTab === "All") return true;
-    return todo.tag === selectedTab;
-  });
-
-  const fetchTodos = async () => {
-    try {
-      const todos = await getTodos();
-      console.log("Todos:", todos);
-      setTodos(todos);
-      setLoading(false);
-    } catch (err) {
-      console.error("Error fetching todo contents:", err);
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    fetchTodos();
-  }, []);
-
-  const isFocused = useIsFocused();
-
-  useEffect(() => {
-    if (isFocused) {
-      fetchTodos();
-      console.log("Screen is focused – Daten neu geladen");
-    }
-  }, [isFocused]);
-
-  const changeToDoStatus = (id: string, done: boolean) => {
-    if (!todos) return; // Ensure todos is not null
-
-    const updatedTodos = todos?.documents?.map((todo: ToDoItemProps) => {
-      if (todo.id == id || todo.$id == id) {
-        return { ...todo, done: !done };
-      }
-      return todo;
-    });
-    setTodos({ ...todos, documents: updatedTodos });
-
-    updateTodo(
-      {
-        $id: id,
-        done: !done
-      }
-    )
-  };
-
+  const newToDo = () => router.push("/(todo)/newtodo");
+  const edit = () => router.push("/(todo)/edit");
   return (
     <GluestackUIProvider config={config}>
       <SafeAreaView style={styles.container}>

@@ -1,15 +1,23 @@
 export const FridgeCategories = {
-  DAIRY: 'Milchprodukte',
-  MEAT: 'Fleisch',
-  VEGETABLES: 'Gemüse',
-  FRUITS: 'Obst',
-  DRINKS: 'Getränke',
-  FROZEN: 'Tiefkühlkost',
-  OTHER: 'Sonstige'
+  DAIRY: 'Dairy',
+  MEAT: 'Meat & Fish',
+  VEGETABLES: 'Vegetables',
+  FRUITS: 'Fruits',
+  DRINKS: 'Drinks',
+  FROZEN: 'Frozen',
+  OTHER: 'Other'
 } as const;
 
 export type FridgeCategoryType = typeof FridgeCategories[keyof typeof FridgeCategories];
 
 export const getAllFridgeCategories = (): FridgeCategoryType[] => {
-  return Object.values(FridgeCategories);
+  return [
+    FridgeCategories.FRUITS,
+    FridgeCategories.VEGETABLES,
+    FridgeCategories.DAIRY,
+    FridgeCategories.DRINKS,
+    FridgeCategories.MEAT,
+    FridgeCategories.FROZEN,
+    FridgeCategories.OTHER
+  ];
 };
