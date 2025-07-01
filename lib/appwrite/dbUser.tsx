@@ -1,6 +1,6 @@
-import {getDatabases } from './initializer'; //für db
-import { Databases, Models, Query } from 'react-native-appwrite';
 import * as Crypto from 'expo-crypto';
+import { Models, Query } from 'react-native-appwrite';
+import { getDatabases } from './initializer'; //für db
 
 
 const databases = getDatabases();
@@ -74,6 +74,18 @@ export async function updateUser(user: User, newGroupID: string) {
     return updatedUser;
   } catch (error) {
     console.error('Group update failed', error);
+    throw error;
+  }
+}
+
+export async function getUsersByGroupId(groupId: string): Promise<Models.DocumentList<Models.Document>> {
+  try {
+    const response = await databases.listDocuments(databaseId, userCollectionId, [
+      Query.equal("groupID", groupId),
+    ]);
+    return response;
+  } catch (error) {
+    console.error('Failed to fetch group members:', error);
     throw error;
   }
 }

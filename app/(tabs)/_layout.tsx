@@ -5,7 +5,25 @@ import { Image } from "react-native";
 export default function TabLayout() {
     return (
         <Tabs screenOptions={{ animation: "shift" }}>
-            <Tabs.Screen name='index' options={{ headerShown: false }} />
+            <Tabs.Screen 
+                name='index' 
+                options={{ 
+                    title: "Home",
+                    headerShown: false,
+                    tabBarIcon: () => (
+                        <Image
+                            source={require("@/assets/images/fridge_icons/logo-2.png")}
+                            style={{
+                                width: 24,
+                                height: 24,
+                                marginRight: "auto",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                        />
+                    ),
+                }} 
+            />
             <Tabs.Screen
                 name='calendar'
                 options={{
