@@ -4,10 +4,10 @@ import BackButton from "../../../components/BackButton";
 
 export default function FridgeStack() {
   return (
-    <Stack>
+    <Stack >
       <Stack.Screen 
         name="fridge_home" 
-        options={{ headerTitle: "Home" }} 
+        options={{ headerShown: false }} 
       />
 
       <Stack.Screen 
