@@ -31,7 +31,12 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
     const [repeat] = useState(event?.repeat || false);
     const [date, setDate] = useState(event ? new Date(event.startDate) : new Date());
     const [startTime, setStartTime] = useState(event ? new Date(event.startDate) : new Date());
-    const [endTime, setEndTime] = useState(event ? new Date(event.endDate) : new Date());
+    const [endTime, setEndTime] = useState(() => {
+        if (event) return new Date(event.endDate);
+        const date = new Date();
+        date.setHours(date.getHours() + 1);
+        return date;
+    });
     const [categoryModalVisible, setCategoryModalVisible] = useState(false);
     const [categories, setCategories] = useState<Models.Document[]>([]);
 
