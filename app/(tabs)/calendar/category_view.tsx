@@ -7,14 +7,14 @@ import { Link, useFocusEffect } from "expo-router";
 import React, { useCallback, useState } from "react";
 import { FlatList, Image, Pressable, SafeAreaView, Text, View } from "react-native";
 import { Models } from "react-native-appwrite";
-import { getCategory } from "../../../lib/appwrite/dbKalender";
+import { getAllCategory } from "../../../lib/appwrite/dbKalender";
 
 const CategoryView = () => {
     const [categories, setCategories] = useState<Models.Document[]>([]);
 
     const fetchCategories = async () => {
         try {
-            const response = await getCategory();
+            const response = await getAllCategory();
             setCategories(response.documents);
         } catch (error) {
             console.error("Error fetching categories:", error);

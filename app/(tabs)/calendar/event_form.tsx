@@ -1,7 +1,5 @@
 import CategoryModal from "@/components/calendar/category_modal";
-import { useUser } from "@/components/UserContext";
-import { getCategory } from "@/lib/appwrite/dbKalender";
-import { checkUserValid } from "@/lib/appwrite/dbUser";
+import { getAllCategory } from "@/lib/appwrite/dbKalender";
 import { useSession } from "@/lib/context/SessionContext";
 import { Event } from "@/lib/types/calendar";
 import { ContainerStyles } from "@/styles/container_styles";
@@ -40,7 +38,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
     const [categories, setCategories] = useState<Models.Document[]>([]);
 
     useEffect(() => {
-        getCategory()
+        getAllCategory()
             .then((res) => {
                 const fetchedCategories = res.documents;
                 setCategories(fetchedCategories);

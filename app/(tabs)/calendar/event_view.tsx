@@ -1,8 +1,8 @@
 import DeleteModal from "@/components/DeleteModal";
-import { createNewEvent, deleteEvent, getCategory, updateEvent } from "@/lib/appwrite/dbKalender";
+import { createNewEvent, deleteEvent, updateEvent } from "@/lib/appwrite/dbKalender";
 import { Event } from "@/lib/types/calendar";
 import { useLocalSearchParams, useNavigation } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, View } from "react-native";
 import EventForm from "./event_form";
 

@@ -1,4 +1,4 @@
-import { getCategory } from "@/lib/appwrite/dbKalender";
+import { getAllCategory } from "@/lib/appwrite/dbKalender";
 import { EventWithId } from "@/lib/types/calendar";
 import React, { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
@@ -31,7 +31,7 @@ export const WeekView: React.FC<WeekViewProps> = ({ dateForWeek, events, viewWid
     const [categories, setCategories] = useState<Models.Document[]>([]);
 
     useEffect(() => {
-        getCategory()
+        getAllCategory()
             .then((res) => setCategories(res.documents))
             .catch(() => {});
     }, []);
@@ -59,13 +59,16 @@ export const WeekView: React.FC<WeekViewProps> = ({ dateForWeek, events, viewWid
                     <View style={{ position: "relative", flex: 1 }}>
                         <Grid />
                         {weekEvents.map((event, index) => {
-                            const color = categoryColorMap.get(event.category) || "tomato";
+                            console.log(categoryColorMap)
+                            console.log(event.category)
+                            const categoryColor = (event.category as any)?.color || '#000000';
+                            console.log(categoryColor)
                             return (
                                 <EventBlock
                                     key={index}
                                     event={event}
                                     startOfWeek={startOfWeek}
-                                    categoryColor={color}
+                                    categoryColor={categoryColor}
                                 />
                             );
                         })}

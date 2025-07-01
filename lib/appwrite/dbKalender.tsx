@@ -24,13 +24,23 @@ export const getCalender = async function (): Promise<Models.DocumentList<any>> 
     }
 };
 
-export const getCategory = async function (): Promise<Models.DocumentList<any>> {
+export const getAllCategory = async function (): Promise<Models.DocumentList<any>> {
     try {
         const group = getGlobalGroup();
         if (group === null) {
             throw new Error("Group is not set.");
         }
         const result = await databases.listDocuments(databaseId, categoryCollectionId, [Query.equal("group", group.$id)]);
+        return result;
+    } catch (error) {
+        console.error("Error fetching getCategory:", error);
+        throw error;
+    }
+};
+
+export const getCategory = async function (documentId: string): Promise<Models.Document> {
+    try {
+        const result = await databases.getDocument(databaseId, categoryCollectionId, documentId);
         return result;
     } catch (error) {
         console.error("Error fetching getCategory:", error);
