@@ -49,6 +49,17 @@ export const buttonStyles = StyleSheet.create({
         fontWeight: "700",
       },
       button: {
-          borderRadius: 10,
+        backgroundColor: "#7749f8",
+        borderRadius: 16,
+        paddingVertical: 18,
+        alignItems: "center",
+        shadowColor: "#5a33c7",
+        shadowOffset: {
+          width: 0,
+          height: 4,
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 4.65,
+        elevation: 8,
       },
 })

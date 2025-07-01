@@ -129,7 +129,7 @@ export const ContainerStyles = StyleSheet.create({
         flexGrow: 1,
         justifyContent: "center",
         marginHorizontal: 30,
-        marginVertical: 30,
+        marginVertical: 10,
     },
     timePickerContainer: {
         flexDirection: "row",
@@ -163,7 +163,6 @@ export const ContainerStyles = StyleSheet.create({
         marginLeft: "auto",
     },
     titleSection: {
-      paddingHorizontal: 20,
       paddingVertical: 25,
     },
 });;

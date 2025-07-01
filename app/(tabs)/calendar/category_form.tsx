@@ -2,11 +2,14 @@ import ColorPicker from "@/components/calendar/color_picker";
 import DeleteEventModal from "@/components/calendar/delete_event_modal";
 import { createNewCategory, deleteCategory, updateCategory } from "@/lib/appwrite/dbKalender";
 import { Category } from "@/lib/types/calendar";
+import { buttonStyles } from "@/styles/button_styles";
+import { cardStyles } from "@/styles/card_styles";
 import { ContainerStyles } from "@/styles/container_styles";
+import { fontStyles } from "@/styles/font_styles";
 import { inputStyles } from "@/styles/input_styles";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useState } from "react";
-import { Button, TextInput, View } from "react-native";
+import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const COLORS = [
@@ -18,6 +21,8 @@ const COLORS = [
     "plum",
     "lightpink",
     "lightgray",
+    "lavender",
+    "peachpuff",
 ];
 
 const CategoryForm = () => {
@@ -68,6 +73,9 @@ const CategoryForm = () => {
 
     return (
         <SafeAreaView style={ContainerStyles.ModalContainer}>
+            <View style={ContainerStyles.titleSection}>
+                <Text style={fontStyles.title}> {isEdit ? "Update Category" : "New Category"}</Text>
+            </View>
             <TextInput
                 placeholder='Titel'
                 placeholderTextColor={"grey"}
@@ -75,7 +83,7 @@ const CategoryForm = () => {
                 value={name}
                 style={inputStyles.input}
             />
-            <View>
+            <View style={cardStyles.BasicCard}>
                 <ColorPicker
                     colors={COLORS}
                     selectedColor={selectedColor}
@@ -83,11 +91,21 @@ const CategoryForm = () => {
                 />
                 <View style={[{ backgroundColor: selectedColor }]} />
             </View>
+            <Text
+                style={[
+                    fontStyles.subtitle,
+                    { textAlign: "left", marginVertical: 30, marginBottom: 50},
+                ]}>
+                Categories help you organize and color-code your calendar events. Choose a name and
+                color for easy identification.
+            </Text>
             <View>
-                <Button
-                    title={isEdit ? "Update Category" : "Add Category"}
-                    onPress={handleAddOrUpdateCategory}
-                />
+                <TouchableOpacity style={buttonStyles.button} onPress={handleAddOrUpdateCategory}>
+                    <Text style={fontStyles.buttonText}>
+                        {isEdit ? "Update Category" : "Add Category"}
+                    </Text>
+                </TouchableOpacity>
+
                 {isEdit && (
                     <Button
                         title='Delete Category'

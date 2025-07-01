@@ -28,7 +28,7 @@ const CategoryView = () => {
     );
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={ContainerStyles.ModalContainer}>
             <View style={ContainerStyles.titleSection}>
                 <View
                     style={{
@@ -51,7 +51,7 @@ const CategoryView = () => {
                 data={categories}
                 renderItem={({ item }) => <CategoryItem item={item} />}
                 keyExtractor={(item) => item.$id}
-                style={cardStyles.Card}
+                style={[cardStyles.BasicCard, {width: "100%"}]}
             />
         </SafeAreaView>
     );
