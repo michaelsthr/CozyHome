@@ -5,6 +5,7 @@ import { Image } from "react-native";
 export default function TabLayout() {
     return (
         <Tabs screenOptions={{ animation: "shift" }}>
+            <Tabs.Screen name='index' options={{ href: null, headerShown: false }} />
             <Tabs.Screen name='index' />
             <Tabs.Screen
                 name='calendar'

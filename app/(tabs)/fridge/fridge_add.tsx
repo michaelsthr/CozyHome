@@ -15,6 +15,7 @@ import {
 } from "react-native";
 import { FridgeCategories, FridgeCategoryType, getAllFridgeCategories } from "../../../lib/constants/categories";
 import { fridgeStyles as styles } from "../../../styles/fridge_styles";
+import { inputStyles } from "@/styles/input_styles";
 import { setKuehlschrankInhalt } from "./fridgeBack/components/dbKuehlschrank";
 
 export default function AddItem() {
@@ -152,7 +153,7 @@ export default function AddItem() {
             <TextInput
               placeholder="Enter product name..."
               placeholderTextColor="#9ca3af"
-              style={styles.input}
+              style={inputStyles.input}
               value={name}
               onChangeText={setName}
               returnKeyType="done"
@@ -165,7 +166,7 @@ export default function AddItem() {
             <TextInput
               placeholder="Enter quantity..."
               placeholderTextColor="#9ca3af"
-              style={styles.input}
+              style={inputStyles.input}
               value={quantity}
               onChangeText={setQuantity}
               keyboardType="numeric"
@@ -191,7 +192,7 @@ export default function AddItem() {
           <View style={styles.inputGroup}>
             <Text style={styles.inputLabel}>{"Expiration Date"}</Text>
             <TouchableOpacity
-              style={styles.input}
+              style={inputStyles.input}
               onPress={() => {
                 const now = new Date();
                 setSelectedMonth(now.getMonth());

@@ -14,6 +14,8 @@ import { fridgeStyles as styles } from "../../../styles/fridge_styles";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
 import { QuantityControls } from "./fridgeBack/components/QuantityControls";
 import { useQuantityManager } from "./fridgeBack/hooks/useQuantityManager";
+import { fontStyles } from "@/styles/font_styles";
+import { ContainerStyles } from "@/styles/container_styles";
 
 export default function Drinks() {
   const router = useRouter();
@@ -104,8 +106,8 @@ export default function Drinks() {
         </View>
 
         {/* Title Section */}
-        <View style={styles.titleSection}>
-          <Text style={styles.title}>{"Refreshing Drinks"}</Text>
+        <View style={ContainerStyles.titleSection}>
+          <Text style={fontStyles.title}>{"Refreshing Drinks"}</Text>
         </View>
 
         {/* Search */}

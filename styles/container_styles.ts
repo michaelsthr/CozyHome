@@ -162,4 +162,8 @@ export const ContainerStyles = StyleSheet.create({
         color: "#888",
         marginLeft: "auto",
     },
+    titleSection: {
+      paddingHorizontal: 20,
+      paddingVertical: 25,
+    },
 });;

@@ -50,7 +50,6 @@ const AddEvent = () => {
 
     return (
         <View style={{ flex: 1, justifyContent: "center" }}>
-            <Button onPress={() => navigation.goBack()} title='Back' />
             <EventForm
                 event={eventFromParams}
                 onSubmit={handleAddOrUpdateEvent}
