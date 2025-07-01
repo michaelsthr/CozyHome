@@ -8,6 +8,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { addTodo } from "../../../lib/appwrite/dbTodo"; //für db
 import styles, { containerWidth } from "./styles";
+import { Group, useSession } from "@/lib/context/SessionContext";
 
 const isWeb = Platform.OS === 'web';
 
@@ -224,6 +225,7 @@ export default function NewToDo() {
   const [todoName, setTodoName] = useState('');
   const [date, setDate] = useState<Date | null>(null);
   const [show, setShow] = useState(false);
+  const { group } = useSession();
 
   const onChange = (event, selectedDate) => {
     if (Platform.OS !== 'ios') setShow(false);
@@ -294,10 +296,10 @@ export default function NewToDo() {
           <DatePickerField date={date} setDate={setDate} />
         </VStack>
       </Box>
-      <HStack style={[styles.buttonsContainer, { marginBottom: insets.bottom + 16 }]}>        
+      <HStack style={[styles.buttonsContainer, { marginBottom: insets.bottom + 16 }]}>
         <Button style={[styles.buttons, { backgroundColor: "grey" }]} onPress={cancel}>
-        <Text style={styles.buttonText}>Cancel</Text>
-      </Button>
+          <Text style={styles.buttonText}>Cancel</Text>
+        </Button>
         <Button style={[styles.buttons, { backgroundColor: "blue" }]} onPress={() => saveNewTodo(todoName, selectedPerson, date, selectedRepeat, selectedLabel)}>
           <Text style={styles.buttonText}>Add</Text>
         </Button>

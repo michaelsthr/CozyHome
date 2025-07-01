@@ -10,7 +10,9 @@ export const unstable_settings = {
 export default function RootLayout() {
   return (
     <SessionProvider>
-      <Stack initialRouteName="(group)/index" />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(group)/index"  />
+      </Stack>
     </SessionProvider>
   );
 }

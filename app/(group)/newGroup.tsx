@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useNavigation, router } from 'expo-router';
 import { addGroup, getGroups } from "../../lib/appwrite/dbGroup";
+import { Group, useSession } from '@/lib/context/SessionContext';
 
 interface GroupProps {
     name: string;
@@ -34,6 +35,7 @@ export default function NewGroup() {
     const [groupName, setGroupName] = useState('');
     const [groupType, setGroupType] = useState('');
     const [groupKey, setGroupKey] = useState('');
+    const { user, group, setGroup } = useSession();
 
     useEffect(() => {
         const loadKey = async () => {
@@ -62,9 +64,16 @@ export default function NewGroup() {
         };
 
         try {
-            await addGroup(newGroup);
+            const createdGroup = await addGroup(newGroup);
+            const groupForContext: Group = {
+                $id: createdGroup.$id,
+                name: createdGroup.name,
+                groupKey: createdGroup.groupKey,
+                type: createdGroup.type,
+            };
+            setGroup(groupForContext);
             Alert.alert('Group created successfully!');
-            router.replace('/(tabs)'); 
+            router.replace('/(tabs)');
             // ToDo: add Group ID to current user
         } catch (error) {
             console.error('Failed to create group:', error);

@@ -1,6 +1,6 @@
-import { Models } from 'react-native-appwrite';
+import { Models, Query } from 'react-native-appwrite';
 import { getDatabases } from './initializer'; //für db
-
+import { useSession, getGlobalGroup } from '../context/SessionContext';
 
 const databases = getDatabases();
 const databaseId = '681cc676001b5505b333';
@@ -8,7 +8,13 @@ const collectionId = '681cc690001e33dabf95';
 
 const getTodos = async function (): Promise<Models.DocumentList<any>> {
     try {
-        const result = await databases.listDocuments(databaseId, collectionId);
+        const group = getGlobalGroup()
+        if (!group) throw new Error("Group is not set.");
+        
+        const result = await databases.listDocuments(
+            databaseId,
+            collectionId,
+            [Query.equal("group", group.$id)]);
         return result;
     } catch (error) {
         console.error("Error fetching documents:", error);
@@ -18,7 +24,15 @@ const getTodos = async function (): Promise<Models.DocumentList<any>> {
 
 const addTodo = async function (todo: any): Promise<Models.Document> {
     try {
-        const result = await databases.createDocument(databaseId, collectionId, 'unique()', todo);
+        const group = getGlobalGroup()
+        if (!group || !group.$id) throw new Error("Group is not set.");
+
+        const todoWithGroup = {
+            ...todo,
+            group: group.$id,
+        }
+
+        const result = await databases.createDocument(databaseId, collectionId, 'unique()', todoWithGroup);
         return result;
     } catch (error) {
         console.error("Error creating document:", error);

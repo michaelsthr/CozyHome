@@ -36,7 +36,6 @@ export default function EnterGroupKey() {
       return;
     }
     setGroup(foundGroup);
-    console.log(group?.groupKey);
 
     router.replace('/(tabs)');
 

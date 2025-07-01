@@ -1,4 +1,5 @@
 import { Client, Databases } from "react-native-appwrite";
+import { Group, useSession } from "@/lib/context/SessionContext";
 
 let _client: Client | null = null;
 
