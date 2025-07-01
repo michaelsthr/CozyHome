@@ -241,6 +241,11 @@ export const fridgeStyles = StyleSheet.create({
     fontWeight: "500",
   },
 
+  itemDetailsRow: {
+    alignItems: "center",
+    width: "100%",
+  },
+
   // Quantity Controls
   quantityControls: {
     flexDirection: "row",

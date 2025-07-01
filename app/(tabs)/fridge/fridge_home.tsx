@@ -228,11 +228,11 @@ export default function Fridge() {
                 const { days, label } = getDaysLeft(item.mhd);
                 return (
                   <View key={item.$id} style={styles.carouselItemCard}>
-                    <Image 
-                      source={getCategoryImage(item.kategorie)} 
-                      style={styles.itemImage} 
+                    <Image
+                      source={getCategoryImage(item.kategorie)}
+                      style={styles.itemImage}
                     />
-                    <View style={styles.statusRow}> 
+                    <View style={styles.statusRow}>
                       <View style={styles.statusIconContainer}>
                         <Image
                           source={getStatusIcon(item.mhd)}
@@ -242,6 +242,8 @@ export default function Fridge() {
                           {`${days} ${label}`}
                         </Text>
                       </View>
+                    </View>
+                    <View style={styles.itemDetailsRow}>
                       <Text style={styles.itemName} numberOfLines={2}>
                         {item.name}
                       </Text>
@@ -254,7 +256,7 @@ export default function Fridge() {
                     </View>
                   </View>
                 );
-                })} 
+              })} 
           </ScrollView> ) : (
             <View style={styles.emptyState}>
               <Image
