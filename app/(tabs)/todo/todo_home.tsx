@@ -78,9 +78,9 @@ export default function Todo() {
       const todos = await getTodos();
       console.log("Todos:", todos);
       setTodos(todos);
-      setLoading(false);
     } catch (err) {
       console.error("Error fetching todo contents:", err);
+    } finally {
       setLoading(false);
     }
   }

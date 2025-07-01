@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'reac
 import { router, useNavigation } from 'expo-router';
 import { getGroups } from "../../lib/appwrite/dbGroup";
 import { Group, useSession } from '@/lib/context/SessionContext';
+import { updateUser } from '@/lib/appwrite/dbUser';
 
 
 interface GroupProps {
@@ -14,7 +15,7 @@ interface GroupProps {
 export default function EnterGroupKey() {
   const navigation = useNavigation();
   const [groupKey, setGroupKey] = useState('');
-  const { user, group, setGroup } = useSession();
+  const { user, setUser, group, setGroup } = useSession();
 
 
   useLayoutEffect(() => {
@@ -23,25 +24,32 @@ export default function EnterGroupKey() {
     });
   }, [navigation]);
 
-  const handleSubmit = async () => {
-    const existingGroups = await getGroups();
-    const existingKeys = new Set((existingGroups.documents ?? []).map((group: GroupProps) => group.groupKey));
+ const handleSubmit = async () => {
+  const existingGroups = await getGroups();
+  const foundGroup = (existingGroups.documents ?? []).find(
+    (group: GroupProps) => group.groupKey.toUpperCase() === groupKey.trim().toUpperCase()
+  );
 
-    const foundGroup = (existingGroups.documents ?? []).find(
-      (group: GroupProps) => group.groupKey === groupKey.trim().toUpperCase()
-    );
+  if (!foundGroup) {
+    Alert.alert('Please enter a valid Group Key');
+    return;
+  }
+  
+  if (!user) {
+    Alert.alert("No logged-in user found.");
+    return;
+  }
 
-    if (!foundGroup) {
-      Alert.alert('Enter a valid Group Key');
-      return;
-    }
-    setGroup(foundGroup);
-
+  setGroup(foundGroup);
+  
+  try {
+    const updatedUser = await updateUser(user, foundGroup.$id);
+    setUser(updatedUser);
     router.replace('/(tabs)');
-
-    // ToDo: add Group to user
-    // Beispiel: navigation.push('/groupDetails', { code: groupKey });
-  };
+  } catch {
+    Alert.alert('Failed to update user group.');
+  }
+};
 
   return (
     <View style={styles.container}>

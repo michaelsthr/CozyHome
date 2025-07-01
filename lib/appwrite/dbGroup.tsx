@@ -26,5 +26,15 @@ const addGroup = async function(group: any): Promise<Models.Document> {
     }
 }
 
+const getGroupById = async function getGroupById(groupId: string): Promise<Models.Document> {
+  try {
+    const response = await databases.getDocument(databaseId, collectionId, groupId);
+    return response;
+  } catch (error) {
+    console.error("Error fetching group by ID:", error);
+    throw error;
+  }
+}
 
-export { getGroups, addGroup };
+
+export { getGroups, addGroup, getGroupById };

@@ -8,9 +8,11 @@ const collectionId = '681cc690001e33dabf95';
 
 const getTodos = async function (): Promise<Models.DocumentList<any>> {
     try {
-        const group = getGlobalGroup()
-        if (!group) throw new Error("Group is not set.");
-        
+        const group = getGlobalGroup();
+        if (group === null) {
+            throw new Error("Group is not set.");
+        }
+
         const result = await databases.listDocuments(
             databaseId,
             collectionId,
