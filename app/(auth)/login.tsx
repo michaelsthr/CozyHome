@@ -6,7 +6,6 @@ import { useSession } from '@/lib/context/SessionContext';
 
 import { createNewUser, checkUserValid, User } from '@/lib/appwrite/dbUser';
 import * as Crypto from "expo-crypto";
-import { getGroupById } from '@/lib/appwrite/dbGroup';
 
 export default function Auth() {
   const [username, setUsername] = useState('');
@@ -67,7 +66,6 @@ export default function Auth() {
   async function register(username: string, password: string) {
     try {
       await createNewUser(username, password);
-      alert("Registration successful.");
       await login(username, password);
     } catch (error) {
       console.error("Registration failed:", error);

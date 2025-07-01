@@ -7,6 +7,9 @@ import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-na
 import { ToDoItem, ToDoItemProps } from "../../../components/todo_item";
 import { getTodos, updateTodo } from "../../../lib/appwrite/dbTodo"; //für db
 import styles, { screenHeight, screenWidth } from "./styles";
+import { useSession } from '@/lib/context/SessionContext';
+import { getUserById } from "@/lib/appwrite/dbUser";
+
 
 const formatDate = (isoString: string) => {
   if (!isoString) return null;
@@ -63,6 +66,7 @@ export default function Todo() {
     total: 0,
     documents: [],
   });
+  const { user } = useSession();
 
   const [loading, setLoading] = useState(true);
   const newToDo = () => router.push("./newtodo");
@@ -98,23 +102,23 @@ export default function Todo() {
     }
   }, [isFocused]);
 
-  const changeToDoStatus = (id: string, done: boolean) => {
-    if (!todos) return; // Ensure todos is not null
+  const changeToDoStatus = async (id: string, done: boolean) => {
+    if (!todos) return;
 
-    const updatedTodos = todos?.documents?.map((todo: ToDoItemProps) => {
-      if (todo.id == id || todo.$id == id) {
-        return { ...todo, done: !done };
-      }
-      return todo;
-    });
+    const updatedTodos = todos.documents.map((todo: ToDoItemProps) =>
+      (todo.id === id || todo.$id === id) ? { ...todo, done: !done } : todo
+    );
     setTodos({ ...todos, documents: updatedTodos });
 
-    updateTodo(
-      {
+    try {
+      await updateTodo({
         $id: id,
-        done: !done
-      }
-    )
+        done: !done,
+        doneBy: user?.username
+      });
+    } catch (error) {
+      console.error("Error updating todo:", error);
+    }
   };
 
   return (
@@ -144,6 +148,7 @@ export default function Todo() {
                 isChecked={item.done}
                 changeToDoStatus={changeToDoStatus}
                 tag={item.tag ? item.tag : null}
+                doneBy={item.doneBy || null}
               />
             ))}
           </ScrollView>

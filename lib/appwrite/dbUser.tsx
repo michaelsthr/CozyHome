@@ -59,12 +59,12 @@ export const checkUserValid = async function (username: string): Promise<Models.
 };
 
 
-export async function updateUser(user: User, newGroupID: string) {
+export async function updateUser(userID: string, newGroupID: string) {
   try {
     const updatedUser = await databases.updateDocument(
       databaseId,
       userCollectionId,
-      user.$id,
+      userID,
       {
         groupID: newGroupID,
       }
@@ -90,5 +90,13 @@ export async function getUsersByGroupId(groupId: string): Promise<Models.Documen
   }
 }
 
-
+export async function getUserById(userID: string): Promise<Models.Document | null> {
+  try {
+    const user = await databases.getDocument(databaseId, userCollectionId, userID);
+    return user;
+  } catch (error) {
+    console.error('Failed to fetch user by ID:', error);
+    return null;
+  }
+}
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Button } from 'react-native';
 import { router, useNavigation } from 'expo-router';
 import { getGroups } from "../../lib/appwrite/dbGroup";
 import { Group, useSession } from '@/lib/context/SessionContext';
@@ -24,35 +24,42 @@ export default function EnterGroupKey() {
     });
   }, [navigation]);
 
- const handleSubmit = async () => {
-  const existingGroups = await getGroups();
-  const foundGroup = (existingGroups.documents ?? []).find(
-    (group: GroupProps) => group.groupKey.toUpperCase() === groupKey.trim().toUpperCase()
-  );
+  const handleSubmit = async () => {
+    const existingGroups = await getGroups();
+    const foundGroup = (existingGroups.documents ?? []).find(
+      (group: GroupProps) => group.groupKey.toUpperCase() === groupKey.trim().toUpperCase()
+    );
 
-  if (!foundGroup) {
-    Alert.alert('Please enter a valid Group Key');
-    return;
-  }
-  
-  if (!user) {
-    Alert.alert("No logged-in user found.");
-    return;
-  }
+    if (!foundGroup) {
+      Alert.alert('Please enter a valid Group Key');
+      return;
+    }
 
-  setGroup(foundGroup);
-  
-  try {
-    const updatedUser = await updateUser(user, foundGroup.$id);
-    setUser(updatedUser);
-    router.replace('/(tabs)');
-  } catch {
-    Alert.alert('Failed to update user group.');
-  }
-};
+    if (!user) {
+      Alert.alert("No logged-in user found.");
+      return;
+    }
+    console.log(user);
+    
+
+    setGroup(foundGroup);
+
+    try {
+      const updatedUser = await updateUser(user.userId, foundGroup.$id);
+      setUser(updatedUser);
+      router.replace('/(tabs)');
+    } catch {
+      Alert.alert('Failed to update user group.');
+    }
+  };
 
   return (
     <View style={styles.container}>
+      <Button
+        title="← Zurück"
+        color="blue"
+        onPress={() => router.back()}
+      />
       <Text style={styles.titleText}>Please put in an existing Group Key:</Text>
       <TextInput
         style={styles.input}

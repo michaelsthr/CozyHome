@@ -45,16 +45,16 @@ export default function EditTodos() {
     fetchTodos();
   }, []);
 
-   const isFocused = useIsFocused();
-  
-    useEffect(() => {
-      if (isFocused) {
-        fetchTodos();
-        console.log("Screen is focused – Daten neu geladen");
-      }
-    }, [isFocused]);
+  const isFocused = useIsFocused();
 
-  const handleDeletePress = (id: string, title:string) => {
+  useEffect(() => {
+    if (isFocused) {
+      fetchTodos();
+      console.log("Screen is focused – Daten neu geladen");
+    }
+  }, [isFocused]);
+
+  const handleDeletePress = (id: string, title: string) => {
     setSelectedTodoId(id);
     setSelectedTodoTitle(title);
     setModalVisible(true);
@@ -62,6 +62,7 @@ export default function EditTodos() {
   const [successMessage, setSuccessMessage] = useState("");
 
   return (
+
     <GluestackUIProvider config={config}>
       <SafeAreaView style={styles.container}>
         <Text style={styles.heading}>Edit To Do</Text>

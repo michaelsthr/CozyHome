@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Button } from 'react-native';
 import { useNavigation, router } from 'expo-router';
 import { addGroup, getGroups } from "../../lib/appwrite/dbGroup";
 import { Group, useSession } from '@/lib/context/SessionContext';
@@ -83,7 +83,6 @@ export default function NewGroup() {
             const updatedUser = await updateUser(user, createdGroup.$id);
             setUser(updatedUser);
 
-            Alert.alert('Group created successfully!');
             router.replace('/(tabs)');
         } catch (error) {
             console.error('Error while creating group or updating user:', error);
@@ -93,6 +92,11 @@ export default function NewGroup() {
 
     return (
         <View style={styles.container}>
+            <Button
+                    title="← Zurück"
+                    color="blue"
+                    onPress={() => router.back()}
+                  />
             <Text style={styles.titleText}>Create new group</Text>
 
             <TextInput

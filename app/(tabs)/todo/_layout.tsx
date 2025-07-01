@@ -5,7 +5,7 @@ export default function TodoLayout() {
     <Stack
       screenOptions={{
         headerShown: false,
-        animation: "slide_from_right",
+        presentation: "formSheet",
       }}
     />
   );

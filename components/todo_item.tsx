@@ -14,6 +14,7 @@ export interface ToDoItemProps {
   routine?: string;
   responsible?: string;
   tag?: string;
+  doneBy?: string
   changeToDoStatus: (id: string, currentStatus: boolean) => void;
   onTrashPress: () => void;
 }
@@ -27,7 +28,8 @@ export const ToDoItem = ({
   responsible,
   changeToDoStatus,
   tag = null,
-}: ToDoItemProps) => 
+  doneBy = null,
+}: ToDoItemProps) =>
   <Box style={styles.todoItem}>
     <VStack space="xs">
       <HStack style={styles.titleRow}>
@@ -36,7 +38,7 @@ export const ToDoItem = ({
           <Badge style={styles.badge}>
             <BadgeText style={styles.badgeText}>{responsible}</BadgeText>
           </Badge>
-        ) : null} 
+        ) : null}
         {tag ? (
           <Badge style={styles.badge}>
             <BadgeText style={styles.badgeText}>{tag}</BadgeText>
@@ -45,15 +47,16 @@ export const ToDoItem = ({
       </HStack>
       <HStack style={styles.checkboxRow}>
         <VStack alignItems="center">
-          <View style={{borderWidth: 2, borderColor:'#ccc',borderRadius: 1, marginRight: "8%", transform:[{ scale: 0.7 }]}}>
-            <Checkbox status={isChecked ? 'checked' : 'unchecked'}
-                onPress={() => changeToDoStatus(id, isChecked)}
-                color="blue"
-                uncheckedColor="#f9f9f9">
-            </Checkbox>
+          <View style={{ borderWidth: 2, borderColor: '#ccc', borderRadius: 1, marginRight: "8%", transform: [{ scale: 0.7 }] }}>
+            <Checkbox
+              status={isChecked ? 'checked' : 'unchecked'}
+              onPress={() => changeToDoStatus(id, isChecked)}
+              color="blue"
+              uncheckedColor="#f9f9f9"
+            />
           </View>
           {isChecked && (
-            <Text style={{ opacity: isChecked ? 1 : 0 }}>Bewohner1</Text>
+            <Text style={{ opacity: isChecked ? 1 : 0 }}>{doneBy}</Text>
           )}
         </VStack>
       </HStack>
@@ -70,17 +73,17 @@ export const ToDoItem = ({
       </HStack>
     </VStack>
   </Box>
-;
+  ;
 
 export const EditToDoItem = ({
   id,
   title,
-  date, 
-  responsible, 
+  date,
+  responsible,
   isChecked,
   routine,
   onTrashPress,
-  tag=null
+  tag = null
 }: ToDoItemProps) => {
   const router = useRouter();
   return (
@@ -90,18 +93,18 @@ export const EditToDoItem = ({
           <HStack style={styles.titleRow}>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
             {responsible ? (
-            <Badge style={styles.badge}>
-              <Text style={styles.badgeText}>{responsible}</Text>
-            </Badge>
-          ) : null} 
-          {tag ? (
-            <Badge style={styles.badge}>
-              <Text style={styles.badgeText}>{tag}</Text>
-            </Badge>
-          ) : null}
+              <Badge style={styles.badge}>
+                <Text style={styles.badgeText}>{responsible}</Text>
+              </Badge>
+            ) : null}
+            {tag ? (
+              <Badge style={styles.badge}>
+                <Text style={styles.badgeText}>{tag}</Text>
+              </Badge>
+            ) : null}
           </HStack>
           <HStack style={styles.IconRow}>
-            <TouchableOpacity onPress={onTrashPress} style={{marginRight:"8%"}}>
+            <TouchableOpacity onPress={onTrashPress} style={{ marginRight: "8%" }}>
               <TrashIcon size="lg" />
             </TouchableOpacity>
           </HStack>
