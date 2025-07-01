@@ -16,7 +16,7 @@ import {
 import { FridgeCategories, FridgeCategoryType, getAllFridgeCategories } from "../../../lib/constants/categories";
 import { fridgeStyles as styles } from "../../../styles/fridge_styles";
 import { inputStyles } from "@/styles/input_styles";
-import { setKuehlschrankInhalt } from "./fridgeBack/components/dbKuehlschrank";
+import { setKuehlschrankInhalt } from "../../../lib/appwrite/dbKuehlschrank";
 
 export default function AddItem() {
   const router = useRouter();  const [name, setName] = useState("");

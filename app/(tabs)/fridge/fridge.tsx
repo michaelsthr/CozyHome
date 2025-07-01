@@ -1,8 +1,7 @@
 import { Models } from 'appwrite';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { deleteKuehlschrankInhalt, getKuehlschrankInhalt, setKuehlschrankInhalt, updateKuehlschrankInhalt } from "./fridgeBack/components/dbKuehlschrank"; //für db
-
+import { deleteKuehlschrankInhalt, getKuehlschrankInhalt, setKuehlschrankInhalt, updateKuehlschrankInhalt } from"../../../lib/appwrite/dbKuehlschrank";
 export default function Fridge() {
   const [contents, setContents] = useState<Models.DocumentList<any> | null>(null);
   const [loading, setLoading] = useState(true);

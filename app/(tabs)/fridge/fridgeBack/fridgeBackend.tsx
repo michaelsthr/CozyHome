@@ -3,11 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { FridgeCategories, FridgeCategoryType, getAllFridgeCategories } from "../../../../lib/constants/categories";
 import DatePickerField from "./components/DatePickerField";
-import { deleteKuehlschrankInhalt, getKuehlschrankInhalt, KuehlschrankItem, NewKuehlschrankItem, setKuehlschrankInhalt, updateKuehlschrankInhalt } from "./components/dbKuehlschrank"; //für db
+import { deleteKuehlschrankInhalt, getKuehlschrankInhalt, KuehlschrankItem, NewKuehlschrankItem, setKuehlschrankInhalt, updateKuehlschrankInhalt } from "../../../../lib/appwrite/dbKuehlschrank"; //für db
 import { inputStyles } from '@/styles/input_styles';
 
 export default function Fridge() {
-  // Helper function to get category display information (can be expanded to include icons, colors, etc.)
   const getCategoryDisplayInfo = (categoryValue: string | undefined) => {
     if (!categoryValue) return { label: 'Keine Kategorie', color: '#777777' };
     
@@ -15,7 +14,6 @@ export default function Fridge() {
     const isValidCategory = Object.values(FridgeCategories).includes(categoryValue as FridgeCategoryType);
     
     if (isValidCategory) {
-      // Return display information based on category
       switch(categoryValue) {
         case FridgeCategories.DAIRY:
           return { label: categoryValue, color: '#e3f2fd' }; // Light blue for dairy
@@ -27,8 +25,6 @@ export default function Fridge() {
           return { label: categoryValue, color: '#ffe0b2' }; // Light orange for fruits
         case FridgeCategories.DRINKS:
           return { label: categoryValue, color: '#b3e5fc' }; // Lighter blue for drinks
-        case FridgeCategories.SNACKS:
-          return { label: categoryValue, color: '#f8bbd0' }; // Light pink for snacks
         case FridgeCategories.FROZEN:
           return { label: categoryValue, color: '#d1c4e9' }; // Light purple for frozen
         default:

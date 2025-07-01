@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Models } from 'appwrite';
-import { getKuehlschrankInhalt, updateKuehlschrankInhalt, setKuehlschrankInhalt, deleteKuehlschrankInhalt } from '../components/dbKuehlschrank'; // Adjust the import path as necessary
+import { getKuehlschrankInhalt, updateKuehlschrankInhalt, setKuehlschrankInhalt, deleteKuehlschrankInhalt } from "../../../../../lib/appwrite/dbKuehlschrank"; // Adjust the import path as necessary
 import { KuehlschrankItem, NewKuehlschrankItem } from '../types/fridge';
 
 export const useFridgeData = () => {
