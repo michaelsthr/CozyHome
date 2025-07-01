@@ -1,3 +1,4 @@
+import TimePickerModal from "@/components/calendar/time_picker_modal";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -13,14 +14,14 @@ import {
   View
 } from "react-native";
 import { FridgeCategories, FridgeCategoryType, getAllFridgeCategories } from "../../../lib/constants/categories";
-import { setKuehlschrankInhalt } from "./fridgeBack/components/dbKuehlschrank";
 import { fridgeStyles as styles } from "../../../styles/fridge_styles";
+import { setKuehlschrankInhalt } from "./fridgeBack/components/dbKuehlschrank";
 
 export default function AddItem() {
   const router = useRouter();  const [name, setName] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [quantity, setQuantity] = useState("1");
   const [category, setCategory] = useState<FridgeCategoryType>(FridgeCategories.OTHER);
-  const [expDate, setExpDate] = useState<Date | null>(null);
+  const [expDate, setExpDate] = useState<Date | null>(new Date());
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);  const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
@@ -60,9 +61,8 @@ export default function AddItem() {
     return days;
   };
 
-  const selectDate = (day: number) => {
-    const selectedDate = new Date(selectedYear, selectedMonth, day);
-    setExpDate(selectedDate);
+  const selectDate = (day: any) => {
+    setExpDate(day);
     setShowDatePicker(false);
   };
 
@@ -225,104 +225,14 @@ export default function AddItem() {
           )}</TouchableOpacity>
           
         {/* Date Picker Modal */}
-        {showDatePicker && (
-          <Modal
-            visible={showDatePicker}
-            transparent={true}
-            animationType="slide"
-            onRequestClose={() => setShowDatePicker(false)}
-          >
-            <TouchableOpacity 
-              style={styles.modalOverlay}
-              activeOpacity={1}
-              onPress={() => setShowDatePicker(false)}
-            >
-              <TouchableOpacity activeOpacity={1}>
-                <View style={styles.calendarModalContent}>
-                  <Text style={styles.modalTitle}>{"Select Expiration Date"}</Text>
-                  
-                  {/* Calendar Header with Month/Year Navigation */}
-                  <View style={styles.calendarHeader}>
-                    <TouchableOpacity onPress={goToPreviousMonth} style={styles.navButton}>
-                      <Text style={styles.navButtonText}>‹</Text>
-                    </TouchableOpacity>
-                    
-                    <TouchableOpacity onPress={goToToday} style={styles.monthYearButton}>
-                      <Text style={styles.monthYearText}>
-                        {new Date(selectedYear, selectedMonth).toLocaleDateString('en-US', { 
-                          month: 'long', 
-                          year: 'numeric' 
-                        })}
-                      </Text>
-                    </TouchableOpacity>
-                    
-                    <TouchableOpacity onPress={goToNextMonth} style={styles.navButton}>
-                      <Text style={styles.navButtonText}>›</Text>
-                    </TouchableOpacity>
-                  </View>
-
-                  {/* Year Quick Jump */}
-                  <View style={styles.yearJump}>
-                    <TouchableOpacity 
-                      onPress={() => setSelectedYear(selectedYear - 1)} 
-                      style={styles.yearButton}
-                    >
-                      <Text style={styles.yearButtonText}>{selectedYear - 1}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                      onPress={() => setSelectedYear(selectedYear + 1)} 
-                      style={styles.yearButton}
-                    >
-                      <Text style={styles.yearButtonText}>{selectedYear + 1}</Text>
-                    </TouchableOpacity>
-                  </View>
-
-                  {/* Days of Week Header */}
-                  <View style={styles.weekHeader}>
-                    {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
-                      <Text key={day} style={styles.weekDay}>{day}</Text>
-                    ))}
-                  </View>
-
-                  {/* Calendar Grid */}
-                  <View style={styles.calendarGrid}>
-                    {generateCalendar().map((dayInfo, index) => {
-                      if (!dayInfo) {
-                        return <View key={index} style={styles.emptyDay} />;
-                      }
-
-                      const { day, date, isPast, isToday } = dayInfo;
-                      const isSelected = expDate && expDate.toDateString() === date.toDateString();
-
-                      return (
-                        <TouchableOpacity
-                          key={index}
-                          style={[
-                            styles.calendarDay,
-                            isPast && styles.pastDay,
-                            isToday && styles.todayDay,
-                            isSelected && styles.selectedDay
-                          ]}
-                          onPress={() => selectDate(day)}
-                          disabled={isPast}
-                        >
-                          <Text style={[
-                            styles.calendarDayText,
-                            isPast && styles.pastDayText,
-                            isToday && styles.todayDayText,
-                            isSelected && styles.selectedDayText
-                          ]}>
-                            {day}
-                          </Text>
-                        </TouchableOpacity>
-                      );
-                    })}                  
-                    </View>
-                </View>
-              </TouchableOpacity>
-            </TouchableOpacity>
-          </Modal>
-        )}
+        <TimePickerModal 
+          showStartDatePicker={showDatePicker}
+          value={new Date()}
+          onDateChanges={(event, date) => selectDate(date)}
+          title='Select a date'
+          onDismiss={() => setShowDatePicker(false)}
+        />
+        
         
         {/* Category Selection Modal */}
         <Modal
