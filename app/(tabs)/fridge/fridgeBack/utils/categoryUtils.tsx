@@ -8,7 +8,7 @@ export interface CategoryDisplayInfo {
 export const getCategoryDisplayInfo = (categoryValue: string | undefined): CategoryDisplayInfo => {
   if (!categoryValue) return { label: 'Keine Kategorie', color: '#777777' };
   
-  const isValidCategory = Object.values(FridgeCategories).includes(categoryValue as unknown as FridgeCategories);
+  const isValidCategory = Object.values(FridgeCategories).includes(categoryValue as unknown as FridgeCategoryType);
   
   if (isValidCategory) {
     switch(categoryValue) {
@@ -22,8 +22,6 @@ export const getCategoryDisplayInfo = (categoryValue: string | undefined): Categ
         return { label: categoryValue, color: '#ffe0b2' };
       case FridgeCategories.DRINKS:
         return { label: categoryValue, color: '#b3e5fc' };
-      case FridgeCategories.SNACKS:
-        return { label: categoryValue, color: '#f8bbd0' };
       case FridgeCategories.FROZEN:
         return { label: categoryValue, color: '#d1c4e9' };
       default:

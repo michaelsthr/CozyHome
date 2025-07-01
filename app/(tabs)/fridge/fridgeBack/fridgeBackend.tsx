@@ -19,6 +19,8 @@ import {
     getAllFridgeCategories,
 } from "../../../../lib/constants/categories";
 import DatePickerField from "./components/DatePickerField";
+import { deleteKuehlschrankInhalt, getKuehlschrankInhalt, KuehlschrankItem, NewKuehlschrankItem, setKuehlschrankInhalt, updateKuehlschrankInhalt } from "../../../../lib/appwrite/dbKuehlschrank"; //für db
+import { inputStyles } from '@/styles/input_styles';
 import {
     deleteKuehlschrankInhalt,
     getKuehlschrankInhalt,
@@ -29,6 +31,58 @@ import {
 } from "./components/dbKuehlschrank"; //für db
 
 export default function Fridge() {
+  const getCategoryDisplayInfo = (categoryValue: string | undefined) => {
+    if (!categoryValue) return { label: 'Keine Kategorie', color: '#777777' };
+    
+    // Check if the category matches one of our predefined categories
+    const isValidCategory = Object.values(FridgeCategories).includes(categoryValue as FridgeCategoryType);
+    
+    if (isValidCategory) {
+      switch(categoryValue) {
+        case FridgeCategories.DAIRY:
+          return { label: categoryValue, color: '#e3f2fd' }; // Light blue for dairy
+        case FridgeCategories.MEAT:
+          return { label: categoryValue, color: '#ffcdd2' }; // Light red for meat
+        case FridgeCategories.VEGETABLES:
+          return { label: categoryValue, color: '#c8e6c9' }; // Light green for vegetables
+        case FridgeCategories.FRUITS:
+          return { label: categoryValue, color: '#ffe0b2' }; // Light orange for fruits
+        case FridgeCategories.DRINKS:
+          return { label: categoryValue, color: '#b3e5fc' }; // Lighter blue for drinks
+        case FridgeCategories.FROZEN:
+          return { label: categoryValue, color: '#d1c4e9' }; // Light purple for frozen
+        default:
+          return { label: categoryValue, color: '#eeeeee' }; // Gray for other
+      }
+    }
+    
+    return { label: categoryValue, color: '#eeeeee' };
+  };  
+  const [contents, setContents] = useState<Models.DocumentList<any> | null>(null);
+  const [categories] = useState<FridgeCategoryType[]>(getAllFridgeCategories());
+  const [loading, setLoading] = useState(true);
+  const [itemName, setItemName] = useState('');
+  const [itemAmount, setItemAmount] = useState('1');
+  const [selectedCategory, setSelectedCategory] = useState<FridgeCategoryType | ''>('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [activeFilter, setActiveFilter] = useState<FridgeCategoryType | 'ALL'>('ALL');
+  const [sortBy, setSortBy] = useState<'name' | 'category' | 'amount'>('name');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');  const [editingItem, setEditingItem] = useState<KuehlschrankItem | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [expDate, setExpDate] = useState<Date | null>(null);useEffect(() => {
+    async function fetchData() {
+      try {
+        const inhalt = await getKuehlschrankInhalt();
+        setContents(inhalt);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setLoading(false);
+      }
+    }
+    
+    fetchData();
+  }, []);
     // Helper function to get category display information (can be expanded to include icons, colors, etc.)
     const getCategoryDisplayInfo = (categoryValue: string | undefined) => {
         if (!categoryValue) return { label: "Keine Kategorie", color: "#777777" };

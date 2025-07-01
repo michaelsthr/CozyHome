@@ -23,6 +23,8 @@ import {
 } from "../../../lib/constants/categories";
 import { fridgeStyles as styles } from "../../../styles/fridge_styles";
 import { setKuehlschrankInhalt } from "./fridgeBack/components/dbKuehlschrank";
+import { inputStyles } from "@/styles/input_styles";
+import { setKuehlschrankInhalt } from "../../../lib/appwrite/dbKuehlschrank";
 
 export default function AddItem() {
     const router = useRouter();
