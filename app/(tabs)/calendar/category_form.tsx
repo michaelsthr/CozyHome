@@ -1,5 +1,6 @@
 import ColorPicker from "@/components/calendar/color_picker";
 import DeleteEventModal from "@/components/calendar/delete_event_modal";
+import DeleteModal from "@/components/DeleteModal";
 import { createNewCategory, deleteCategory, updateCategory } from "@/lib/appwrite/dbKalender";
 import { Category } from "@/lib/types/calendar";
 import { buttonStyles } from "@/styles/button_styles";
@@ -107,18 +108,21 @@ const CategoryForm = () => {
                 </TouchableOpacity>
 
                 {isEdit && (
+                <>
                     <Button
                         title='Delete Category'
                         color='red'
                         onPress={() => setShowDeleteModal(true)}
                     />
+                    <DeleteModal
+                        visible={showDeleteModal}
+                        onClose={() => setShowDeleteModal(false)}
+                        onDelete={handleDeleteCategory}
+                        title='Delete Event?'
+                    />
+                </>
                 )}
             </View>
-            <DeleteEventModal
-                visible={showDeleteModal}
-                onClose={() => setShowDeleteModal(false)}
-                onDelete={handleDeleteCategory}
-            />
         </SafeAreaView>
     );
 };

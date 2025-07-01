@@ -136,14 +136,6 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
                 value={name}
             />
             
-            <TextInput
-                style={[inputStyles.input, { opacity: 0.7 }]}
-                placeholder='Creator'
-                placeholderTextColor={"grey"}
-                value={"Creator: " + creatorName || "Unknown"}
-                editable={false}
-            />
-            
             <View style={{marginVertical: 10}}>
                 <CustomDateTimePicker
                     value={date}
@@ -201,11 +193,17 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
                         height: 80,
                         textAlignVertical: 'top',
                         paddingTop: 10,
-                        marginBottom: 30
                     }]}
                     multiline={true}
                     numberOfLines={4}
                 />
+                <Text
+                    style={[
+                        fontStyles.subtitle,
+                        { textAlign: "left", marginTop: 10, marginBottom: 40},
+                    ]}>
+                    {"The Creator of this Event is: " + creatorName || "Unknown"}
+                </Text>
                 <TouchableOpacity style={buttonStyles.button} onPress={handleSubmit}>
                     <Text style={fontStyles.buttonText}>
                         {isEditMode ?  "Update Event" : "Add Event"}

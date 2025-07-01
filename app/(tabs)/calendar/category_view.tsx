@@ -53,6 +53,13 @@ const CategoryView = () => {
                 keyExtractor={(item) => item.$id}
                 style={[cardStyles.BasicCard, {width: "100%"}]}
             />
+            <Text
+                style={[
+                    fontStyles.subtitle,
+                    { textAlign: "left", marginVertical: 30, marginBottom: 50},
+                ]}>
+                Categories help you organize and color-code your calendar events. Click the '+' icon to create one :)
+            </Text>
         </SafeAreaView>
     );
 };
