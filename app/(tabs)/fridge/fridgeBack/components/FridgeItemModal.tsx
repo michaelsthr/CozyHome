@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { FridgeCategoryType, getAllFridgeCategories } from '../types/fridge';
 import DatePickerField from './DatePickerField';
+import { inputStyles } from '@/styles/input_styles';
 
 interface FridgeItemModalProps {
   visible: boolean;
@@ -55,7 +56,7 @@ export const FridgeItemModal: React.FC<FridgeItemModalProps> = ({
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Name:</Text>
               <TextInput
-                style={styles.input}
+                style={inputStyles.input}
                 placeholder="Artikelname"
                 value={itemName}
                 onChangeText={setItemName}

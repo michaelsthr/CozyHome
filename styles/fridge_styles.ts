@@ -9,7 +9,6 @@ export const fridgeStyles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
   },
-
   // Header
   header: {
     flexDirection: "row",
@@ -56,16 +55,6 @@ export const fridgeStyles = StyleSheet.create({
   },
   username: {
     fontSize: 28,
-    fontWeight: "700",
-    color: "#1e293b",
-    letterSpacing: -0.5,
-  },
-  titleSection: {
-    paddingHorizontal: 20,
-    paddingVertical: 25,
-  },
-  title: {
-    fontSize: 32,
     fontWeight: "700",
     color: "#1e293b",
     letterSpacing: -0.5,
@@ -405,16 +394,6 @@ export const fridgeStyles = StyleSheet.create({
     fontWeight: "600",
     color: "#475569",
     marginBottom: 8,
-  },
-  input: {
-    backgroundColor: "#ffffff",
-    borderRadius: 12,
-    paddingHorizontal: 15,
-    paddingVertical: 12,
-    fontSize: 16,
-    color: "#1e293b",
-    borderWidth: 1,
-    borderColor: "#e2e8f0",
   },
   dropdownInput: {
     flexDirection: "row",

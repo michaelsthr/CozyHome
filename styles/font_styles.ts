@@ -13,12 +13,6 @@ export const fontStyles = StyleSheet.create({
         color: "#1e293b",
         letterSpacing: -0.5,
       },
-      title: {
-        fontSize: 24,
-        fontWeight: "700",
-        color: "#1e293b",
-        letterSpacing: -0.5,
-      },
       subtitle: {
         fontSize: 16,
         color: "#64748b",
@@ -64,12 +58,19 @@ export const fontStyles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "700",
         color: "#475569",
-      },    h1: {
+      },    
+      title: {
+        fontSize: 24,
+        fontWeight: "700",
+        color: "#1e293b",
+        letterSpacing: -0.5,
+      },
+      h1: {
         fontSize: 30,
         fontWeight: "bold",
         textAlign: "center",
         marginRight: "auto",
-    },
+      },
     h2: {
         fontSize: 24,
         fontWeight: "bold",

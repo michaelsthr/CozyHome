@@ -38,7 +38,14 @@ export default function Auth() {
         };
         setLoggedInUser(currentUser);
         setIsAuthenticated(true);
-        setUser(currentUser)
+        
+        const sessionUser = {
+          username: userDoc.username,
+          password: userDoc.password,
+          groupID: userDoc.groupID,
+          userId: userDoc.$id
+        };
+        setUser(sessionUser);
         if (currentUser.groupID === null) {
           router.push("/(group)");
           return;
@@ -49,22 +56,22 @@ export default function Auth() {
         router.push("/(tabs)");
         console.log("LoggedInUser: ", currentUser);
       } else {
-        alert("Benutzername oder Passwort ist falsch.");
+        alert("Username or password is incorrect. Please try again.");
       }
     } catch (error) {
-      console.error("Login fehlgeschlagen:", error);
-      alert("Login fehlgeschlagen.");
+      console.error("Login failed:", error);
+      alert("Login failed.");
     }
   }
 
   async function register(username: string, password: string) {
     try {
       await createNewUser(username, password);
-      alert("Registrierung erfolgreich");
+      alert("Registration successful.");
       await login(username, password);
     } catch (error) {
-      console.error("Registrierung fehlgeschlagen:", error);
-      alert("Registrierung fehlgeschlagen.");
+      console.error("Registration failed:", error);
+      alert("Registration failed.");
     }
   }
 
@@ -87,7 +94,7 @@ export default function Auth() {
       />
 
       <TextInput
-        placeholder="Passwort"
+        placeholder="Password"
         placeholderTextColor="black"
         autoCapitalize="none"
         secureTextEntry={true}
@@ -101,7 +108,7 @@ export default function Auth() {
       />
 
       <Button
-        title="Registrieren"
+        title="Register"
         onPress={() => register(username, password)}
       />
     </View>
@@ -114,5 +121,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: 12,
+    backgroundColor: "white"
   },
 });

@@ -4,6 +4,7 @@ import { ActivityIndicator, FlatList, Modal, ScrollView, StyleSheet, Text, TextI
 import { FridgeCategories, FridgeCategoryType, getAllFridgeCategories } from "../../../../lib/constants/categories";
 import DatePickerField from "./components/DatePickerField";
 import { deleteKuehlschrankInhalt, getKuehlschrankInhalt, KuehlschrankItem, NewKuehlschrankItem, setKuehlschrankInhalt, updateKuehlschrankInhalt } from "./components/dbKuehlschrank"; //für db
+import { inputStyles } from '@/styles/input_styles';
 
 export default function Fridge() {
   // Helper function to get category display information (can be expanded to include icons, colors, etc.)
@@ -273,7 +274,7 @@ export default function Fridge() {
               <View style={styles.inputContainer}>
                 <Text style={styles.inputLabel}>Name:</Text>
                 <TextInput
-                  style={styles.input}
+                  style={inputStyles.input}
                   placeholder="Artikelname"
                   value={itemName}
                   onChangeText={setItemName}

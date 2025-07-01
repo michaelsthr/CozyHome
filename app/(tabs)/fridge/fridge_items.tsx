@@ -9,6 +9,8 @@ import {
   View
 } from "react-native";
 import { fridgeStyles as styles } from "../../../styles/fridge_styles";
+import { fontStyles } from "@/styles/font_styles";
+import { ContainerStyles } from "@/styles/container_styles";
 
 // Routes matching the screen file names
 const categories = [
@@ -38,8 +40,8 @@ export default function FridgeItems() {
         </View>        
         
         {/* Title Section */}
-        <View style={styles.titleSection}>
-          <Text style={styles.title}>{"Food Categories"}</Text>
+        <View style={ContainerStyles.titleSection}>
+          <Text style={fontStyles.title}>{"Food Categories"}</Text>
         </View>
 
         {/* Categories Grid */}
