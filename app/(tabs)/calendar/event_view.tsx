@@ -1,7 +1,8 @@
 import DeleteModal from "@/components/DeleteModal";
-import { createNewEvent, deleteEvent, Event, updateEvent } from "@/lib/appwrite/dbKalender";
+import { createNewEvent, deleteEvent, getCategory, updateEvent } from "@/lib/appwrite/dbKalender";
+import { Event } from "@/lib/types/calendar";
 import { useLocalSearchParams, useNavigation } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, View } from "react-native";
 import EventForm from "./event_form";
 
@@ -10,7 +11,7 @@ const AddEvent = () => {
     const params = useLocalSearchParams();
     const isEdit = !!params.id;
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-
+    
     const eventFromParams: Event | undefined =
         isEdit ?
             {
@@ -75,3 +76,4 @@ const AddEvent = () => {
 };
 
 export default AddEvent;
+

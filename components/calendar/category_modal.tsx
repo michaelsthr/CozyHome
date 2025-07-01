@@ -10,7 +10,7 @@ interface CategoryModalProps {
     visible: boolean;
     categories: Models.Document[];
     onClose: () => void;
-    onSelectCategory: (categoryName: string) => void;
+    onSelectCategory: (category: any) => void;
 }
 
 const CategoryModal: React.FC<CategoryModalProps> = ({
@@ -31,7 +31,7 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
                             <Pressable
                                 style={ContainerStyles.categoryContainer}
                                 onPress={() => {
-                                    onSelectCategory(item.name);
+                                    onSelectCategory(item);
                                 }}>
                                 <View
                                     style={[

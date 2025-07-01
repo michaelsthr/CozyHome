@@ -10,7 +10,7 @@ import React, {
     useState,
 } from "react";
 import { Dimensions, ScrollView, View } from "react-native";
-import { EventInterface } from "../../../lib/types/calendar";
+import { EventWithId } from "../../../lib/types/calendar";
 import { WeekView } from "./week_view";
 
 interface TimetableProps {
@@ -22,7 +22,7 @@ interface TimetableRef {
 }
 
 const Timetable = forwardRef<TimetableRef, TimetableProps>(({ onMonthChange }, ref) => {
-    const [events, setEvents] = useState<EventInterface[]>([]);
+    const [events, setEvents] = useState<EventWithId[]>([]);
     const [currentDate, setCurrentDate] = useState(new Date());
     const scrollViewRef = useRef<ScrollView>(null);
     const [viewWidth, setViewWidth] = useState(Dimensions.get("window").width);
@@ -41,11 +41,10 @@ const Timetable = forwardRef<TimetableRef, TimetableProps>(({ onMonthChange }, r
                     repeat: Boolean(document.repeat),
                     creator: document.creator,
                     description: document.description,
-                    color: document.color || "#1E88E5",
-                    borderColor: document.borderColor || "#0D47A1",
+                    category: document.category
                 }));
 
-                setEvents(mappedEvents as EventInterface[]);
+                setEvents(mappedEvents as EventWithId[]);
             }
         } catch (error) {
             console.error("Failed to fetch events:", error);

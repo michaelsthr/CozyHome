@@ -1,12 +1,13 @@
 import CategoryModal from "@/components/calendar/category_modal";
 import { useUser } from "@/components/UserContext";
-import { Event, getCategory } from "@/lib/appwrite/dbKalender";
+import { getCategory } from "@/lib/appwrite/dbKalender";
+import { Event } from "@/lib/types/calendar";
 import { ContainerStyles } from "@/styles/container_styles";
 import { globalStyles } from "@/styles/global_styles";
 import { inputStyles } from "@/styles/input_styles";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useEffect, useState } from "react";
-import { Button, Pressable, Switch, Text, TextInput, View } from "react-native";
+import { Button, Pressable, Text, TextInput, View } from "react-native";
 import { Models } from "react-native-appwrite";
 
 interface EventFormProps {
@@ -21,7 +22,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
 
     const [name, setName] = useState(event?.name || "");
     const [description, setDescription] = useState(event?.description || "");
-    const [category, setCategory] = useState(event?.category || "");
+    const [categoryId, setCategoryId] = useState(event?.category);
 
     const [wholeday, setWholeDay] = useState(event?.wholeday || false);
     const [repeat, setRepeat] = useState(event?.repeat || false);
@@ -38,13 +39,16 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
     useEffect(() => {
         getCategory()
             .then((res) => {
-                setCategories(res.documents);
-                if (!category && res.documents.length > 0) {
-                    setCategory(res.documents[0].name);
+                const fetchedCategories = res.documents;
+                setCategories(fetchedCategories);
+                if (event?.category) {
+                    setCategoryId(event.category);
+                } else if (fetchedCategories.length > 0) {
+                    setCategoryId(fetchedCategories[0].$id);
                 }
             })
             .catch(() => {});
-    }, []);
+    }, [event?.category]);
 
     const onDateChange = (event: any, selectedDate?: Date) => {
         const currentDate = selectedDate || date;
@@ -72,18 +76,26 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
         const endDateTime = new Date(date);
         endDateTime.setHours(endTime.getHours(), endTime.getMinutes(), endTime.getSeconds());
 
+        if (!categoryId) {
+            console.error("No category selected");
+            return;
+        }
+
         const eventData: Event = {
             name: name || "new Event",
             startDate: startDateTime.toISOString(),
             endDate: endDateTime.toISOString(),
             description: description,
-            category: category,
+            category: categoryId,
             creator: creator,
             repeat: repeat,
             wholeday: wholeday,
         };
+        console.log(eventData);
         onSubmit(eventData);
     };
+
+    const selectedCategory = categories.find((c) => c.$id === categoryId);
 
     return (
         <View style={ContainerStyles.ModalContainer}>
@@ -119,54 +131,24 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
                     onChange={onDateChange}
                     themeVariant='light'
                 />
-                <View style={ContainerStyles.switchContainer}>
-                    <Text>Wholeday</Text>
-                    <Switch
-                        trackColor={{ false: "#767577", true: "#81b0ff" }}
-                        thumbColor={wholeday ? "#f4f3f4" : "#f4f3f4"}
-                        onValueChange={toggleWholeDay}
-                        value={wholeday}
-                    />
-                </View>
-                <View style={ContainerStyles.switchContainer}>
-                    <Text>Repeat</Text>
-                    <Switch
-                        trackColor={{ false: "#767577", true: "#81b0ff" }}
-                        thumbColor={repeat ? "#f4f3f4" : "#f4f3f4"}
-                        onValueChange={toggleRepeat}
-                        value={repeat}
-                    />
-                </View>
                 <View style={globalStyles.separator} />
                 <Pressable
                     onPress={() => setCategoryModalVisible(true)}
                     style={ContainerStyles.categoryPicker}>
                     <Text style={ContainerStyles.categoryPickerText}>Category:</Text>
-                    {category ?
-                        <View style={ContainerStyles.categoryPickerValueContainer}>
-                            {categories.find((c) => c.name === category) && (
-                                <View
-                                    style={[
-                                        globalStyles.categoryPickerColorSwatch,
-                                        {
-                                            backgroundColor:
-                                                categories.find((c) => c.name === category)
-                                                    ?.color || "#ccc",
-                                        },
-                                    ]}
-                                />
-                            )}
-                            <Text style={ContainerStyles.categoryPickerValueText}>{category}</Text>
-                        </View>
-                    : categories.length > 0 ?
+                    {selectedCategory ?
                         <View style={ContainerStyles.categoryPickerValueContainer}>
                             <View
                                 style={[
                                     globalStyles.categoryPickerColorSwatch,
-                                    { backgroundColor: categories[0].color },
+                                    {
+                                        backgroundColor: selectedCategory.color || "#ccc",
+                                    },
                                 ]}
                             />
-                            <Text style={{ fontSize: 18 }}>{categories[0].name}</Text>
+                            <Text style={ContainerStyles.categoryPickerValueText}>
+                                {selectedCategory.name}
+                            </Text>
                         </View>
                     :   <Text style={ContainerStyles.categoryPickerPlaceholder}>
                             No categories available
@@ -177,8 +159,12 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
                     visible={categoryModalVisible}
                     categories={categories}
                     onClose={() => setCategoryModalVisible(false)}
-                    onSelectCategory={(categoryName) => {
-                        setCategory(categoryName);
+                    onSelectCategory={(category) => {
+                        const newCategory = categories.find((c) => c.name === category.name);
+                        if (newCategory) {
+                            setCategoryId(newCategory.$id);
+                            console.log("set new cat");
+                        }
                         setCategoryModalVisible(false);
                     }}
                 />

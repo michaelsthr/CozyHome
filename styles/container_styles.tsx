@@ -21,12 +21,6 @@ export const ContainerStyles = StyleSheet.create({
         marginVertical: 20,
         alignContent: "center",
     },
-    switchContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        marginVertical: 10,
-        justifyContent: "space-between",
-    },
     categoryPicker: {
         flexDirection: "row",
         alignItems: "center",

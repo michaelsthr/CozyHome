@@ -1,9 +1,17 @@
 import { CELL_HEIGHT, DAY_WIDTH } from "@/lib/constants/calendar";
-import { EventInterface } from "@/lib/types/calendar";
+import { EventWithId } from "@/lib/types/calendar";
 import { router } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-export function EventBlock({ event, startOfWeek }: { event: EventInterface; startOfWeek: Date }) {
+export function EventBlock({
+    event,
+    startOfWeek,
+    categoryColor,
+}: {
+    event: EventWithId;
+    startOfWeek: Date;
+    categoryColor: string;
+}) {
     const startDate = new Date(event.startDate);
     const endDate = new Date(event.endDate);
 
@@ -41,8 +49,7 @@ export function EventBlock({ event, startOfWeek }: { event: EventInterface; star
                         repeat: String(event.repeat),
                         creator: event.creator,
                         description: event.description,
-                        color: event.color,
-                        borderColor: event.borderColor,
+                        category: event.category,
                     },
                 })
             }
@@ -53,12 +60,11 @@ export function EventBlock({ event, startOfWeek }: { event: EventInterface; star
                     left: left,
                     height: height,
                     width: width,
-                    backgroundColor: event.color,
-                    borderColor: event.borderColor,
+                    backgroundColor: categoryColor,
                 },
             ]}>
             <View>
-                <Text style={styles.eventText} numberOfLines={5} ellipsizeMode="clip">
+                <Text style={styles.eventText} numberOfLines={5} ellipsizeMode='clip'>
                     {event.name}
                 </Text>
             </View>
@@ -77,7 +83,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         flex: 1,
         flexWrap: "wrap",
-        textAlign: "center"
+        textAlign: "center",
     },
     eventText: {
         color: "white",

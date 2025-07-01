@@ -1,5 +1,7 @@
+import { Event } from "@/lib/types/calendar";
 import { Models } from "react-native-appwrite";
 import { getDatabases } from "./initializer"; //für db
+import { Category } from "@/lib/types/calendar";
 
 const databases = getDatabases();
 const databaseId = "681cc676001b5505b333";
@@ -25,17 +27,6 @@ export const getCategory = async function (): Promise<Models.DocumentList<any>> 
         throw error;
     }
 };
-
-export interface Event {
-    name: string;
-    startDate: string;
-    endDate: string;
-    repeat: boolean;
-    wholeday: boolean;
-    creator: string;
-    description: string;
-    category: string;
-}
 
 export const createNewEvent = async function (eventInfo: Event): Promise<Models.Document> {
     try {
@@ -79,11 +70,6 @@ export const getEvent = async function (documentId: string): Promise<Models.Docu
         throw error;
     }
 };
-
-export interface Category {
-    name: string;
-    color: string;
-}
 
 export const createNewCategory = async function (categoryInfo: Category): Promise<Models.Document> {
     try {
