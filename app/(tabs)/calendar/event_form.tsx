@@ -2,6 +2,7 @@ import CategoryModal from "@/components/calendar/category_modal";
 import CustomDateTimePicker from "@/components/calendar/custom_date_time_picker";
 import TimeRangePicker from "@/components/calendar/time_range_picker";
 import { getAllCategory } from "@/lib/appwrite/dbKalender";
+import { getUserById } from "@/lib/appwrite/dbUser";
 import { useSession } from "@/lib/context/SessionContext";
 import { Event } from "@/lib/types/calendar";
 import { buttonStyles } from "@/styles/button_styles";
@@ -39,6 +40,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
     });
     const [categoryModalVisible, setCategoryModalVisible] = useState(false);
     const [categories, setCategories] = useState<Models.Document[]>([]);
+    const [creatorName, setCreatorName] = useState<string>("");
 
     useEffect(() => {
         getAllCategory()
@@ -54,7 +56,21 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
             .catch((error) => {
                 console.error("Error fetching categories:", error);
             });
-    }, [event?.category]);
+
+        if (event?.creator) {
+            getUserById(event.creator)
+                .then((creatorUser) => {
+                    if (creatorUser) {
+                        setCreatorName(creatorUser.username);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error fetching creator:", error);
+                });
+        } else {
+            setCreatorName(user?.username || "");
+        }
+    }, [event?.category, event?.creator, user?.username]);
 
     const handleDateTimeChange = (type: 'date' | 'startTime' | 'endTime') => 
         (event: any, selectedDate?: Date) => {
@@ -118,6 +134,14 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
                 placeholderTextColor={"grey"}
                 onChangeText={(text) => setName(text)}
                 value={name}
+            />
+            
+            <TextInput
+                style={[inputStyles.input, { opacity: 0.7 }]}
+                placeholder='Creator'
+                placeholderTextColor={"grey"}
+                value={"Creator: " + creatorName || "Unknown"}
+                editable={false}
             />
             
             <View style={{marginVertical: 10}}>
