@@ -1,4 +1,5 @@
 import CategoryItem from "@/components/calendar/category_item";
+import { getAllCategory } from "@/lib/appwrite/dbKalender";
 import { cardStyles } from "@/styles/card_styles";
 import { ContainerStyles } from "@/styles/container_styles";
 import { fontStyles } from "@/styles/font_styles";
@@ -7,7 +8,6 @@ import { Link, useFocusEffect } from "expo-router";
 import React, { useCallback, useState } from "react";
 import { FlatList, Image, Pressable, SafeAreaView, Text, View } from "react-native";
 import { Models } from "react-native-appwrite";
-import { getAllCategory } from "../../../lib/appwrite/dbKalender";
 
 const CategoryView = () => {
     const [categories, setCategories] = useState<Models.Document[]>([]);
@@ -34,7 +34,7 @@ const CategoryView = () => {
                     style={{
                         flexDirection: "row",
                         justifyContent: "space-between",
-                        alignContent: "center",
+                        alignItems: "center",
                     }}>
                     <Text style={fontStyles.title}>Categories</Text>
                     <Link href='/(tabs)/calendar/category_form' push asChild>

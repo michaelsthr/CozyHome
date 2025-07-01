@@ -11,17 +11,13 @@ export default function Calendar() {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const timetableRef = useRef<any>(null);
 
-    const handleCalendarPress = () => {
-        setShowDatePicker(true);
-    };
+    const handleCalendarPress = () => setShowDatePicker(true);
 
     const handleDateChange = (event: any, date?: Date) => {
         setShowDatePicker(false);
         if (date) {
             setSelectedDate(date);
-            if (timetableRef.current) {
-                timetableRef.current.jumpToDate(date);
-            }
+            timetableRef.current?.jumpToDate(date);
         }
     };
 
@@ -32,7 +28,7 @@ export default function Calendar() {
             <TimePickerModal
                 showStartDatePicker={showDatePicker}
                 value={selectedDate}
-                onDateChanges={(event, date) => handleDateChange(event, date)}
+                onDateChanges={handleDateChange}
                 title='Select a date'
                 onDismiss={() => setShowDatePicker(false)}
             />

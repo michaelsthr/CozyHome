@@ -17,23 +17,17 @@ interface EventFormProps {
 }
 
 const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) => {
-    const { user } = useSession()
-    const userId = user?.userId
-    const creator: string = userId || "";
+    const { user } = useSession();
+    const creator = user?.userId || "";
 
     const [name, setName] = useState(event?.name || "");
     const [description, setDescription] = useState(event?.description || "");
     const [categoryId, setCategoryId] = useState(event?.category);
-
-    const [wholeday, setWholeDay] = useState(event?.wholeday || false);
-    const [repeat, setRepeat] = useState(event?.repeat || false);
-    const toggleWholeDay = () => setWholeDay((previousState) => !previousState);
-    const toggleRepeat = () => setRepeat((previousState) => !previousState);
-
+    const [wholeday] = useState(event?.wholeday || false);
+    const [repeat] = useState(event?.repeat || false);
     const [date, setDate] = useState(event ? new Date(event.startDate) : new Date());
     const [startTime, setStartTime] = useState(event ? new Date(event.startDate) : new Date());
     const [endTime, setEndTime] = useState(event ? new Date(event.endDate) : new Date());
-
     const [categoryModalVisible, setCategoryModalVisible] = useState(false);
     const [categories, setCategories] = useState<Models.Document[]>([]);
 
@@ -48,23 +42,27 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
                     setCategoryId(fetchedCategories[0].$id);
                 }
             })
-            .catch(() => {});
+            .catch((error) => {
+                console.error("Error fetching categories:", error);
+            });
     }, [event?.category]);
 
-    const onDateChange = (event: any, selectedDate?: Date) => {
-        const currentDate = selectedDate || date;
-        setDate(currentDate);
-    };
-
-    const onStartTimeChange = (event: any, selectedDate?: Date) => {
-        const currentDate = selectedDate || startTime;
-        setStartTime(currentDate);
-    };
-
-    const onEndTimeChange = (event: any, selectedDate?: Date) => {
-        const currentDate = selectedDate || endTime;
-        setEndTime(currentDate);
-    };
+    const handleDateTimeChange = (type: 'date' | 'startTime' | 'endTime') => 
+        (event: any, selectedDate?: Date) => {
+            if (!selectedDate) return;
+            
+            switch (type) {
+                case 'date':
+                    setDate(selectedDate);
+                    break;
+                case 'startTime':
+                    setStartTime(selectedDate);
+                    break;
+                case 'endTime':
+                    setEndTime(selectedDate);
+                    break;
+            }
+        };
 
     const handleSubmit = () => {
         const startDateTime = new Date(date);
@@ -93,12 +91,15 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
             wholeday: wholeday,
         };
 
-        console.log(eventData);
         onSubmit(eventData);
     };
 
+    const handleCategorySelect = (category: Models.Document) => {
+        setCategoryId(category.$id);
+        setCategoryModalVisible(false);
+    };
+
     const selectedCategory = categories.find((c) => c.$id === categoryId);
-    console.log(selectedCategory)
 
     return (
         <View style={ContainerStyles.ModalContainer}>
@@ -115,7 +116,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
                         value={startTime}
                         mode={"time"}
                         is24Hour={true}
-                        onChange={onStartTimeChange}
+                        onChange={handleDateTimeChange('startTime')}
                         themeVariant='light'
                     />
                     <Text style={globalStyles.timePickerArrow}>→</Text>
@@ -123,7 +124,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
                         value={endTime}
                         mode={"time"}
                         is24Hour={true}
-                        onChange={onEndTimeChange}
+                        onChange={handleDateTimeChange('endTime')}
                         themeVariant='light'
                     />
                 </View>
@@ -131,7 +132,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
                     value={date}
                     mode={"date"}
                     is24Hour={true}
-                    onChange={onDateChange}
+                    onChange={handleDateTimeChange('date')}
                     themeVariant='light'
                 />
                 <View style={globalStyles.separator} />
@@ -162,14 +163,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
                     visible={categoryModalVisible}
                     categories={categories}
                     onClose={() => setCategoryModalVisible(false)}
-                    onSelectCategory={(category) => {
-                        const newCategory = categories.find((c) => c.name === category.name);
-                        if (newCategory) {
-                            setCategoryId(newCategory.$id);
-                            console.log("set new cat");
-                        }
-                        setCategoryModalVisible(false);
-                    }}
+                    onSelectCategory={handleCategorySelect}
                 />
                 <View style={globalStyles.separator} />
                 <TextInput

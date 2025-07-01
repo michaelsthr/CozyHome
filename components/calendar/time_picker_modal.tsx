@@ -38,7 +38,7 @@ type TimePickerModalProps = {
 };
 
 const TimePickerModal = (props: TimePickerModalProps) => {
-    const { showStartDatePicker, value, onDateChanges, title, onDismiss } = props;
+    const { showStartDatePicker, value, onDateChanges, onDismiss } = props;
     return (
         <Modal
             style={{

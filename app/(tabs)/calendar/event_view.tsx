@@ -6,45 +6,60 @@ import React, { useState } from "react";
 import { Button, View } from "react-native";
 import EventForm from "./event_form";
 
-const AddEvent = () => {
+const EventView = () => {
     const navigation = useNavigation();
     const params = useLocalSearchParams();
     const isEdit = !!params.id;
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    
-    const eventFromParams: Event | undefined =
-        isEdit ?
-            {
-                name: typeof params.name === "string" ? params.name : "",
-                startDate:
-                    typeof params.startDate === "string" ?
-                        params.startDate
-                    :   new Date().toISOString(),
-                endDate:
-                    typeof params.endDate === "string" ? params.endDate : new Date().toISOString(),
-                description: typeof params.description === "string" ? params.description : "",
-                category: typeof params.category === "string" ? params.category : "",
-                creator: typeof params.creator === "string" ? params.creator : "",
-                repeat: params.repeat === "true",
-                wholeday: params.wholeday === "true",
-            }
-        :   undefined;
+
+    // Helper function to safely extract string parameter
+    const getStringParam = (param: string | string[] | undefined): string => {
+        if (typeof param === "string") return param;
+        if (Array.isArray(param)) return param[0] || "";
+        return "";
+    };
+
+    // Helper function to safely extract boolean parameter
+    const getBooleanParam = (param: string | string[] | undefined): boolean => {
+        return getStringParam(param) === "true";
+    };
+
+    const eventFromParams: Event | undefined = isEdit
+        ? {
+              name: getStringParam(params.name),
+              startDate: getStringParam(params.startDate) || new Date().toISOString(),
+              endDate: getStringParam(params.endDate) || new Date().toISOString(),
+              description: getStringParam(params.description),
+              category: getStringParam(params.category),
+              creator: getStringParam(params.creator),
+              repeat: getBooleanParam(params.repeat),
+              wholeday: getBooleanParam(params.wholeday),
+          }
+        : undefined;
 
     const handleAddOrUpdateEvent = async (event: Event) => {
-        if (isEdit && params.id) {
-            await updateEvent(params.id as string, event);
-            console.log("Event updated");
-        } else {
-            await createNewEvent(event);
-            console.log("Event created");
+        try {
+            if (isEdit && params.id) {
+                await updateEvent(params.id as string, event);
+                console.log("Event updated");
+            } else {
+                await createNewEvent(event);
+                console.log("Event created");
+            }
+            navigation.goBack();
+        } catch (error) {
+            console.error("Error saving event:", error);
         }
-        navigation.goBack();
     };
 
     const handleDeleteEvent = async () => {
-        if (isEdit && params.id) {
-            await deleteEvent(params.id as string);
-            navigation.goBack();
+        try {
+            if (isEdit && params.id) {
+                await deleteEvent(params.id as string);
+                navigation.goBack();
+            }
+        } catch (error) {
+            console.error("Error deleting event:", error);
         }
     };
 
@@ -74,5 +89,5 @@ const AddEvent = () => {
     );
 };
 
-export default AddEvent;
+export default EventView;
 

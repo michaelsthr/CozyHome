@@ -1,10 +1,6 @@
 import ColorPicker from "@/components/calendar/color_picker";
 import DeleteEventModal from "@/components/calendar/delete_event_modal";
-import {
-    createNewCategory,
-    deleteCategory,
-    updateCategory,
-} from "@/lib/appwrite/dbKalender";
+import { createNewCategory, deleteCategory, updateCategory } from "@/lib/appwrite/dbKalender";
 import { Category } from "@/lib/types/calendar";
 import { ContainerStyles } from "@/styles/container_styles";
 import { inputStyles } from "@/styles/input_styles";
@@ -13,35 +9,31 @@ import React, { useState } from "react";
 import { Button, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+const COLORS = [
+    "tomato",
+    "skyblue",
+    "gold",
+    "lightgreen",
+    "coral",
+    "plum",
+    "lightpink",
+    "lightgray",
+];
+
 const CategoryForm = () => {
     const navigation = useNavigation();
     const params = useLocalSearchParams();
     const isEdit = !!params.id;
-    const colors = [
-        "tomato",
-        "skyblue",
-        "gold",
-        "lightgreen",
-        "coral",
-        "plum",
-        "lightpink",
-        "lightgray",
-    ];
 
-    const [name, setName] = useState(
-        typeof params.name === "string"
-            ? params.name
-            : Array.isArray(params.name)
-            ? params.name[0]
-            : ""
-    );
-    const [selectedColor, setSelectedColor] = useState(
-        typeof params.color === "string"
-            ? params.color
-            : Array.isArray(params.color)
-            ? params.color[0]
-            : "tomato"
-    );
+    // Helper function to safely extract string parameter
+    const getStringParam = (param: string | string[] | undefined, defaultValue = ""): string => {
+        if (typeof param === "string") return param;
+        if (Array.isArray(param)) return param[0] || defaultValue;
+        return defaultValue;
+    };
+
+    const [name, setName] = useState(getStringParam(params.name));
+    const [selectedColor, setSelectedColor] = useState(getStringParam(params.color, "tomato"));
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const handleAddOrUpdateCategory = async () => {
@@ -49,21 +41,28 @@ const CategoryForm = () => {
             alert("Please enter a name for the category.");
             return null;
         }
-        if (isEdit) {
-            await updateCategory(params.id as string, { name, color: selectedColor });
-            console.log("Category updated");
+        try {
+            if (isEdit) {
+                await updateCategory(params.id as string, { name, color: selectedColor });
+                console.log("Category updated");
+            } else {
+                await createNewCategory({ name, color: selectedColor } as Category);
+                console.log("Category created");
+            }
             navigation.goBack();
-        } else {
-            createNewCategory({ name, color: selectedColor } as Category);
-            console.log("Category created");
-            navigation.goBack();
+        } catch (error) {
+            console.error("Error saving category:", error);
         }
     };
 
     const handleDeleteCategory = async () => {
-        if (isEdit) {
-            await deleteCategory(params.id as string);
-            navigation.goBack();
+        try {
+            if (isEdit) {
+                await deleteCategory(params.id as string);
+                navigation.goBack();
+            }
+        } catch (error) {
+            console.error("Error deleting category:", error);
         }
     };
 
@@ -78,7 +77,7 @@ const CategoryForm = () => {
             />
             <View>
                 <ColorPicker
-                    colors={colors}
+                    colors={COLORS}
                     selectedColor={selectedColor}
                     onSelectColor={setSelectedColor}
                 />
