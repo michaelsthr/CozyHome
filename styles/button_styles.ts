@@ -1,19 +1,6 @@
 import { StyleSheet } from "react-native";
 
 export const buttonStyles = StyleSheet.create({
-    homeQuantityButton: {
-        backgroundColor: "#059669",
-        borderRadius: 6,
-        width: 24,
-        height: 24,
-        alignItems: "center",
-        justifyContent: "center",
-      },
-      homeQuantityButtonText: {
-        color: "#ffffff",
-        fontSize: 14,
-        fontWeight: "700",
-      },
       addButton: {
         marginHorizontal: 20,
         marginBottom: 30,
@@ -61,8 +48,7 @@ export const buttonStyles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "700",
       },
+      button: {
+          borderRadius: 10,
+      },
 })
-    button: {
-        borderRadius: 10,
-    },
-});

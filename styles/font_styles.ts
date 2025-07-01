@@ -36,16 +36,6 @@ export const fontStyles = StyleSheet.create({
         textAlign: "center",
         marginTop: 5,
       },
-      homeQuantityButtonText: {
-        color: "#ffffff",
-        fontSize: 14,
-        fontWeight: "700",
-      },
-      homeQuantityText: {
-        fontSize: 12,
-        fontWeight: "700",
-        color: "#475569",
-      },
       emptyText: {
         fontSize: 18,
         fontWeight: "600",
@@ -59,42 +49,11 @@ export const fontStyles = StyleSheet.create({
         textAlign: "center",
         lineHeight: 20,
       },
-      itemsLabel: {
-        fontSize: 20,
-        fontWeight: "700",
-        color: "#1e293b",
-      },
-      filterText: {
-        fontSize: 16,
-        color: "#059669",
-        fontWeight: "600",
-      },
-      itemText: {
-        fontSize: 16,
-        fontWeight: "600",
-        color: "#1e293b",
-        textAlign: "center",
-      },
       addButtonText: {
         color: "#ffffff",
         fontSize: 18,
         fontWeight: "700",
         letterSpacing: 0.5,
-      },
-      sectionLabel: {
-        fontSize: 20,
-        fontWeight: "700",
-        color: "#1e293b",
-      },
-      category_statusText: {
-        fontSize: 14,
-        color: "#64748b",
-        fontWeight: "500",
-      },
-      category_itemName: {
-        fontSize: 18,
-        fontWeight: "600",
-        color: "#1e293b",
       },
       quantityButtonText: {
         color: "#ffffff",
