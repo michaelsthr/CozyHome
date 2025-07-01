@@ -119,7 +119,7 @@ export default function HomePage() {
       </View>
 
       {/* Group Members Section */}
-      <View style={ContainerStyles.titleSection}>
+      <View style={[ContainerStyles.titleSection, {marginHorizontal: 20}]}>
         <Text style={fontStyles.title}>Group Members</Text>
         <Text style={[fontStyles.subtitle, { marginBottom: 0 }]}>
           {groupMembers.length} member{groupMembers.length !== 1 ? "s" : ""}
