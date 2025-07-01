@@ -5,7 +5,6 @@ import { useRouter } from 'expo-router';
 
 import CozyInput from '@/components/cozy_input';
 import { createNewUser, checkUserValid, User } from '@/lib/appwrite/dbUser';
-import {any} from "zod";
 import * as Crypto from "expo-crypto";
 
 export default function Auth() {
