@@ -207,10 +207,6 @@ export default function Fridge() {
         {/* Fridge Section */}
         <View style={styles.fridgeSection}>
           <View style={styles.titleContainer}>
-            <Image
-              source={require("../../../assets/images/fridge_icons/fridge.png")}
-              style={styles.fridgeIcon}
-            />
             <Text style={styles.homeTitle}>{"Your Fridge"}</Text>
           </View>
           <Text style={styles.subtitle}>
