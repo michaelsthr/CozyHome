@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-export const cardStyles = StyleSheet.create({
+export const cardStyles = StyleSheet.create({});
     itemCard: {
         width: 120,
         marginRight: 15,
@@ -33,4 +33,3 @@ export const cardStyles = StyleSheet.create({
         shadowRadius: 4.65,
         elevation: 6,
       },
-})

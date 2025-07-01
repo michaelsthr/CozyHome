@@ -1,5 +1,6 @@
 import { Stack } from "expo-router";
 import React from "react";
+import BackButton from "../../../components/BackButton";
 
 export default function FridgeStack() {
   return (
