@@ -227,7 +227,7 @@ export const fridgeStyles = StyleSheet.create({
   },
   addButton: {
     marginHorizontal: 20,
-    marginBottom: 30,
+    marginBottom: 100,
     backgroundColor: "#059669",
     borderRadius: 16,
     paddingVertical: 18,
@@ -367,7 +367,7 @@ export const fridgeItemsStyles = StyleSheet.create({
   },
   addButton: {
     marginHorizontal: 20,
-    marginBottom: 30,
+    marginBottom: 100,
     backgroundColor: "#059669",
     borderRadius: 16,
     paddingVertical: 18,
@@ -576,7 +576,7 @@ export const fridgeCategoryStyles = StyleSheet.create({
   },
   addButton: {
     marginHorizontal: 20,
-    marginVertical: 30,
+    marginVertical: 100,
     backgroundColor: "#059669",
     borderRadius: 16,
     paddingVertical: 18,
@@ -707,7 +707,7 @@ export const fridgeAddStyles = StyleSheet.create({
   },
   addButton: {
     marginHorizontal: 20,
-    marginBottom: 30,
+    marginBottom: 100,
     backgroundColor: "#059669",
     borderRadius: 16,
     paddingVertical: 18,
