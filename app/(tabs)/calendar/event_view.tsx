@@ -1,9 +1,12 @@
 import DeleteModal from "@/components/DeleteModal";
 import { createNewEvent, deleteEvent, updateEvent } from "@/lib/appwrite/dbKalender";
 import { Event } from "@/lib/types/calendar";
+import { ContainerStyles } from "@/styles/container_styles";
+import { fontStyles } from "@/styles/font_styles";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useState } from "react";
-import { Button, View } from "react-native";
+import { Button, View, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import EventForm from "./event_form";
 
 const EventView = () => {
@@ -61,7 +64,10 @@ const EventView = () => {
     };
 
     return (
-        <View style={{ flex: 1, justifyContent: "center" }}>
+        <SafeAreaView style={ContainerStyles.ModalContainer}>
+            <View style={ContainerStyles.titleSection}>
+                <Text style={fontStyles.title}>{isEdit ? "Update Event" : "New Event"}</Text>
+            </View>
             <EventForm
                 event={eventFromParams}
                 onSubmit={handleAddOrUpdateEvent}
@@ -82,7 +88,7 @@ const EventView = () => {
                     />
                 </>
             )}
-        </View>
+        </SafeAreaView>
     );
 };
 

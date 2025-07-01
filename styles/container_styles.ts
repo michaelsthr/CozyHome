@@ -140,11 +140,6 @@ export const ContainerStyles = StyleSheet.create({
     categoryPicker: {
         flexDirection: "row",
         alignItems: "center",
-        padding: 12,
-        borderWidth: 1,
-        borderColor: "#eee",
-        borderRadius: 8,
-        marginBottom: 10,
     },
     categoryPickerText: {
         fontSize: 16,
