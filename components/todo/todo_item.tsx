@@ -3,7 +3,7 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { Checkbox } from 'react-native-paper';
-import styles from "../app/(tabs)/todo/styles";
+import styles from "../../app/(tabs)/todo/styles";
 
 export interface ToDoItemProps {
   key: string;

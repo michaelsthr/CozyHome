@@ -56,7 +56,7 @@ export default function EnterGroupKey() {
   return (
     <View style={styles.container}>
       <Button
-        title="← Zurück"
+        title="← Back"
         color="blue"
         onPress={() => router.back()}
       />

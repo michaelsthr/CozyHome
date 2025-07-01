@@ -93,7 +93,7 @@ export default function NewGroup() {
     return (
         <View style={styles.container}>
             <Button
-                    title="← Zurück"
+                    title="← Back"
                     color="blue"
                     onPress={() => router.back()}
                   />

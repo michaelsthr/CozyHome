@@ -1,14 +1,13 @@
+import { useSession } from '@/lib/context/SessionContext';
 import { config } from "@gluestack-ui/config";
 import { Button, GluestackUIProvider, HStack } from "@gluestack-ui/themed";
 import { useIsFocused } from '@react-navigation/native';
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { ToDoItem, ToDoItemProps } from "../../../components/todo_item";
+import { ToDoItem, ToDoItemProps } from "../../../components/todo/todo_item";
 import { getTodos, updateTodo } from "../../../lib/appwrite/dbTodo"; //für db
 import styles, { screenHeight, screenWidth } from "./styles";
-import { useSession } from '@/lib/context/SessionContext';
-import { getUserById } from "@/lib/appwrite/dbUser";
 
 
 const formatDate = (isoString: string) => {
@@ -150,6 +149,7 @@ export default function Todo() {
                 changeToDoStatus={changeToDoStatus}
                 tag={item.tag ? item.tag : null}
                 doneBy={item.doneBy || null}
+                responsible={item.responsible || null}
               />
             ))}
           </ScrollView>

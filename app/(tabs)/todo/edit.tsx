@@ -4,7 +4,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Modal, SafeAreaView, ScrollView, Text, View } from "react-native";
-import { EditToDoItem } from "../../../components/todo_item";
+import { EditToDoItem } from "../../../components/todo/todo_item";
 import { deleteTodo, getTodos } from "../../../lib/appwrite/dbTodo"; //für db
 import styles, { containerWidth } from "./styles";
 
@@ -62,7 +62,6 @@ export default function EditTodos() {
   const [successMessage, setSuccessMessage] = useState("");
 
   return (
-
     <GluestackUIProvider config={config}>
       <SafeAreaView style={styles.container}>
         <Text style={styles.heading}>Edit To Do</Text>
@@ -83,6 +82,7 @@ export default function EditTodos() {
                 isChecked={item.done}
                 onTrashPress={() => handleDeletePress(item.$id, item.name)}
                 tag={item.tag || null}
+                responsible={item.responsible || null}
               />
             ))}
           </ScrollView>

@@ -9,6 +9,13 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { addTodo } from "../../../lib/appwrite/dbTodo"; //für db
 import styles, { containerWidth } from "./styles";
 import { Group, useSession } from "@/lib/context/SessionContext";
+import { getUsersByGroupId } from "@/lib/appwrite/dbUser";
+import {
+  DropDownResponsible,
+  DropDownLabel,
+  DropDownRepeat,
+  DatePickerField,
+}  from "@/components/todo/pickers";
 
 const isWeb = Platform.OS === 'web';
 
@@ -22,201 +29,6 @@ interface ToDoItemProps {
   responsible?: string;
 }
 
-const dataWH = [
-  { key: "1", value: "täglich" },
-  { key: "2", value: "wöchentlich" },
-  { key: "3", value: "monatlich" },
-  { key: "4", value: "jährlich" }
-];
-
-const DropDownResponsible = ({ selectedPerson, setSelectedPerson }) => {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(selectedPerson || null);
-  const [items, setItems] = useState([
-    { label: 'None', value: 'None' },
-    { label: 'Bewohner 1', value: 'Bewohner 1' },
-    { label: 'Bewohner 2', value: 'Bewohner 2' },
-    { label: 'Bewohner 3', value: 'Bewohner 3' },
-  ]);
-
-  useEffect(() => {
-    setSelectedPerson(value);
-  }, [value]);
-
-  return (
-    <DropDownPicker
-      open={open}
-      value={value}
-      items={items}
-      setOpen={setOpen}
-      setValue={setValue}
-      setItems={setItems}
-      zIndex={4000}
-      zIndexInverse={1000}
-      placeholder="None"
-      style={{ borderColor: '#ccc', borderRadius: 8 }}
-      textStyle={{ fontSize: 14, color: '#000' }}
-      dropDownContainerStyle={{ borderColor: '#ccc' }}
-    />
-  );
-};
-
-const DropDownLabel = ({ selectedLabel, setSelectedLabel }) => {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(selectedLabel || null);
-  const [items, setItems] = useState([
-    { label: 'None', value: 'None' },
-    { label: 'Tasks', value: 'Tasks' },
-    { label: 'Shopping', value: 'Shopping' },
-  ]);
-
-  useEffect(() => {
-    setSelectedLabel(value);
-  }, [value]);
-
-  return (
-    <DropDownPicker
-      open={open}
-      value={value}
-      items={items}
-      setOpen={setOpen}
-      setValue={setValue}
-      setItems={setItems}
-      zIndex={4000}
-      zIndexInverse={1000}
-      placeholder="None"
-      style={{
-        borderColor: '#ccc',
-        borderRadius: 8,
-      }}
-      textStyle={{
-        fontSize: 14,
-        color: '#000',
-      }}
-      dropDownContainerStyle={{
-        borderColor: '#ccc',
-        elevation: 10,
-        zIndex: 2000,
-        position: "absolute",
-        top: "100%"
-      }}
-    />
-  );
-};
-const DropDownRepeat = ({ selectedRepeat, setSelectedRepeat }) => {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(selectedRepeat || null);
-  const [items, setItems] = useState([
-    { label: 'None', value: 'None' },
-    { label: 'daily', value: 'daily' },
-    { label: 'weekly', value: 'weekly' },
-    { label: 'monthly', value: 'monthly' },
-    { label: 'yearly', value: 'yearly' },
-  ]);
-
-  useEffect(() => {
-    setSelectedRepeat(value);
-  }, [value]);
-
-  return (
-    <DropDownPicker
-      open={open}
-      value={value}
-      items={items}
-      setOpen={setOpen}
-      setValue={setValue}
-      setItems={setItems}
-      zIndex={3000}
-      zIndexInverse={1000}
-      placeholder="None"
-      style={{
-        borderColor: '#ccc',
-        borderRadius: 8,
-      }}
-      textStyle={{
-        fontSize: 14,
-        color: '#000',
-      }}
-      dropDownContainerStyle={{
-        borderColor: '#ccc',
-        elevation: 10,
-
-      }}
-    />
-  );
-};
-
-const DatePickerField = ({ date, setDate }) => {
-  const [showPicker, setShowPicker] = useState(false);
-  const [hasSelected, setHasSelected] = useState(false);
-  const isWeb = Platform.OS == "web";
-
-  useEffect(() => {
-    if (date) {
-      setHasSelected(true);
-    }
-  }, [date]);
-
-  const handleChange = (event, date) => {
-    if (date) {
-      setDate(date);
-      setHasSelected(true);
-    }
-    setShowPicker(false);
-  };
-
-  const handleWebChange = (e) => {
-    const selectedDate = new Date(e.target.value);
-    setDate(selectedDate);
-    setHasSelected(true);
-  };
-  return (
-    <View style={{ width: '100%', marginBottom: '10%' }}>
-      <Text style={{ marginBottom: 6 }}>Date</Text>
-      <View
-        style={{
-          borderWidth: 1,
-          borderColor: '#ccc',
-          borderRadius: 8,
-          paddingVertical: 12,
-          paddingHorizontal: 16,
-          justifyContent: 'space-between',
-          height: 44,
-          flexDirection: "row",
-        }}
-      >
-        {isWeb ? (
-          <TextInput
-            style={{ flex: 1, color: '#000', fontSize: 14 }}
-            type="date"
-            value={date ? date.toISOString().split('T')[0] : ''}
-            onChange={handleWebChange}
-          />
-        ) : (
-          <>
-            <Text style={{ color: hasSelected ? '#000' : '#999' }}>
-              {hasSelected && date ? date.toLocaleDateString() : ''}
-            </Text>
-            <TouchableOpacity onPress={() => setShowPicker(prev => !prev)}>
-              <CalendarDays size={20} color="black" />
-            </TouchableOpacity>
-          </>
-        )}
-      </View>
-      {!isWeb && showPicker && (
-        <View style={{ alignItems: "center", bottom: -43, left: 6, right: 12, position: "absolute" }}>
-          <DateTimePicker
-            mode="date"
-            display="default"
-            value={date || new Date()}
-            onChange={handleChange}
-          />
-        </View>
-      )}
-    </View>
-  );
-};
-
 export default function NewToDo() {
   const [selectedPerson, setSelectedPerson] = useState('');
   const [selectedRepeat, setSelectedRepeat] = useState('');
@@ -225,7 +37,9 @@ export default function NewToDo() {
   const [todoName, setTodoName] = useState('');
   const [date, setDate] = useState<Date | null>(null);
   const [show, setShow] = useState(false);
-  const { group } = useSession();
+  type GroupMember = { $id: string; username: string; groupID: string };
+  const [groupMembers, setGroupMembers] = useState<GroupMember[]>([]);
+  const { user, group } = useSession();
 
   const onChange = (event, selectedDate) => {
     if (Platform.OS !== 'ios') setShow(false);
@@ -237,6 +51,30 @@ export default function NewToDo() {
   const showDatepicker = () => setShow(true);
   const cancel = () => { console.log("Cancel"); router.back(); };
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    const fetchGroupMembers = async () => {
+      if (!user?.groupID) {
+        return;
+      }
+      try {
+        const membersData = await getUsersByGroupId(user.groupID.$id);
+        setGroupMembers(membersData.documents.map(doc => ({
+          $id: doc.$id,
+          username: doc.username,
+          groupID: doc.groupID.$id
+        })));
+        console.log(groupMembers);
+
+      } catch (error) {
+        console.error("Error fetching group data:", error);
+        Alert.alert("Error", "Failed to load group information");
+      }
+    };
+
+    fetchGroupMembers();
+  }, [user?.groupID]);
+
   const saveNewTodo = (
     title: string,
     responsible: string,
@@ -252,7 +90,7 @@ export default function NewToDo() {
 
     const newTodo = {
       name: title,
-      // Todo: responsible: (responsible ? responsible : null),
+      responsible: (responsible ? responsible : null),
       date: (date ? date.toISOString() : null),
       regularity: regularity || null,
       tag: tag || null,
@@ -283,7 +121,10 @@ export default function NewToDo() {
           />
           <View style={{ marginBottom: "10%", zIndex: 4000 }}>
             <Text style={{ marginBottom: "2%" }}>Assignee</Text>
-            <DropDownResponsible selectedPerson={selectedPerson} setSelectedPerson={setSelectedPerson} />
+            <DropDownResponsible
+              selectedPerson={selectedPerson}
+              setSelectedPerson={setSelectedPerson}
+              members={groupMembers} />
           </View>
           <View style={{ marginBottom: "10%", zIndex: 3000, position: "relative" }}>
             <Text style={{ marginBottom: "2%" }}>Repeat</Text>
