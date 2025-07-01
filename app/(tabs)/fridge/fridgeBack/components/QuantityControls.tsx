@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Alert, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { KuehlschrankItem } from './dbKuehlschrank';
+import { KuehlschrankItem } from "../../../../../lib/appwrite/dbKuehlschrank";
 
 interface QuantityControlsProps {
   item: KuehlschrankItem;

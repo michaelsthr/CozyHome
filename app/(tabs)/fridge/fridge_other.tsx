@@ -13,7 +13,7 @@ import {
     View,
 } from "react-native";
 import { fridgeStyles as styles } from "../../../styles/fridge_styles";
-import { getKuehlschrankInhalt, KuehlschrankItem } from "./fridgeBack/components/dbKuehlschrank";
+import { getKuehlschrankInhalt, KuehlschrankItem } from "../../../lib/appwrite/dbKuehlschrank";
 import { QuantityControls } from "./fridgeBack/components/QuantityControls";
 import { useQuantityManager } from "./fridgeBack/hooks/useQuantityManager";
 

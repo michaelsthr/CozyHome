@@ -16,13 +16,13 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
+import { setKuehlschrankInhalt } from "../../../lib/appwrite/dbKuehlschrank";
 import {
     FridgeCategories,
     FridgeCategoryType,
     getAllFridgeCategories,
 } from "../../../lib/constants/categories";
 import { fridgeStyles as styles } from "../../../styles/fridge_styles";
-import { setKuehlschrankInhalt } from "./fridgeBack/components/dbKuehlschrank";
 
 export default function AddItem() {
     const router = useRouter();

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { deleteKuehlschrankInhalt, KuehlschrankItem, updateKuehlschrankInhalt } from '../components/dbKuehlschrank';
+import { deleteKuehlschrankInhalt, KuehlschrankItem, updateKuehlschrankInhalt } from "../../../../../lib/appwrite/dbKuehlschrank";
 
 export const useQuantityManager = () => {
   const [isUpdating, setIsUpdating] = useState(false);
