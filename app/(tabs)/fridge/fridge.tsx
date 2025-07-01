@@ -10,16 +10,6 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import {
-    deleteKuehlschrankInhalt,
-    getKuehlschrankInhalt,
-    setKuehlschrankInhalt,
-    updateKuehlschrankInhalt,
-} from "./fridgeBack/components/dbKuehlschrank"; //für db
-
-import { Models } from 'appwrite';
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { deleteKuehlschrankInhalt, getKuehlschrankInhalt, setKuehlschrankInhalt, updateKuehlschrankInhalt } from"../../../lib/appwrite/dbKuehlschrank";
 export default function Fridge() {
     const [contents, setContents] = useState<Models.DocumentList<any> | null>(null);
@@ -75,7 +65,7 @@ export default function Fridge() {
                 };
 
                 // Update in database
-                await updateKuehlschrankInhalt(updatedItem);
+                await updateKuehlschrankInhalt(updatedItem as any);
                 setEditingItem(null);
             } else {
                 // Create new item object

@@ -1,4 +1,7 @@
 import TimePickerModal from "@/components/calendar/time_picker_modal";
+import { ContainerStyles } from "@/styles/container_styles";
+import { fontStyles } from "@/styles/font_styles";
+import { inputStyles } from "@/styles/input_styles";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -13,14 +16,13 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
+import { setKuehlschrankInhalt } from "../../../lib/appwrite/dbKuehlschrank";
 import {
     FridgeCategories,
     FridgeCategoryType,
     getAllFridgeCategories,
 } from "../../../lib/constants/categories";
 import { fridgeStyles as styles } from "../../../styles/fridge_styles";
-import { inputStyles } from "@/styles/input_styles";
-import { setKuehlschrankInhalt } from "../../../lib/appwrite/dbKuehlschrank";
 
 export default function AddItem() {
     const router = useRouter();

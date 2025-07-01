@@ -14,50 +14,21 @@ import {
     View,
 } from "react-native";
 import {
-    FridgeCategories,
-    FridgeCategoryType,
-    getAllFridgeCategories,
-} from "../../../../lib/constants/categories";
-import DatePickerField from "./components/DatePickerField";
-import { deleteKuehlschrankInhalt, getKuehlschrankInhalt, KuehlschrankItem, NewKuehlschrankItem, setKuehlschrankInhalt, updateKuehlschrankInhalt } from "../../../../lib/appwrite/dbKuehlschrank"; //für db
-import { inputStyles } from '@/styles/input_styles';
-import {
     deleteKuehlschrankInhalt,
     getKuehlschrankInhalt,
     KuehlschrankItem,
     NewKuehlschrankItem,
     setKuehlschrankInhalt,
     updateKuehlschrankInhalt,
-} from "./components/dbKuehlschrank"; //für db
+} from "../../../../lib/appwrite/dbKuehlschrank"; //für db
+import {
+    FridgeCategories,
+    FridgeCategoryType,
+    getAllFridgeCategories,
+} from "../../../../lib/constants/categories";
+import DatePickerField from "./components/DatePickerField";
 
 export default function Fridge() {
-  const getCategoryDisplayInfo = (categoryValue: string | undefined) => {
-    if (!categoryValue) return { label: 'Keine Kategorie', color: '#777777' };
-    
-    // Check if the category matches one of our predefined categories
-    const isValidCategory = Object.values(FridgeCategories).includes(categoryValue as FridgeCategoryType);
-    
-    if (isValidCategory) {
-      switch(categoryValue) {
-        case FridgeCategories.DAIRY:
-          return { label: categoryValue, color: '#e3f2fd' }; // Light blue for dairy
-        case FridgeCategories.MEAT:
-          return { label: categoryValue, color: '#ffcdd2' }; // Light red for meat
-        case FridgeCategories.VEGETABLES:
-          return { label: categoryValue, color: '#c8e6c9' }; // Light green for vegetables
-        case FridgeCategories.FRUITS:
-          return { label: categoryValue, color: '#ffe0b2' }; // Light orange for fruits
-        case FridgeCategories.DRINKS:
-          return { label: categoryValue, color: '#b3e5fc' }; // Lighter blue for drinks
-        case FridgeCategories.FROZEN:
-          return { label: categoryValue, color: '#d1c4e9' }; // Light purple for frozen
-        default:
-          return { label: categoryValue, color: '#eeeeee' }; // Gray for other
-      }
-    }
-    
-    return { label: categoryValue, color: '#eeeeee' };
-  };  
   const [contents, setContents] = useState<Models.DocumentList<any> | null>(null);
   const [categories] = useState<FridgeCategoryType[]>(getAllFridgeCategories());
   const [loading, setLoading] = useState(true);
@@ -67,9 +38,12 @@ export default function Fridge() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeFilter, setActiveFilter] = useState<FridgeCategoryType | 'ALL'>('ALL');
   const [sortBy, setSortBy] = useState<'name' | 'category' | 'amount'>('name');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');  const [editingItem, setEditingItem] = useState<KuehlschrankItem | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [editingItem, setEditingItem] = useState<KuehlschrankItem | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [expDate, setExpDate] = useState<Date | null>(null);useEffect(() => {
+  const [expDate, setExpDate] = useState<Date | null>(null);
+  
+  useEffect(() => {
     async function fetchData() {
       try {
         const inhalt = await getKuehlschrankInhalt();
@@ -105,8 +79,6 @@ export default function Fridge() {
                     return { label: categoryValue, color: "#ffe0b2" }; // Light orange for fruits
                 case FridgeCategories.DRINKS:
                     return { label: categoryValue, color: "#b3e5fc" }; // Lighter blue for drinks
-                case FridgeCategories.SNACKS:
-                    return { label: categoryValue, color: "#f8bbd0" }; // Light pink for snacks
                 case FridgeCategories.FROZEN:
                     return { label: categoryValue, color: "#d1c4e9" }; // Light purple for frozen
                 default:
@@ -116,33 +88,7 @@ export default function Fridge() {
 
         return { label: categoryValue, color: "#eeeeee" };
     };
-    const [contents, setContents] = useState<Models.DocumentList<any> | null>(null);
-    const [categories] = useState<FridgeCategoryType[]>(getAllFridgeCategories());
-    const [loading, setLoading] = useState(true);
-    const [itemName, setItemName] = useState("");
-    const [itemAmount, setItemAmount] = useState("1");
-    const [selectedCategory, setSelectedCategory] = useState<FridgeCategoryType | "">("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [activeFilter, setActiveFilter] = useState<FridgeCategoryType | "ALL">("ALL");
-    const [sortBy, setSortBy] = useState<"name" | "category" | "amount">("name");
-    const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
-    const [editingItem, setEditingItem] = useState<KuehlschrankItem | null>(null);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [expDate, setExpDate] = useState<Date | null>(null);
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const inhalt = await getKuehlschrankInhalt();
-                setContents(inhalt);
-                setLoading(false);
-            } catch (err) {
-                console.error("Error fetching data:", err);
-                setLoading(false);
-            }
-        }
 
-        fetchData();
-    }, []);
 
     if (loading) {
         return (
@@ -290,33 +236,7 @@ export default function Fridge() {
         }
     };
 
-    const clearFilter = () => {
-        setActiveFilter("ALL");
-    };
 
-    const applyFilter = (category: FridgeCategoryType) => {
-        setActiveFilter(category);
-    };
-
-    const sortItems = (items: KuehlschrankItem[]) => {
-        return items.sort((a, b) => {
-            let comparison = 0;
-
-            switch (sortBy) {
-                case "name":
-                    comparison = a.name.localeCompare(b.name);
-                    break;
-                case "category":
-                    comparison = (a.kategorie || "").localeCompare(b.kategorie || "");
-                    break;
-                case "amount":
-                    comparison = (a.anzahl || 0) - (b.anzahl || 0);
-                    break;
-            }
-
-            return sortDirection === "desc" ? -comparison : comparison;
-        });
-    };
     const formatDate = (date: Date | null) => {
         if (!date) return "";
         return `${date.getDate().toString().padStart(2, "0")}.${(date.getMonth() + 1)
@@ -377,62 +297,64 @@ export default function Fridge() {
                                     keyboardType='numeric'
                                 />
                             </View>
-                            <DatePickerField
-                                date={expDate}
-                                setDate={setExpDate}
-                                label='MHD:'
-                                minimumDate={new Date()}
-                            />
+                            
+                            <View style={styles.datePickerContainer}>
+                                <DatePickerField
+                                    date={expDate}
+                                    setDate={setExpDate}
+                                    label="MHD (Haltbarkeitsdatum):"
+                                    minimumDate={new Date()}
+                                />
+                            </View>
+                            
+                            <ScrollView
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                style={styles.categoryScroll}>
+                                <TouchableOpacity
+                                    style={[
+                                        styles.categoryButton,
+                                        !selectedCategory
+                                            ? styles.categoryButtonSelected
+                                            : {}
+                                    ]}
+                                    onPress={() => setSelectedCategory("")}>
+                                    <Text
+                                        style={[
+                                            styles.categoryButtonText,
+                                            !selectedCategory
+                                                ? styles.categoryButtonTextSelected
+                                                : {},
+                                        ]}>
+                                        Keine
+                                    </Text>
+                                </TouchableOpacity>
 
-                            <View style={styles.categoryPickerContainer}>
-                                <Text style={styles.inputLabel}>Kategorie:</Text>
-                                <ScrollView
-                                    horizontal
-                                    showsHorizontalScrollIndicator={false}
-                                    style={styles.categoryScroll}>
+                                {categories.map((categoryValue) => (
                                     <TouchableOpacity
+                                        key={categoryValue}
                                         style={[
                                             styles.categoryButton,
-                                            !selectedCategory ? styles.categoryButtonSelected : {},
+                                            selectedCategory === categoryValue
+                                                ? styles.categoryButtonSelected
+                                                : {},
                                         ]}
-                                        onPress={() => setSelectedCategory("")}>
+                                        onPress={() => setSelectedCategory(categoryValue)}>
                                         <Text
                                             style={[
                                                 styles.categoryButtonText,
-                                                !selectedCategory
+                                                selectedCategory === categoryValue
                                                     ? styles.categoryButtonTextSelected
                                                     : {},
                                             ]}>
-                                            Keine
+                                            {categoryValue}
                                         </Text>
                                     </TouchableOpacity>
-
-                                    {categories.map((categoryValue) => (
-                                        <TouchableOpacity
-                                            key={categoryValue}
-                                            style={[
-                                                styles.categoryButton,
-                                                selectedCategory === categoryValue
-                                                    ? styles.categoryButtonSelected
-                                                    : {},
-                                            ]}
-                                            onPress={() => setSelectedCategory(categoryValue)}>
-                                            <Text
-                                                style={[
-                                                    styles.categoryButtonText,
-                                                    selectedCategory === categoryValue
-                                                        ? styles.categoryButtonTextSelected
-                                                        : {},
-                                                ]}>
-                                                {categoryValue}
-                                            </Text>
-                                        </TouchableOpacity>
-                                    ))}
-                                </ScrollView>
-                            </View>
+                                ))}
+                            </ScrollView>
                         </View>
+                        
                         <View style={styles.modalButtonContainer}>
-                            {" "}
                             <TouchableOpacity
                                 style={[styles.addButton, isSubmitting && styles.disabledButton]}
                                 onPress={handleAddItem}
@@ -523,7 +445,7 @@ export default function Fridge() {
                                 activeFilter === "ALL" && styles.filterChipTextActive,
                             ]}>
                             Alle anzeigen
-                            {contents?.documents && ` (${contents.documents.length})`}
+                            {contents && contents.documents ? ` (${contents.documents.length})` : ''}
                         </Text>
                     </TouchableOpacity>
                     {categories.map((categoryValue) => {
@@ -555,7 +477,7 @@ export default function Fridge() {
                             </TouchableOpacity>
                         );
                     })}
-                </ScrollView>{" "}
+                </ScrollView>
             </View>
             {getFilteredItems().length > 0 ? (
                 <FlatList
@@ -697,10 +619,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginBottom: 8,
     },
-    filterSectionTitle: {
-        fontSize: 16,
-        fontWeight: "bold",
-    },
     resetFilterButton: {
         padding: 4,
     },
@@ -728,24 +646,7 @@ const styles = StyleSheet.create({
         color: "white",
         fontWeight: "bold",
     },
-    filterButton: {
-        flex: 1,
-        padding: 10,
-        borderRadius: 4,
-        marginRight: 8,
-        backgroundColor: "#f0f0f0",
-        borderWidth: 1,
-        borderColor: "#ddd",
-        alignItems: "center",
-    },
-    filterButtonActive: {
-        backgroundColor: "#2196F3",
-        borderColor: "#2196F3",
-    },
-    filterButtonText: {
-        color: "#333",
-        fontWeight: "bold",
-    },
+
     formContainer: {
         width: "100%",
         marginBottom: 20,
@@ -757,15 +658,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         alignItems: "center",
     },
-    categoryPickerContainer: {
-        marginBottom: 16,
-        width: "100%",
-    },
-    categoryLabel: {
-        fontSize: 16,
-        fontWeight: "bold",
-        marginBottom: 8,
-    },
+
     categoryScroll: {
         flexDirection: "row",
     },
@@ -789,14 +682,7 @@ const styles = StyleSheet.create({
         color: "white",
         fontWeight: "bold",
     },
-    input: {
-        borderWidth: 1,
-        borderColor: "#ddd",
-        borderRadius: 4,
-        padding: 8,
-        flex: 3,
-        marginRight: 8,
-    },
+
     amountInput: {
         borderWidth: 1,
         borderColor: "#ddd",
@@ -805,11 +691,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginRight: 8,
     },
-    buttonContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        flex: 2,
-    },
+
     addButton: {
         backgroundColor: "#2196F3",
         borderRadius: 4,
@@ -929,28 +811,7 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         width: "100%",
     },
-    dateLabel: {
-        fontSize: 16,
-        fontWeight: "bold",
-        marginBottom: 8,
-    },
-    dateInput: {
-        borderWidth: 1,
-        borderColor: "#ddd",
-        borderRadius: 4,
-        padding: 8,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-    },
-    dateInputText: {
-        flex: 1,
-        color: "#333",
-    },
-    datePicker: {
-        width: "100%",
-        marginTop: 8,
-    },
+
     // Modal styles
     modalOverlay: {
         flex: 1,
@@ -995,61 +856,7 @@ const styles = StyleSheet.create({
         marginBottom: 8,
         fontWeight: "500",
     },
-    // Date picker styles
-    datePickerButton: {
-        borderWidth: 1,
-        borderColor: "#ddd",
-        borderRadius: 4,
-        padding: 10,
-        backgroundColor: "#f9f9f9",
-        flex: 1,
-        minHeight: 42, // Consistent height
-        justifyContent: "center", // Center text vertically
-    },
-    datePickerButtonText: {
-        color: "#333",
-        fontSize: 14,
-    },
-    dateInputGroup: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        flex: 1,
-    },
-    dateInputField: {
-        borderWidth: 1,
-        borderColor: "#ddd",
-        borderRadius: 4,
-        padding: 8,
-        textAlign: "center",
-        flex: 1,
-        marginHorizontal: 4,
-    },
-    dateInputSeparator: {
-        fontSize: 18,
-        fontWeight: "bold",
-        color: "#333",
-        paddingHorizontal: 2,
-    },
-    clearDateButton: {
-        marginLeft: 8,
-        width: 30,
-        height: 30,
-        borderRadius: 15,
-        backgroundColor: "#f44336",
-        alignItems: "center",
-        justifyContent: "center",
-        elevation: 2, // For Android shadow
-        shadowColor: "#000", // For iOS shadow
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.2,
-        shadowRadius: 1.5,
-    },
-    clearDateText: {
-        color: "white",
-        fontSize: 18,
-        fontWeight: "bold",
-    },
+
     expiredText: {
         color: "red",
         fontWeight: "bold",

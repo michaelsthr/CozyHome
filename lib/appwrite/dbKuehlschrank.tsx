@@ -50,11 +50,7 @@ const setKuehlschrankInhalt = async function(kuehlschrankInhalt: NewKuehlschrank
 const updateKuehlschrankInhalt = async function(kuehlschrankInhalt: KuehlschrankItem): Promise<Models.Document> {
     try {
         const { $id, $createdAt, $updatedAt, $permissions, $databaseId, $collectionId, ...updateData } = kuehlschrankInhalt;
-        const group = getGlobalGroup();
-        if (group === null) {
-            throw new Error("Group is not set.");
-        }
-        const result = await databases.updateDocument(databaseId, collectionId, $id, updateData, [Query.equal("group", group.$id)]);
+        const result = await databases.updateDocument(databaseId, collectionId, $id, updateData);
         return result;
     } catch (error) {
         console.error("Error updating document:", error);
