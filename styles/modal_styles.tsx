@@ -15,18 +15,6 @@ export const modalStyles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-around",
     },
-    centeredModalContainer: {
-        flex: 1,
-        backgroundColor: "rgba(0,0,0,0.2)",
-        justifyContent: "center",
-    },
-    centeredModalContent: {
-        backgroundColor: "white",
-        margin: 30,
-        borderRadius: 12,
-        padding: 20,
-        maxHeight: 400,
-    },
     modalBackdrop: {
         flex: 1,
         backgroundColor: "rgba(0,0,0,0.2)",

@@ -15,14 +15,6 @@ export const inputStyles = StyleSheet.create({
         borderColor: "#059669",
         backgroundColor: "#ffffff",
       },
-      category_quantityInput: {
-        fontSize: 16,
-        fontWeight: "700",
-        color: "#1e293b",
-        textAlign: "center",
-        borderColor: "#059669",
-        backgroundColor: "#ffffff",
-      },
     input: {
         fontSize: 25,
         fontWeight: "bold",
