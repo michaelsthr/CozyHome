@@ -1,11 +1,11 @@
 import ColorPicker from "@/components/calendar/color_picker";
 import DeleteEventModal from "@/components/calendar/delete_event_modal";
 import {
-    Category,
     createNewCategory,
     deleteCategory,
     updateCategory,
 } from "@/lib/appwrite/dbKalender";
+import { Category } from "@/lib/types/calendar";
 import { ContainerStyles } from "@/styles/container_styles";
 import { inputStyles } from "@/styles/input_styles";
 import { useLocalSearchParams, useNavigation } from "expo-router";
@@ -29,28 +29,34 @@ const CategoryForm = () => {
     ];
 
     const [name, setName] = useState(
-        typeof params.name === "string" ? params.name
-        : Array.isArray(params.name) ? params.name[0]
-        : ""
+        typeof params.name === "string"
+            ? params.name
+            : Array.isArray(params.name)
+            ? params.name[0]
+            : ""
     );
     const [selectedColor, setSelectedColor] = useState(
-        typeof params.color === "string" ? params.color
-        : Array.isArray(params.color) ? params.color[0]
-        : "tomato"
+        typeof params.color === "string"
+            ? params.color
+            : Array.isArray(params.color)
+            ? params.color[0]
+            : "tomato"
     );
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const handleAddOrUpdateCategory = async () => {
+        if (name === "") {
+            alert("Please enter a name for the category.");
+            return null;
+        }
         if (isEdit) {
             await updateCategory(params.id as string, { name, color: selectedColor });
             console.log("Category updated");
             navigation.goBack();
         } else {
-            const newCat = await createNewCategory({ name, color: selectedColor } as Category);
+            createNewCategory({ name, color: selectedColor } as Category);
             console.log("Category created");
-            if(newCat !== null) {
-                navigation.goBack();
-            }
+            navigation.goBack();
         }
     };
 

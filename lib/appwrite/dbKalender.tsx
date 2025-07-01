@@ -93,10 +93,6 @@ export const getEvent = async function (documentId: string): Promise<Models.Docu
 
 export const createNewCategory = async function (categoryInfo: Category): Promise<Models.Document | any> {
     try {
-        if(categoryInfo.name === "") {
-            alert("Please enter a name for the category.")
-            return null;
-        }
         const group = getGlobalGroup();
         if (group === null) {
             throw new Error("Group is not set.");
