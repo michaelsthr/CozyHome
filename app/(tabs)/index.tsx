@@ -67,15 +67,6 @@ export default function HomePage() {
     );
   }
 
-  if (!user || !user.groupID) {
-    return (
-      <View style={[ContainerStyles.container, { justifyContent: "center", alignItems: "center" }]}>
-        <Text style={fontStyles.h2}>No Group Found</Text>
-        <Text style={fontStyles.medium}>Please join a group to continue</Text>
-      </View>
-    );
-  }
-
   return (
     <ScrollView style={ContainerStyles.container} showsVerticalScrollIndicator={false}>
       {/* Header with App Logo */}

@@ -116,6 +116,7 @@ export default function Todo() {
         done: !done,
         doneBy: user?.username
       });
+      fetchTodos();
     } catch (error) {
       console.error("Error updating todo:", error);
     }
