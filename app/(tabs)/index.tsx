@@ -1,4 +1,3 @@
-import { getGroupById } from "@/lib/appwrite/dbGroup";
 import { getUsersByGroupId, updateUserGroup } from "@/lib/appwrite/dbUser";
 import { useSession } from "@/lib/context/SessionContext";
 import { cardStyles } from "@/styles/card_styles";
@@ -6,7 +5,6 @@ import { ContainerStyles } from "@/styles/container_styles";
 import { fontStyles } from "@/styles/font_styles";
 import { globalStyles } from "@/styles/global_styles";
 import { useRouter } from "expo-router";
-import { User } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -15,10 +13,8 @@ import {
   Image,
   ScrollView,
   Text,
-  TouchableOpacity,
   View
 } from "react-native";
-import { Models } from "react-native-appwrite";
 
 interface GroupMember {
   $id: string;
@@ -41,12 +37,17 @@ export default function HomePage() {
 
       try {
         // Fetch group members
-        const membersData = await getUsersByGroupId(user.groupID.$id);
-        setGroupMembers(membersData.documents.map(doc => ({
-          $id: doc.$id,
-          username: doc.username,
-          groupID: doc.groupID.$id
-        })));
+        const groupRef = user.groupID;
+        const groupId = typeof groupRef === 'object' && groupRef !== null ? (groupRef as any).$id : groupRef;
+
+        const membersData = await getUsersByGroupId(groupId);
+        setGroupMembers(
+          membersData.documents.map((doc) => ({
+            $id: doc.$id,
+            username: doc.username,
+            groupID: doc.groupID,
+          }))
+        );
       } catch (error) {
         console.error("Error fetching group data:", error);
         Alert.alert("Error", "Failed to load group information");
@@ -69,30 +70,43 @@ export default function HomePage() {
     );
   }
 
-  const leaveGroup = async () => {
-  try {
-    console.log(user);
-    
-    if (!user || !user.$id) {
-      return Alert.alert("Error", "User can't be loaded.");
-    }
-
-    await updateUserGroup(user.$id, null);
-
-    const updatedUser = { ...user, groupID: null }; // aktualisiertes Objekt
-    setUser(updatedUser);
-
-    console.log("Updated user after leaving group:", updatedUser);
-
-    router.push("/(group)");
-  } catch (error) {
-    console.error("Error leaving group:", error);
-    Alert.alert("Error", "Failed to leave Group");
+  if (!user) {
+    // Optional: Redirect to login or show a message if user is not available
+    return (
+      <View style={globalStyles.loadingContainer}>
+        <Text>User not found. Please log in.</Text>
+        <Button title="Go to Login" onPress={() => router.push("/login")} />
+      </View>
+    );
   }
-};
+
+  const leaveGroup = async () => {
+    try {
+      console.log(user);
+
+      if (!user || !user.$id) {
+        return Alert.alert("Error", "User can't be loaded.");
+      }
+
+      await updateUserGroup(user.$id, undefined);
+
+      const updatedUser = { ...user, groupID: undefined }; // aktualisiertes Objekt
+      setUser(updatedUser);
+
+      console.log("Updated user after leaving group:", updatedUser);
+
+      router.push("/(group)");
+    } catch (error) {
+      console.error("Error leaving group:", error);
+      Alert.alert("Error", "Failed to leave Group");
+    }
+  };
 
   return (
-    <ScrollView style={ContainerStyles.container} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={ContainerStyles.container}
+      showsVerticalScrollIndicator={false}
+    >
       {/* Header with App Logo */}
       <View style={ContainerStyles.header}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -158,7 +172,8 @@ export default function HomePage() {
                 style={{
                   width: 45,
                   height: 45,
-                  backgroundColor: member.$id === user.userId ? "#22c55e" : "#6366f1",
+                  backgroundColor:
+                    member.$id === user.$id ? "#22c55e" : "#6366f1",
                   borderRadius: 22.5,
                   justifyContent: "center",
                   alignItems: "center",
@@ -172,8 +187,11 @@ export default function HomePage() {
               <View style={ContainerStyles.info}>
                 <Text style={[fontStyles.itemName, { textAlign: "left" }]}>
                   {member.username}
-                  {member.$id === user.userId && (
-                    <Text style={{ color: "#22c55e", fontWeight: "normal" }}> (You)</Text>
+                  {member.$id === user.$id && (
+                    <Text style={{ color: "#22c55e", fontWeight: "normal" }}>
+                      {" "}
+                      (You)
+                    </Text>
                   )}
                 </Text>
               </View>
