@@ -10,6 +10,7 @@ import {
   View
 } from "react-native";
 import { fridgeStyles as styles } from "../../../styles/fridge_styles";
+import { ContainerStyles } from "@/styles/container_styles";
 
 // Routes matching the screen file names
 const categories = [
@@ -30,17 +31,16 @@ export default function FridgeItems() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer}>
 
+      <View style={styles.fridgeSection}>
         {/* Header with Title and Plus Button */}
-        <View style={styles.headerContainer}>
+        <View style={ContainerStyles.titleSection}>
           <Text style={fontStyles.title}>{"Food Categories"}</Text>
           <TouchableOpacity
             style={styles.plusButton}
-            onPress={() => router.push("/(tabs)/fridge/fridge_add")}
-          >
+            onPress={() => router.push("/(tabs)/fridge/fridge_add")}>
             <Image
               source={require("../../../assets/images/symbol-plus.png")}
-              style={styles.plusIcon}
-            />
+              style={styles.plusIcon}/>
           </TouchableOpacity>
         </View>
 
@@ -58,6 +58,7 @@ export default function FridgeItems() {
             </TouchableOpacity>
           ))}
         </View>
+      </View>
       </ScrollView>
     </SafeAreaView>
   );

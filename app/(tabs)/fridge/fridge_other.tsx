@@ -100,6 +100,7 @@ export default function Other() {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.scrollContainer}>
 
+            <View style={styles.fridgeSection}>
                 {/* Title Section */}
                 <View style={ContainerStyles.titleSection}>
                     <Text style={fontStyles.title}>{"Other Items"}</Text>
@@ -129,7 +130,7 @@ export default function Other() {
                         </Text>
                     </View>
                 ) : (
-                    <View style={styles.itemsList}>
+                    <View>
                         {filteredItems.map((item) => (
                             <View key={item.$id} style={styles.listItemCard}>
                                 <Image
@@ -161,6 +162,7 @@ export default function Other() {
                         ))}
                     </View>
                 )}
+            </View>
 
                 {/* Add New Item Button */}
                 <TouchableOpacity

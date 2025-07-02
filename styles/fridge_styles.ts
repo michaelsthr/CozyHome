@@ -117,19 +117,14 @@ export const fridgeStyles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "flex-start",
-    paddingHorizontal: 5,
     paddingBottom: 20,
-    gap: 8,
+    gap: 12,
   },
   itemsContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    paddingHorizontal: 20,
     paddingBottom: 20,
-  },
-  itemsList: {
-    paddingHorizontal: 20,
   },
 
   // Item Cards
@@ -166,12 +161,11 @@ export const fridgeStyles = StyleSheet.create({
     elevation: 6,
   },
   fridgeHomeItemCard: {
-    width: "30%",
+    width: "31%",
     backgroundColor: "#ffffff",
     borderRadius: 16,
     padding: 12,
     alignItems: "center",
-    marginBottom: 15,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -229,7 +223,6 @@ export const fridgeStyles = StyleSheet.create({
     fontWeight: "600",
     color: "#1e293b",
     textAlign: "center",
-    marginTop: 5,
   },
   listItemName: {
     fontSize: 18,
@@ -276,8 +269,9 @@ export const fridgeStyles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 6,
-    gap: 3,
+    marginTop: 10,
+    marginLeft: 10,
+    gap: 6,
   },
   quantityButton: {
     backgroundColor: "#7749f8",
@@ -324,8 +318,8 @@ export const fridgeStyles = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 4,
     borderRadius: 8,
-    minWidth: 28,
-    minHeight: 28,
+    minWidth: 35,
+    minHeight: 35,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
@@ -344,8 +338,8 @@ export const fridgeStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#059669",
     backgroundColor: "#ffffff",
-    minWidth: 28,
-    minHeight: 28,
+    minWidth: 35,
+    minHeight: 35,
     paddingHorizontal: 6,
     paddingVertical: 4,
     borderRadius: 8,
@@ -373,7 +367,7 @@ export const fridgeStyles = StyleSheet.create({
   // Add Button
   addButton: {
     marginHorizontal: 20,
-    marginBottom: 100,
+    marginBottom: 20,
     backgroundColor: "#7749f8",
     borderRadius: 16,
     paddingVertical: 18,
@@ -469,10 +463,7 @@ export const fridgeStyles = StyleSheet.create({
   },
 
   // Add Item Form Styles
-  formContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-  },
+  
   inputGroup: {
     marginBottom: 20,
   },

@@ -98,6 +98,7 @@ export default function Dairy() {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.scrollContainer}>
 
+            <View style={styles.fridgeSection}>
                 {/* Title Section */}
                 <View style={ContainerStyles.titleSection}>
                     <Text style={fontStyles.title}>{"Dairy Items"}</Text>
@@ -124,7 +125,7 @@ export default function Dairy() {
                         <Text style={styles.emptyText}>{"No dairy products found"}</Text>
                         <Text style={styles.emptySubtext}>{"Add some dairy to your fridge"}</Text>
                     </View> ) : (
-                    <View style={styles.itemsList}>
+                    <View>
                         {filteredItems.map((item) => (
                             <View key={item.$id} style={styles.listItemCard}>
                                 <Image
@@ -156,6 +157,7 @@ export default function Dairy() {
                         ))}
                     </View>
                 )}
+             </View>
 
                 {/* Add New Item Button */}
                 <TouchableOpacity

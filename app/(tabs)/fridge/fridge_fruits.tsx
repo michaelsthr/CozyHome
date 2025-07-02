@@ -96,7 +96,8 @@ export default function Fruits() {
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.scrollContainer}>
-
+                
+            <View style={styles.fridgeSection}>
                 {/* Title Section */}
                 <View style={ContainerStyles.titleSection}>
                     <Text style={fontStyles.title}>{"Fresh Fruits"}</Text>
@@ -124,7 +125,7 @@ export default function Fruits() {
                         <Text style={styles.emptySubtext}>{"Add some fruits to your fridge"}</Text>
                     </View>
                 ) : (
-                    <View style={styles.itemsList}>
+                    <View>
                         {filteredItems.map((item) => (
                             <View key={item.$id} style={styles.listItemCard}>
                                 <Image
@@ -156,6 +157,7 @@ export default function Fruits() {
                         ))}
                     </View>
                 )}
+            </View>
 
                 {/* Add New Item Button */}
                 <TouchableOpacity

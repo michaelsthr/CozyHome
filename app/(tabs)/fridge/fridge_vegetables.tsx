@@ -97,6 +97,7 @@ export default function Vegetables() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer}>
 
+      <View style={styles.fridgeSection}>
         {/* Title Section */}
         <View style={ContainerStyles.titleSection}>
           <Text style={fontStyles.title}>{"Fresh Vegetables"}</Text>
@@ -123,7 +124,7 @@ export default function Vegetables() {
             <Text style={styles.emptyText}>{"No vegetables found"}</Text>
             <Text style={styles.emptySubtext}>{"Add some vegetables to your fridge"}</Text>
           </View> ) : (
-          <View style={styles.itemsList}>
+          <View>
             {filteredItems.map((item) => (
               <View key={item.$id} style={styles.listItemCard}>
                 <Image source={require("../../../assets/images/fridge_icons/vegetables.png")} style={styles.listItemImage} />
@@ -149,6 +150,7 @@ export default function Vegetables() {
             ))}
           </View>
         )}
+      </View>
 
         {/* Add New Item Button */}
         <TouchableOpacity

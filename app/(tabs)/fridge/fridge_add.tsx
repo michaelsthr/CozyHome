@@ -140,14 +140,14 @@ export default function AddItem() {
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.scrollContainer}>
-                    
+
+                <View style={styles.fridgeSection}>        
                 {/* Title Section */}
                 <View style={ContainerStyles.titleSection}>
                     <Text style={fontStyles.title}>{"Add New Item"}</Text>
                 </View>
-
+            
                 {/* Form Container */}
-                <View style={styles.formContainer}>
                     <View style={styles.inputGroup}>
                         <Text style={styles.inputLabel}>{"Product Name"}</Text>
                         <TextInput
@@ -211,7 +211,6 @@ export default function AddItem() {
                         )}
                     </View>
                 </View>
-
                 {/* Add Button */}
                 <TouchableOpacity
                     style={[styles.addButton, isSubmitting && { opacity: 0.5 }]}
