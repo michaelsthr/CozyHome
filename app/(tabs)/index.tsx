@@ -88,9 +88,9 @@ export default function HomePage() {
         return Alert.alert("Error", "User can't be loaded.");
       }
 
-      await updateUserGroup(user.$id, null);
+      await updateUserGroup(user.$id, "");
 
-      const updatedUser = { ...user, groupID: null }; // aktualisiertes Objekt
+      const updatedUser = { ...user, groupID: "" }; // aktualisiertes Objekt
       setUser(updatedUser);
 
       console.log("Updated user after leaving group:", updatedUser);
@@ -114,6 +114,8 @@ export default function HomePage() {
     } catch (error) {
       console.error("Error log out:", error);
       Alert.alert("Error", "Failed to log out");
+    } finally {
+      setLoading(false);
     }
 
   }
