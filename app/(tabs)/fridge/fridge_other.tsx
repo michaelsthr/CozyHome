@@ -99,13 +99,6 @@ export default function Other() {
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.scrollContainer}>
-                {/* Header */}
-                <View style={styles.header}>
-                    <Image
-                        source={require("../../../assets/images/fridge_icons/profile-picture.png")}
-                        style={styles.avatar}
-                    />
-                </View>
 
                 {/* Title Section */}
                 <View style={ContainerStyles.titleSection}>

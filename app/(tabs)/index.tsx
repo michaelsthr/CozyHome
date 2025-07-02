@@ -90,7 +90,7 @@ export default function HomePage() {
 
       await updateUserGroup(user.$id, "");
 
-      const updatedUser = { ...user, groupID: "" }; // aktualisiertes Objekt
+      const updatedUser = { ...user, groupID: "" };
       setUser(updatedUser);
 
       console.log("Updated user after leaving group:", updatedUser);

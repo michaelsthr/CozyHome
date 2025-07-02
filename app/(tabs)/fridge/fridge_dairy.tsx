@@ -97,13 +97,6 @@ export default function Dairy() {
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.scrollContainer}>
-                {/* Header */}
-                <View style={styles.header}>
-                    <Image
-                        source={require("../../../assets/images/fridge_icons/profile-picture.png")}
-                        style={styles.avatar}
-                    />
-                </View>
 
                 {/* Title Section */}
                 <View style={ContainerStyles.titleSection}>
@@ -130,8 +123,7 @@ export default function Dairy() {
                         />
                         <Text style={styles.emptyText}>{"No dairy products found"}</Text>
                         <Text style={styles.emptySubtext}>{"Add some dairy to your fridge"}</Text>
-                    </View>
-                ) : (
+                    </View> ) : (
                     <View style={styles.itemsList}>
                         {filteredItems.map((item) => (
                             <View key={item.$id} style={styles.listItemCard}>

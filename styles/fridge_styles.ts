@@ -244,13 +244,13 @@ export const fridgeStyles = StyleSheet.create({
     gap: 8,
   },
   quantityButton: {
-    backgroundColor: "#059669",
+    backgroundColor: "#7749f8",
     borderRadius: 8,
     width: 32,
     height: 32,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#059669",
+    shadowColor: "#7749f8",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -316,11 +316,11 @@ export const fridgeStyles = StyleSheet.create({
   addButton: {
     marginHorizontal: 20,
     marginBottom: 100,
-    backgroundColor: "#059669",
+    backgroundColor: "#7749f8",
     borderRadius: 16,
     paddingVertical: 18,
     alignItems: "center",
-    shadowColor: "#059669",
+    shadowColor: "#7749f8",
     shadowOffset: {
       width: 0,
       height: 4,

@@ -49,7 +49,7 @@ export default function TabLayout() {
                     headerShown: false,
                     tabBarIcon: () => (
                         <Image
-                            source={require("../../assets/images/fridge_icons/fridge.png")}
+                            source={require("../../assets/images/fridge_icons/fridge-black.png")}
                             style={{ width: 24, height: 24 }}
                         />
                     ),

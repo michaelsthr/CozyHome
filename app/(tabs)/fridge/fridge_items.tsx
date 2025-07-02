@@ -29,16 +29,8 @@ export default function FridgeItems() {
     <SafeAreaView style={styles.container}>
       <ScrollView 
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContainer}
-      >
-        {/* Header */}
-        <View style={styles.header}>
-          <Image
-            source={require("../../../assets/images/fridge_icons/profile-picture.png")}
-            style={styles.avatar}
-          />
-        </View>        
-        
+        contentContainerStyle={styles.scrollContainer}>
+          
         {/* Title Section */}
         <View style={ContainerStyles.titleSection}>
           <Text style={fontStyles.title}>{"Food Categories"}</Text>

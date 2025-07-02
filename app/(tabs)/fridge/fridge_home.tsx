@@ -171,30 +171,21 @@ export default function Fridge() {
     <SafeAreaView style={styles.container}>
       <ScrollView 
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContainer}
-      >
-        {/* Header */}
-        <View style={styles.header}>
-          <Image
-            source={require("../../../assets/images/fridge_icons/profile-picture.png")}
-            style={styles.avatar}
-          />
-          <Image
-            source={require("../../../assets/images/fridge_icons/logo-2.png")}
-            style={styles.logo}
-          />
-        </View>
+        contentContainerStyle={styles.scrollContainer}>
 
-        {/* Greeting Section */}
-        <View style={styles.greetingSection}>
-          <Text style={styles.greeting}>{"Good morning!"}</Text>
-          <Text style={styles.username}>{"Max Mustermann"}</Text>
-        </View>
-        
-        {/* Search Bar */}
+        {/* Fridge Section */}
+        <View style={styles.fridgeSection}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.homeTitle}>{"Quick"}</Text>
+          </View>
+          <Text style={styles.subtitle}>
+            {fridgeItems.length > 0 ? `${fridgeItems.length} products in your fridge` : "Your fridge is empty"}
+          </Text>
+
+          {/* Search Bar */}
         <View style={styles.searchContainer}>
           <TextInput
-            placeholder="Search items in your fridge..."
+            placeholder="Search products in your fridge..."
             placeholderTextColor="#9ca3af"
             style={styles.searchInput}
             value={searchTerm}
@@ -203,15 +194,6 @@ export default function Fridge() {
             returnKeyType="search"
           />
         </View>
-
-        {/* Fridge Section */}
-        <View style={styles.fridgeSection}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.homeTitle}>{"Your Fridge"}</Text>
-          </View>
-          <Text style={styles.subtitle}>
-            {fridgeItems.length > 0 ? `${fridgeItems.length} items in your fridge` : "Your fridge is empty"}
-          </Text>
 
           {/* Items Carousel */}
           {fridgeItems.length > 0 ? (
@@ -273,7 +255,7 @@ export default function Fridge() {
           style={styles.addButton}
           onPress={() => router.push("/(tabs)/fridge/fridge_items")}
         >
-          <Text style={styles.addButtonText}>{"EXPLORE CATEGORIES"}</Text>
+          <Text style={styles.addButtonText}>{"OPEN FRIDGE"}</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
