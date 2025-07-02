@@ -159,5 +159,6 @@ export const ContainerStyles = StyleSheet.create({
     },
     titleSection: {
       paddingVertical: 25,
+      paddingHorizontal: 25,
     },
 });;

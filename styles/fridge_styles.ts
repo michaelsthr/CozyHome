@@ -73,7 +73,6 @@ export const fridgeStyles = StyleSheet.create({
 
   // Search
   searchContainer: {
-    marginHorizontal: 20,
     marginBottom: 25,
     backgroundColor: "#ffffff",
     borderRadius: 15,
@@ -278,13 +277,13 @@ export const fridgeStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 6,
-    gap: 6,
+    gap: 3,
   },
   quantityButton: {
     backgroundColor: "#7749f8",
     borderRadius: 6,
-    width: 28,
-    height: 28,
+    width: 24,
+    height: 24,
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#7749f8",
@@ -302,7 +301,7 @@ export const fridgeStyles = StyleSheet.create({
   },
   quantityButtonText: {
     color: "#ffffff",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "700",
   },
   quantityDisplay: {
@@ -320,14 +319,36 @@ export const fridgeStyles = StyleSheet.create({
     fontWeight: "700",
     color: "#475569",
   },
+  countContainer: {
+    backgroundColor: "#f1f5f9",
+    paddingHorizontal: 6,
+    paddingVertical: 4,
+    borderRadius: 8,
+    minWidth: 28,
+    minHeight: 28,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "transparent",
+  },
+  itemCount: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: "#475569",
+  },
   quantityInput: {
-    fontSize: 16,
+    fontSize: 13,
     fontWeight: "700",
     color: "#1e293b",
     textAlign: "center",
     borderWidth: 1,
     borderColor: "#059669",
     backgroundColor: "#ffffff",
+    minWidth: 28,
+    minHeight: 28,
+    paddingHorizontal: 6,
+    paddingVertical: 4,
+    borderRadius: 8,
   },
 
   // Labels & Filters
@@ -378,9 +399,7 @@ export const fridgeStyles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 20,
     paddingTop: 20,
-    paddingBottom: 10,
   },
   plusButton: {
     width: 44,

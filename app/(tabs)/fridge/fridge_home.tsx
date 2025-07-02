@@ -179,8 +179,7 @@ export default function Fridge() {
             <Text style={styles.homeTitle}>{"Quick check"}</Text>
             <TouchableOpacity
               style={styles.plusButton}
-              onPress={() => router.push("/(tabs)/fridge/fridge_add")}
-            >
+              onPress={() => router.push("/(tabs)/fridge/fridge_add")}>
               <Image
                 source={require("../../../assets/images/symbol-plus.png")}
                 style={styles.plusIcon}
