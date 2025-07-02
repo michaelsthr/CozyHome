@@ -27,7 +27,7 @@ interface GroupMember {
 }
 
 export default function HomePage() {
-  const { user, setUser, group } = useSession();
+  const { user, setUser, group, setGroup } = useSession();
   const router = useRouter();
   const [groupMembers, setGroupMembers] = useState<GroupMember[]>([]);
   const [loading, setLoading] = useState(true);
@@ -70,26 +70,40 @@ export default function HomePage() {
   }
 
   const leaveGroup = async () => {
-  try {
-    console.log(user);
-    
-    if (!user || !user.$id) {
-      return Alert.alert("Error", "User can't be loaded.");
+    try {
+      if (!user || !user.$id) {
+        return Alert.alert("Error", "User can't be loaded.");
+      }
+
+      await updateUserGroup(user.$id, null);
+
+      const updatedUser = { ...user, groupID: null }; // aktualisiertes Objekt
+      setUser(updatedUser);
+
+      console.log("Updated user after leaving group:", updatedUser);
+
+      router.push("/(group)");
+    } catch (error) {
+      console.error("Error leaving group:", error);
+      Alert.alert("Error", "Failed to leave Group");
+    }
+  };
+
+  const logOut = async () => {
+    try {
+      setLoading(true);
+      
+      setUser(null);
+      setGroup(null);
+
+      router.push('/(auth)');
+
+    } catch (error) {
+      console.error("Error log out:", error);
+      Alert.alert("Error", "Failed to log out");
     }
 
-    await updateUserGroup(user.$id, null);
-
-    const updatedUser = { ...user, groupID: null }; // aktualisiertes Objekt
-    setUser(updatedUser);
-
-    console.log("Updated user after leaving group:", updatedUser);
-
-    router.push("/(group)");
-  } catch (error) {
-    console.error("Error leaving group:", error);
-    Alert.alert("Error", "Failed to leave Group");
   }
-};
 
   return (
     <ScrollView style={ContainerStyles.container} showsVerticalScrollIndicator={false}>
@@ -109,7 +123,7 @@ export default function HomePage() {
       {/* Welcome Section */}
       <View style={ContainerStyles.greetingSection}>
         <Text style={fontStyles.greeting}>Welcome back,</Text>
-        <Text style={fontStyles.username}>{user.username}!</Text>
+        <Text style={fontStyles.username}>{user?.username || "Guest"}!</Text>
         <Text style={fontStyles.subtitle}>Manage your {group?.type}.</Text>
       </View>
 
@@ -158,7 +172,7 @@ export default function HomePage() {
                 style={{
                   width: 45,
                   height: 45,
-                  backgroundColor: member.$id === user.userId ? "#22c55e" : "#6366f1",
+                  backgroundColor: member.$id === user.$id ? "#22c55e" : "#6366f1",
                   borderRadius: 22.5,
                   justifyContent: "center",
                   alignItems: "center",
@@ -172,7 +186,7 @@ export default function HomePage() {
               <View style={ContainerStyles.info}>
                 <Text style={[fontStyles.itemName, { textAlign: "left" }]}>
                   {member.username}
-                  {member.$id === user.userId && (
+                  {member.$id === user.$id && (
                     <Text style={{ color: "#22c55e", fontWeight: "normal" }}> (You)</Text>
                   )}
                 </Text>
@@ -187,7 +201,7 @@ export default function HomePage() {
           <Button
             title="Log Out"
             color="blue"
-            onPress={() => router.back()}
+            onPress={() => logOut()}
           />
         </View>
       ) : (
