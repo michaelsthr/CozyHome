@@ -204,20 +204,16 @@ export default function Fridge() {
           />
         </View>
 
-          {/* Items Carousel */}
+          {/* Items Grid */}
           {fridgeItems.length > 0 ? (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.itemsCarousel}
-            >
+            <View style={styles.itemsGrid}>
               {fridgeItems.map((item) => {
                 const { days, label } = getDaysLeft(item.mhd);
                 return (
-                  <View key={item.$id} style={styles.carouselItemCard}>
+                  <View key={item.$id} style={styles.fridgeHomeItemCard}>
                     <Image
                       source={getCategoryImage(item.kategorie)}
-                      style={styles.itemImage}
+                      style={styles.fridgeHomeItemImage}
                     />
                     <View style={styles.statusRow}>
                       <View style={styles.statusIconContainer}>
@@ -231,7 +227,7 @@ export default function Fridge() {
                       </View>
                     </View>
                     <View style={styles.itemDetailsRow}>
-                      <Text style={styles.itemName} numberOfLines={2}>
+                      <Text style={styles.fridgeHomeItemName} numberOfLines={2}>
                         {item.name}
                       </Text>
                       <QuantityControls
@@ -244,7 +240,7 @@ export default function Fridge() {
                   </View>
                 );
               })} 
-          </ScrollView> ) : (
+            </View> ) : (
             <View style={styles.emptyState}>
               <Image
                 source={require("../../../assets/images/fridge_icons/fridge.png")}
