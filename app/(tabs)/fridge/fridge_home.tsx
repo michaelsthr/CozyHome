@@ -10,8 +10,8 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { fridgeStyles } from "../../../styles/fridge_styles";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "../../../lib/appwrite/dbKuehlschrank";
+import { fridgeStyles } from "../../../styles/fridge_styles";
 import { QuantityControls } from "./fridgeBack/components/QuantityControls";
 import { useQuantityManager } from "./fridgeBack/hooks/useQuantityManager";
 
@@ -175,8 +175,17 @@ export default function Fridge() {
 
         {/* Fridge Section */}
         <View style={styles.fridgeSection}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.homeTitle}>{"Quick"}</Text>
+          <View style={styles.headerContainer}>
+            <Text style={styles.homeTitle}>{"Quick check"}</Text>
+            <TouchableOpacity
+              style={styles.plusButton}
+              onPress={() => router.push("/(tabs)/fridge/fridge_add")}
+            >
+              <Image
+                source={require("../../../assets/images/symbol-plus.png")}
+                style={styles.plusIcon}
+              />
+            </TouchableOpacity>
           </View>
           <Text style={styles.subtitle}>
             {fridgeItems.length > 0 ? `${fridgeItems.length} products in your fridge` : "Your fridge is empty"}

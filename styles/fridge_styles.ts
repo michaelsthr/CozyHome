@@ -336,6 +336,37 @@ export const fridgeStyles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 
+  // Plus Button in Header
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 10,
+  },
+  plusButton: {
+    width: 44,
+    height: 44,
+    backgroundColor: "#7749f8",
+    borderRadius: 22,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#7749f8",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 4,
+  },
+  plusIcon: {
+    width: 20,
+    height: 20,
+    tintColor: "#ffffff",
+  },
+
   // Empty State & Loading
   emptyState: {
     alignItems: "center",

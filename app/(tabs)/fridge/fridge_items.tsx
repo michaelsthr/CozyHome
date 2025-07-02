@@ -1,3 +1,4 @@
+import { fontStyles } from "@/styles/font_styles";
 import { useRouter } from "expo-router";
 import React from "react";
 import {
@@ -9,8 +10,6 @@ import {
   View
 } from "react-native";
 import { fridgeStyles as styles } from "../../../styles/fridge_styles";
-import { fontStyles } from "@/styles/font_styles";
-import { ContainerStyles } from "@/styles/container_styles";
 
 // Routes matching the screen file names
 const categories = [
@@ -30,10 +29,19 @@ export default function FridgeItems() {
       <ScrollView 
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer}>
-          
-        {/* Title Section */}
-        <View style={ContainerStyles.titleSection}>
+
+        {/* Header with Title and Plus Button */}
+        <View style={styles.headerContainer}>
           <Text style={fontStyles.title}>{"Food Categories"}</Text>
+          <TouchableOpacity
+            style={styles.plusButton}
+            onPress={() => router.push("/(tabs)/fridge/fridge_add")}
+          >
+            <Image
+              source={require("../../../assets/images/symbol-plus.png")}
+              style={styles.plusIcon}
+            />
+          </TouchableOpacity>
         </View>
 
         {/* Categories Grid */}
@@ -50,14 +58,6 @@ export default function FridgeItems() {
             </TouchableOpacity>
           ))}
         </View>
-
-        {/* Add New Item Button */}
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => router.push("/(tabs)/fridge/fridge_add")}
-        >
-          <Text style={styles.addButtonText}>{"ADD NEW ITEM"}</Text>
-        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
