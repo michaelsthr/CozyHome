@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Button } fr
 import { router, useNavigation } from 'expo-router';
 import { getGroups } from "../../lib/appwrite/dbGroup";
 import { Group, useSession } from '@/lib/context/SessionContext';
-import { updateUser } from '@/lib/appwrite/dbUser';
+import { updateUserGroup } from '@/lib/appwrite/dbUser';
 
 
 interface GroupProps {
@@ -45,7 +45,7 @@ export default function EnterGroupKey() {
     setGroup(foundGroup);
 
     try {
-      const updatedUser = await updateUser(user.userId, foundGroup.$id);
+      const updatedUser = await updateUserGroup(user.$id, foundGroup.$id);
       setUser(updatedUser);
       router.replace('/(tabs)');
     } catch {

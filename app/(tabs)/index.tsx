@@ -1,15 +1,17 @@
 import { getGroupById } from "@/lib/appwrite/dbGroup";
-import { getUsersByGroupId } from "@/lib/appwrite/dbUser";
+import { getUsersByGroupId, updateUserGroup } from "@/lib/appwrite/dbUser";
 import { useSession } from "@/lib/context/SessionContext";
 import { cardStyles } from "@/styles/card_styles";
 import { ContainerStyles } from "@/styles/container_styles";
 import { fontStyles } from "@/styles/font_styles";
 import { globalStyles } from "@/styles/global_styles";
 import { useRouter } from "expo-router";
+import { User } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  Button,
   Image,
   ScrollView,
   Text,
@@ -25,7 +27,7 @@ interface GroupMember {
 }
 
 export default function HomePage() {
-  const { user, group } = useSession();
+  const { user, setUser, group } = useSession();
   const router = useRouter();
   const [groupMembers, setGroupMembers] = useState<GroupMember[]>([]);
   const [loading, setLoading] = useState(true);
@@ -67,6 +69,28 @@ export default function HomePage() {
     );
   }
 
+  const leaveGroup = async () => {
+  try {
+    console.log(user);
+    
+    if (!user || !user.$id) {
+      return Alert.alert("Error", "User can't be loaded.");
+    }
+
+    await updateUserGroup(user.$id, null);
+
+    const updatedUser = { ...user, groupID: null }; // aktualisiertes Objekt
+    setUser(updatedUser);
+
+    console.log("Updated user after leaving group:", updatedUser);
+
+    router.push("/(group)");
+  } catch (error) {
+    console.error("Error leaving group:", error);
+    Alert.alert("Error", "Failed to leave Group");
+  }
+};
+
   return (
     <ScrollView style={ContainerStyles.container} showsVerticalScrollIndicator={false}>
       {/* Header with App Logo */}
@@ -92,7 +116,7 @@ export default function HomePage() {
       {/* Group Information Card */}
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <View style={[cardStyles.Card, { marginHorizontal: 20, width: "90%" }]}>
-          <View style={{ flexDirection: "row", alignItems: "center", alignContent: "center", marginBottom: 15}}>
+          <View style={{ flexDirection: "row", alignItems: "center", alignContent: "center", marginBottom: 15 }}>
             <View
               style={{
                 width: 50,
@@ -108,9 +132,9 @@ export default function HomePage() {
                 {group?.name?.charAt(0)?.toUpperCase() || "G"}
               </Text>
             </View>
-            <View style={{ flex: 1}}>
+            <View style={{ flex: 1 }}>
               <Text style={fontStyles.title}>{group?.name || "Unknown Group"}</Text>
-              <Text style={[fontStyles.large, { color: "#64748b", marginTop: 5}]}>
+              <Text style={[fontStyles.large, { color: "#64748b", marginTop: 5 }]}>
                 Group Key: {group?.groupKey || "N/A"}
               </Text>
             </View>
@@ -119,7 +143,7 @@ export default function HomePage() {
       </View>
 
       {/* Group Members Section */}
-      <View style={[ContainerStyles.titleSection, {marginHorizontal: 20}]}>
+      <View style={[ContainerStyles.titleSection, { marginHorizontal: 20 }]}>
         <Text style={fontStyles.title}>Group Members</Text>
         <Text style={[fontStyles.subtitle, { marginBottom: 0 }]}>
           {groupMembers.length} member{groupMembers.length !== 1 ? "s" : ""}
@@ -155,6 +179,16 @@ export default function HomePage() {
               </View>
             </View>
           ))}
+          <Button
+            title="Leave Group"
+            color="blue"
+            onPress={() => leaveGroup()}
+          />
+          <Button
+            title="Log Out"
+            color="blue"
+            onPress={() => router.back()}
+          />
         </View>
       ) : (
         <View style={ContainerStyles.emptyState}>

@@ -4,6 +4,7 @@ import React, {
     useContext,
     useState
 } from 'react';
+import { Models } from 'react-native-appwrite';
 
 let currentGroup: Group | null = null;
 
@@ -16,11 +17,11 @@ export const getGlobalGroup = (): Group | null => {
 };
 
 // Typen definieren
-export interface User {
+export interface User extends Models.Document {
     username: string;
     password: string; // hashed
-    groupID: string;
-    userId: string;
+    groupID?: string;
+    $id: string;
 }
 
 export interface Group {

@@ -59,18 +59,17 @@ export const checkUserValid = async function (username: string): Promise<Models.
 };
 
 
-export async function updateUser(userID: string, newGroupID: string) {
+export async function updateUserGroup(userID: string, newGroupID?: string) {
   try {
     const updatedUser = await databases.updateDocument(
       databaseId,
       userCollectionId,
       userID,
       {
-        groupID: newGroupID,
+        groupID: newGroupID ?? null,
       }
     );
 
-    alert("Group updated successfully.");
     return updatedUser;
   } catch (error) {
     console.error('Group update failed', error);

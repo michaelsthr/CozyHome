@@ -42,7 +42,7 @@ export default function Auth() {
           username: userDoc.username,
           password: userDoc.password,
           groupID: userDoc.groupID,
-          userId: userDoc.$id
+          $id: userDoc.$id
         };
         setUser(sessionUser);
         if (currentUser.groupID === null) {
