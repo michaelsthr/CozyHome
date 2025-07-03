@@ -93,15 +93,15 @@ export const EditToDoItem = ({
           <HStack style={styles.titleRow}>
             <Text numberOfLines={1} ellipsizeMode="tail" style={styles.titleText}>{title}</Text>
             {responsible ? (
-              <Badge style={styles.badge}>
-                <Text style={styles.badgeText}>{responsible}</Text>
-              </Badge>
-            ) : null}
-            {tag ? (
-              <Badge style={styles.badge}>
-                <Text style={styles.badgeText}>{tag}</Text>
-              </Badge>
-            ) : null}
+            <Badge style={styles.badge}>
+              <BadgeText style={styles.badgeText}>{responsible}</BadgeText>
+            </Badge>
+          ) : null} 
+          {tag ? (
+            <Badge style={styles.badge}>
+              <BadgeText style={styles.badgeText}>{tag}</BadgeText>
+            </Badge>
+          ) : null}
           </HStack>
           <HStack style={styles.IconRow}>
             <TouchableOpacity onPress={onTrashPress} style={{ marginRight: "8%" }}>

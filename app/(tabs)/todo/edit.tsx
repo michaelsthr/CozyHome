@@ -72,19 +72,23 @@ export default function EditTodos() {
         )}
         <View style={{ flex: 1, marginTop: "10%" }}>
           <ScrollView>
-            {todos?.documents?.map((item, index) => (
-              <EditToDoItem
-                key={index}
-                id={item.$id}
-                title={item.name}
-                date={formatDate(item.date) || null}
-                routine={item.regularity || null}
-                isChecked={item.done}
-                onTrashPress={() => handleDeletePress(item.$id, item.name)}
-                tag={item.tag || null}
-                responsible={item.responsible || null}
-              />
-            ))}
+            {todos && todos.documents.length > 0 ? (
+              todos?.documents?.map((item, index) => (
+                <EditToDoItem
+                  key={index}
+                  id={item.$id}
+                  title={item.name}
+                  date={formatDate(item.date) || null}
+                  routine={item.regularity || null}
+                  isChecked={item.done}
+                  onTrashPress={() => handleDeletePress(item.$id, item.name)}
+                  tag={item.tag || null}
+                  responsible={item.responsible || null}
+                />
+              ))
+            ) : (
+              <Text style={{ textAlign: "center", fontSize: 20, marginTop: 300 }}> No To Dos yet</Text>
+            )}
           </ScrollView>
         </View>
         <Modal

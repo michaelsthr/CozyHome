@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
       marginTop:"8%",
       width: containerWidth,
       gap:"25%",
-    },
+  },
   buttons: {      
       flex:1,            
       paddingVertical: "1%",
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
       marginBottom: "3%",
       borderRadius: 10,
       alignItems: "center",
-    },
+  },
   textInput: {
       width: "99%",
       height: 44,
