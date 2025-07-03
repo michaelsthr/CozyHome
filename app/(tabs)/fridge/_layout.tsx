@@ -14,6 +14,11 @@ export default function FridgeStack() {
         name="fridge_items" 
         options={{ headerTitle: "Fridge", presentation: "formSheet" }} 
       />
+
+      <Stack.Screen 
+        name="fridge_category" 
+        options={{ headerTitle: "", presentation: "formSheet" }} 
+      />
       
       <Stack.Screen 
         name="fridge_fruits" 

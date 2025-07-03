@@ -2,19 +2,18 @@ import TimePickerModal from "@/components/calendar/time_picker_modal";
 import { ContainerStyles } from "@/styles/container_styles";
 import { fontStyles } from "@/styles/font_styles";
 import { inputStyles } from "@/styles/input_styles";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
     ActivityIndicator,
     Alert,
-    Image,
     Modal,
     SafeAreaView,
     ScrollView,
     Text,
     TextInput,
     TouchableOpacity,
-    View,
+    View
 } from "react-native";
 import { setKuehlschrankInhalt } from "../../../lib/appwrite/dbKuehlschrank";
 import {
@@ -26,6 +25,7 @@ import { fridgeStyles as styles } from "../../../styles/fridge_styles";
 
 export default function AddItem() {
     const router = useRouter();
+    const params = useLocalSearchParams();
     const [name, setName] = useState("");
     const [quantity, setQuantity] = useState("1");
     const [category, setCategory] = useState<FridgeCategoryType>(FridgeCategories.OTHER);
@@ -35,6 +35,12 @@ export default function AddItem() {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+    useEffect(() => {
+        if (params.category) {
+            setCategory(params.category as FridgeCategoryType);
+        }
+    }, [params.category]);
 
     const categories = getAllFridgeCategories();
 
@@ -140,21 +146,14 @@ export default function AddItem() {
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.scrollContainer}>
-                {/* Header */}
-                <View style={styles.header}>
-                    <Image
-                        source={require("../../../assets/images/fridge_icons/profile-picture.png")}
-                        style={styles.avatar}
-                    />
-                </View>
 
+                <View style={styles.fridgeSection}>        
                 {/* Title Section */}
                 <View style={ContainerStyles.titleSection}>
                     <Text style={fontStyles.title}>{"Add New Item"}</Text>
                 </View>
-
+            
                 {/* Form Container */}
-                <View style={styles.formContainer}>
                     <View style={styles.inputGroup}>
                         <Text style={styles.inputLabel}>{"Product Name"}</Text>
                         <TextInput
@@ -218,7 +217,6 @@ export default function AddItem() {
                         )}
                     </View>
                 </View>
-
                 {/* Add Button */}
                 <TouchableOpacity
                     style={[styles.addButton, isSubmitting && { opacity: 0.5 }]}

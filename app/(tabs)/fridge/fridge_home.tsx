@@ -10,10 +10,10 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { fridgeStyles } from "../../../styles/fridge_styles";
 import { getKuehlschrankInhalt, KuehlschrankItem } from "../../../lib/appwrite/dbKuehlschrank";
-import QuantityControls from "./fridgeBack/components/QuantityControls";
-import useQuantityManager from "./fridgeBack/hooks/useQuantityManager";
+import { fridgeStyles } from "../../../styles/fridge_styles";
+import { QuantityControls } from "./fridgeBack/components/QuantityControls";
+import { useQuantityManager } from "./fridgeBack/hooks/useQuantityManager";
 
 export default function Fridge() {
   const router = useRouter();
@@ -171,30 +171,29 @@ export default function Fridge() {
     <SafeAreaView style={styles.container}>
       <ScrollView 
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContainer}
-      >
-        {/* Header */}
-        <View style={styles.header}>
-          <Image
-            source={require("../../../assets/images/fridge_icons/profile-picture.png")}
-            style={styles.avatar}
-          />
-          <Image
-            source={require("../../../assets/images/fridge_icons/logo-2.png")}
-            style={styles.logo}
-          />
-        </View>
+        contentContainerStyle={styles.scrollContainer}>
 
-        {/* Greeting Section */}
-        <View style={styles.greetingSection}>
-          <Text style={styles.greeting}>{"Good morning!"}</Text>
-          <Text style={styles.username}>{"Max Mustermann"}</Text>
-        </View>
-        
-        {/* Search Bar */}
+        {/* Fridge Section */}
+        <View style={styles.fridgeSection}>
+          <View style={styles.headerContainer}>
+            <Text style={styles.homeTitle}>{"Quick check"}</Text>
+            <TouchableOpacity
+              style={styles.plusButton}
+              onPress={() => router.push("/(tabs)/fridge/fridge_add")}>
+              <Image
+                source={require("../../../assets/images/symbol-plus.png")}
+                style={styles.plusIcon}
+              />
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.subtitle}>
+            {fridgeItems.length > 0 ? `${fridgeItems.length} products in your fridge` : "Your fridge is empty"}
+          </Text>
+
+          {/* Search Bar */}
         <View style={styles.searchContainer}>
           <TextInput
-            placeholder="Search items in your fridge..."
+            placeholder="Search products in your fridge..."
             placeholderTextColor="#9ca3af"
             style={styles.searchInput}
             value={searchTerm}
@@ -204,29 +203,16 @@ export default function Fridge() {
           />
         </View>
 
-        {/* Fridge Section */}
-        <View style={styles.fridgeSection}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.homeTitle}>{"Your Fridge"}</Text>
-          </View>
-          <Text style={styles.subtitle}>
-            {fridgeItems.length > 0 ? `${fridgeItems.length} items in your fridge` : "Your fridge is empty"}
-          </Text>
-
-          {/* Items Carousel */}
+          {/* Items Grid */}
           {fridgeItems.length > 0 ? (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.itemsCarousel}
-            >
+            <View style={styles.itemsGrid}>
               {fridgeItems.map((item) => {
                 const { days, label } = getDaysLeft(item.mhd);
                 return (
-                  <View key={item.$id} style={styles.carouselItemCard}>
+                  <View key={item.$id} style={styles.fridgeHomeItemCard}>
                     <Image
                       source={getCategoryImage(item.kategorie)}
-                      style={styles.itemImage}
+                      style={styles.fridgeHomeItemImage}
                     />
                     <View style={styles.statusRow}>
                       <View style={styles.statusIconContainer}>
@@ -239,21 +225,23 @@ export default function Fridge() {
                         </Text>
                       </View>
                     </View>
-                    <View style={styles.itemDetailsRow}>
-                      <Text style={styles.itemName} numberOfLines={2}>
+                    <View style={styles.itemDetailsContainer}>
+                      <Text style={styles.fridgeHomeItemName} numberOfLines={2}>
                         {item.name}
                       </Text>
-                      <QuantityControls
-                        item={item}
-                        onQuantityChange={onQuantityChange}
-                        isUpdating={isUpdating}
-                        styles={fridgeStyles}
-                      />
+                      <View style={styles.quantityContainer}>
+                        <QuantityControls
+                          item={item}
+                          onQuantityChange={onQuantityChange}
+                          isUpdating={isUpdating}
+                          styles={fridgeStyles}
+                        />
+                      </View>
                     </View>
                   </View>
                 );
               })} 
-          </ScrollView> ) : (
+            </View> ) : (
             <View style={styles.emptyState}>
               <Image
                 source={require("../../../assets/images/fridge_icons/fridge.png")}
@@ -273,7 +261,7 @@ export default function Fridge() {
           style={styles.addButton}
           onPress={() => router.push("/(tabs)/fridge/fridge_items")}
         >
-          <Text style={styles.addButtonText}>{"EXPLORE CATEGORIES"}</Text>
+          <Text style={styles.addButtonText}>{"Open Fridge"}</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
