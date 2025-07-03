@@ -130,7 +130,7 @@ export default function NewGroup() {
                             Create new group
                         </Text>
                         <Image
-                            source={require("@/assets/images/groups_page.png")}
+                            source={require("@/assets/images/new_group_page.png")}
                             style={{
                                 width: 320,
                                 height: 320,

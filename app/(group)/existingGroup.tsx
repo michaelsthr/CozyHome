@@ -82,7 +82,7 @@ export default function EnterGroupKey() {
                             Join your friends
                         </Text>
                         <Image
-                            source={require("@/assets/images/groups_page.png")}
+                            source={require("@/assets/images/existing_group_page.png")}
                             style={{
                                 width: 320,
                                 height: 320,
