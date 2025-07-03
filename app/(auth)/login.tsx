@@ -88,11 +88,11 @@ export default function Auth() {
             <View style={{ alignItems: "center" }}>
                 <Text
                     style={{
-                        fontSize: 32,
-                        fontWeight: "bold",
-                        color: "#1e293b",
-                        marginBottom: 8,
-                        letterSpacing: -0.5,
+                        fontSize: 40,
+                        fontWeight: "800",
+                        color: "#7749f8",
+                        letterSpacing: -1,
+                        lineHeight: 40,
                     }}>
                     Cozy Home
                 </Text>
@@ -243,6 +243,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         paddingVertical: 20,
-        backgroundColor: "white"
+        backgroundColor: "white",
     },
 });
