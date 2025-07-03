@@ -240,7 +240,7 @@ export default function FridgeCategory() {
 
                 <TouchableOpacity
                     style={styles.addButton}
-                    onPress={() => router.push("/(tabs)/fridge/fridge_add")}
+                    onPress={() => router.push({ pathname: "/(tabs)/fridge/fridge_add", params: { category: categoryName } })}
                 >
                     <Text style={styles.addButtonText}>+</Text>
                 </TouchableOpacity>

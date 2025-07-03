@@ -2,19 +2,18 @@ import TimePickerModal from "@/components/calendar/time_picker_modal";
 import { ContainerStyles } from "@/styles/container_styles";
 import { fontStyles } from "@/styles/font_styles";
 import { inputStyles } from "@/styles/input_styles";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
     ActivityIndicator,
     Alert,
-    Image,
     Modal,
     SafeAreaView,
     ScrollView,
     Text,
     TextInput,
     TouchableOpacity,
-    View,
+    View
 } from "react-native";
 import { setKuehlschrankInhalt } from "../../../lib/appwrite/dbKuehlschrank";
 import {
@@ -26,6 +25,7 @@ import { fridgeStyles as styles } from "../../../styles/fridge_styles";
 
 export default function AddItem() {
     const router = useRouter();
+    const params = useLocalSearchParams();
     const [name, setName] = useState("");
     const [quantity, setQuantity] = useState("1");
     const [category, setCategory] = useState<FridgeCategoryType>(FridgeCategories.OTHER);
@@ -35,6 +35,12 @@ export default function AddItem() {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+    useEffect(() => {
+        if (params.category) {
+            setCategory(params.category as FridgeCategoryType);
+        }
+    }, [params.category]);
 
     const categories = getAllFridgeCategories();
 
