@@ -4,41 +4,46 @@ import { Image } from "react-native";
 
 export default function TabLayout() {
     return (
-        <Tabs screenOptions={{ animation: "shift" }}>
-            <Tabs.Screen 
-                name='index' 
-                options={{ 
+        <Tabs
+            screenOptions={({ route }) => ({
+                tabBarActiveTintColor: "#7749f8",
+                animation: "shift",
+                tabBarIcon: ({ focused }) => {
+                    let iconSource;
+                    const iconStyle = { width: 24, height: 24 };
+
+                    if (route.name === "index") {
+                        iconSource = focused
+                            ? require("@/assets/images/icons/home_full.png")
+                            : require("@/assets/images/icons/home.png");
+                    } else if (route.name === "calendar") {
+                        iconSource = focused
+                            ? require("@/assets/images/icons/calendar_full.png")
+                            : require("@/assets/images/icons/calendar.png");
+                    } else if (route.name === "fridge") {
+                        iconSource = focused
+                            ? require("@/assets/images/icons/fridge_full.png")
+                            : require("@/assets/images/icons/fridge.png");
+                    } else if (route.name === "todo") {
+                        iconSource = focused
+                            ? require("@/assets/images/icons/todo_full.png")
+                            : require("@/assets/images/icons/todo.png");
+                    }
+
+                    return <Image source={iconSource} style={iconStyle} />;
+                },
+            })}>
+            <Tabs.Screen
+                name='index'
+                options={{
                     title: "Home",
                     headerShown: false,
-                    tabBarIcon: () => (
-                        <Image
-                            source={require("@/assets/images/fridge_icons/logo-2.png")}
-                            style={{
-                                width: 24,
-                                height: 24,
-                                marginRight: "auto",
-                                alignItems: "center",
-                                justifyContent: "center",
-                            }}
-                        />
-                    ),
-                }} 
+                }}
             />
             <Tabs.Screen
                 name='calendar'
                 options={{
                     headerShown: false,
-                    tabBarIcon: () => (
-                        <Image
-                            source={require("@/assets/images/calendar.png")}
-                            style={{
-                                width: 24,
-                                height: 24,
-                                alignItems: "center",
-                                justifyContent: "center",
-                            }}
-                        />
-                    ),
                 }}
             />
             <Tabs.Screen
@@ -46,32 +51,15 @@ export default function TabLayout() {
                 options={{
                     title: "Fridge",
                     headerShown: false,
-                    tabBarIcon: () => (
-                        <Image
-                            source={require("../../assets/images/fridge_icons/fridge-black.png")}
-                            style={{ width: 24, height: 24 }}
-                        />
-                    ),
                 }}
             />
-            <Tabs.Screen 
-        name='todo'
-        options={{
-          title: "To Dos",
-          headerShown: false,
-          tabBarIcon: () => (
-            <Image
-              source={require("../../assets/todo.png")}
-              style={{
-                width: 28,
-                height: 28,
-                marginRight: "auto",
-                alignItems: "center",
-                justifyContent: "center",
-              }} />
-            ),
-          }}
-        />
+            <Tabs.Screen
+                name='todo'
+                options={{
+                    title: "To Dos",
+                    headerShown: false,
+                }}
+            />
         </Tabs>
     );
 }
