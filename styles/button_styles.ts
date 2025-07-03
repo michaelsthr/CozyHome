@@ -62,4 +62,20 @@ export const buttonStyles = StyleSheet.create({
         shadowRadius: 4.65,
         elevation: 8,
       },
+  plusButton: {
+    width: 44,
+    height: 44,
+    backgroundColor: "#7749f8",
+    borderRadius: 22,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#7749f8",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 4,
+  },
 })

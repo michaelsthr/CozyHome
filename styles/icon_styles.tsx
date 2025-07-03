@@ -9,4 +9,9 @@ export const iconStyles = StyleSheet.create({
         width: 17,
         height: 17,
     },
+    plusIcon: {
+        width: 20,
+        height: 20,
+        tintColor: "#ffffff",
+    },
 });

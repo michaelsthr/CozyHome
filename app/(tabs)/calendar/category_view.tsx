@@ -1,5 +1,6 @@
 import CategoryItem from "@/components/calendar/category_item";
 import { getAllCategory } from "@/lib/appwrite/dbKalender";
+import { buttonStyles } from "@/styles/button_styles";
 import { cardStyles } from "@/styles/card_styles";
 import { ContainerStyles } from "@/styles/container_styles";
 import { fontStyles } from "@/styles/font_styles";
@@ -38,10 +39,10 @@ const CategoryView = () => {
                     }}>
                     <Text style={fontStyles.title}>Categories</Text>
                     <Link href='/(tabs)/calendar/category_form' push asChild>
-                        <Pressable>
+                        <Pressable style={buttonStyles.plusButton}>
                             <Image
                                 source={require("@/assets/images/symbol-plus.png")}
-                                style={iconStyles.icon2}
+                                style={iconStyles.plusIcon}
                             />
                         </Pressable>
                     </Link>

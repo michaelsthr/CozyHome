@@ -7,7 +7,7 @@ export const screenHeight = Dimensions.get("screen").height;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    paddingHorizontal: 20,
     width: "100%"
   },
   container_box: {
