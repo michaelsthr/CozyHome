@@ -181,9 +181,9 @@ export const QuantityControls: React.FC<QuantityControlsProps> = ({
   };
 
   return (
-    <View style={styles.quantityControls}>
+    <View style={styles.quantityContainer}>
       <TouchableOpacity
-        style={[styles.quantityButton, (isUpdating || isSubmitting || isShowingConfirmation) && styles.quantityButtonDisabled]}
+        style={[styles.quantityButton, isUpdating && styles.quantityButtonDisabled]}
         onPress={handleDecrease}
         disabled={isUpdating || isEditing || isSubmitting || isShowingConfirmation}
       >
@@ -215,7 +215,7 @@ export const QuantityControls: React.FC<QuantityControlsProps> = ({
       )}
       
       <TouchableOpacity
-        style={[styles.quantityButton, (isUpdating || isSubmitting || isShowingConfirmation) && styles.quantityButtonDisabled]}
+        style={[styles.quantityButton, isUpdating && styles.quantityButtonDisabled]}
         onPress={() => onQuantityChange(item, 1)}
         disabled={isUpdating || isEditing || isSubmitting || isShowingConfirmation}
       >

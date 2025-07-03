@@ -225,7 +225,7 @@ export default function Fridge() {
                         </Text>
                       </View>
                     </View>
-                    <View style={styles.itemDetailsRow}>
+                    <View style={styles.itemDetailsContainer}>
                       <Text style={styles.fridgeHomeItemName} numberOfLines={2}>
                         {item.name}
                       </Text>
@@ -259,7 +259,7 @@ export default function Fridge() {
           style={styles.addButton}
           onPress={() => router.push("/(tabs)/fridge/fridge_items")}
         >
-          <Text style={styles.addButtonText}>{"OPEN FRIDGE"}</Text>
+          <Text style={styles.addButtonText}>{"Open Fridge"}</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

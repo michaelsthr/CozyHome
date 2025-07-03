@@ -1,3 +1,4 @@
+import { ContainerStyles } from "@/styles/container_styles";
 import { fontStyles } from "@/styles/font_styles";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -10,17 +11,16 @@ import {
   View
 } from "react-native";
 import { fridgeStyles as styles } from "../../../styles/fridge_styles";
-import { ContainerStyles } from "@/styles/container_styles";
 
 // Routes matching the screen file names
 const categories = [
-  { id: 1, name: "Fruits",      img: require("../../../assets/images/fridge_icons/fruits.png"), route: "/(tabs)/fridge/fridge_fruits" },
-  { id: 2, name: "Vegetables",   img: require("../../../assets/images/fridge_icons/vegetables.png"), route: "/(tabs)/fridge/fridge_vegetables" },
-  { id: 3, name: "Dairy",       img: require("../../../assets/images/fridge_icons/dairy.png"), route: "/(tabs)/fridge/fridge_dairy" },
-  { id: 4, name: "Drinks",      img: require("../../../assets/images/fridge_icons/drinks.png"), route: "/(tabs)/fridge/fridge_drinks" },
-  { id: 5, name: "Meat & Fish", img: require("../../../assets/images/fridge_icons/meat-fish.png"), route: "/(tabs)/fridge/fridge_meat" },
-  { id: 6, name: "Frozen",      img: require("../../../assets/images/fridge_icons/freezer.png"), route: "/(tabs)/fridge/fridge_frozen" },
-  { id: 7, name: "Other",       img: require("../../../assets/images/fridge_icons/fridge.png"), route: "/(tabs)/fridge/fridge_other" },
+  { id: 1, name: "Fruits",      img: require("../../../assets/images/fridge_icons/fruits.png"), route: "/(tabs)/fridge/fridge_category" },
+  { id: 2, name: "Vegetables",   img: require("../../../assets/images/fridge_icons/vegetables.png"), route: "/(tabs)/fridge/fridge_category" },
+  { id: 3, name: "Dairy",       img: require("../../../assets/images/fridge_icons/dairy.png"), route: "/(tabs)/fridge/fridge_category" },
+  { id: 4, name: "Drinks",      img: require("../../../assets/images/fridge_icons/drinks.png"), route: "/(tabs)/fridge/fridge_category" },
+  { id: 5, name: "Meat & Fish", img: require("../../../assets/images/fridge_icons/meat-fish.png"), route: "/(tabs)/fridge/fridge_category" },
+  { id: 6, name: "Frozen",      img: require("../../../assets/images/fridge_icons/freezer.png"), route: "/(tabs)/fridge/fridge_category" },
+  { id: 7, name: "Other",       img: require("../../../assets/images/fridge_icons/fridge.png"), route: "/(tabs)/fridge/fridge_category" },
 ];
 
 export default function FridgeItems() {
@@ -34,30 +34,23 @@ export default function FridgeItems() {
       <View style={styles.fridgeSection}>
         {/* Header with Title and Plus Button */}
         <View style={ContainerStyles.titleSection}>
-          <Text style={fontStyles.title}>{"Food Categories"}</Text>
-          <TouchableOpacity
-            style={styles.plusButton}
-            onPress={() => router.push("/(tabs)/fridge/fridge_add")}>
-            <Image
-              source={require("../../../assets/images/symbol-plus.png")}
-              style={styles.plusIcon}/>
-          </TouchableOpacity>
+          <Text style={fontStyles.title}>Categories</Text>
+          
         </View>
 
-        {/* Categories Grid */}
         <View style={styles.itemsContainer}>
-          {categories.map((item) => (
+          {categories.map((category) => (
             <TouchableOpacity
-              key={item.id}
-              style={styles.gridItemCard}
-              disabled={!item.route}
-              onPress={() => router.push(item.route as any)}
+              key={category.id}
+              style={styles.categoryContainer}
+              onPress={() => router.push({ pathname: "/(tabs)/fridge/fridge_category", params: { category: category.name } })}
             >
-              <Image source={item.img} style={styles.itemImage} />
-              <Text style={styles.itemName}>{item.name}</Text>
+              <Image source={category.img} style={styles.categoryImage} />
+              <Text style={styles.categoryName}>{category.name}</Text>
             </TouchableOpacity>
           ))}
         </View>
+        
       </View>
       </ScrollView>
     </SafeAreaView>

@@ -65,6 +65,16 @@ export const fridgeStyles = StyleSheet.create({
     color: "#1e293b",
     letterSpacing: -0.5,
   },
+  categoryHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  categoryIcon: {
+    width: 32,
+    height: 32,
+    marginRight: 12,
+  },
   subtitle: {
     fontSize: 16,
     color: "#64748b",
@@ -125,6 +135,34 @@ export const fridgeStyles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "space-between",
     paddingBottom: 20,
+  },
+  categoryContainer: {
+    width: "48%",
+    backgroundColor: "#ffffff",
+    borderRadius: 16,
+    padding: 15,
+    alignItems: "center",
+    marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.08,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  categoryImage: {
+    width: 60,
+    height: 60,
+    resizeMode: "contain",
+    marginBottom: 10,
+  },
+  categoryName: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#1e293b",
+    textAlign: "center",
   },
 
   // Item Cards
@@ -191,6 +229,11 @@ export const fridgeStyles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 3,
   },
+  itemDetailsContainer: {
+    alignItems: "center",
+    width: "100%",
+    gap: 10,
+  },
 
   // Item Content
   itemImage: {
@@ -215,8 +258,7 @@ export const fridgeStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "#1e293b",
-    textAlign: "center",
-    marginTop: 5,
+    textAlign: "left",
   },
   fridgeHomeItemName: {
     fontSize: 14,
@@ -258,20 +300,45 @@ export const fridgeStyles = StyleSheet.create({
     color: "#64748b",
     fontWeight: "500",
   },
-
-  itemDetailsRow: {
-    alignItems: "center",
-    width: "100%",
-  },
-
-  // Quantity Controls
-  quantityControls: {
+  itemContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    marginTop: 10,
-    marginLeft: 10,
-    gap: 6,
+    backgroundColor: "#ffffff",
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 12,
+    gap: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 3.84,
+    elevation: 3,
+  },
+  itemDetails: {
+    flex: 1,
+    marginLeft: 12,
+    gap: 5,
+  },
+  itemDate: {
+    fontSize: 14,
+    color: "#666",
+  },
+  daysLeft: {
+    fontSize: 14,
+    fontWeight: "bold",
+  },
+  itemIcon: {
+    width: 40,
+    height: 40,
+    resizeMode: "contain",
+  },
+  quantityContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
   },
   quantityButton: {
     backgroundColor: "#7749f8",
@@ -318,8 +385,8 @@ export const fridgeStyles = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 4,
     borderRadius: 8,
-    minWidth: 35,
-    minHeight: 35,
+    minWidth: 25,
+    minHeight: 25,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
@@ -338,8 +405,8 @@ export const fridgeStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#059669",
     backgroundColor: "#ffffff",
-    minWidth: 35,
-    minHeight: 35,
+    minWidth: 25,
+    minHeight: 25,
     paddingHorizontal: 6,
     paddingVertical: 4,
     borderRadius: 8,
@@ -443,6 +510,11 @@ export const fridgeStyles = StyleSheet.create({
     color: "#94a3b8",
     textAlign: "center",
     lineHeight: 20,
+  },
+  emptyContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 60,
   },
   loadingContainer: {
     flex: 1,
