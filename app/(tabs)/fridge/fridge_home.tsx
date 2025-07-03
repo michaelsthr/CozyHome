@@ -1,7 +1,7 @@
 import { useFocusEffect, useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
-import {ActivityIndicator, Image, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View} from "react-native";
-import {getKuehlschrankInhalt, KuehlschrankItem,} from "../../../lib/appwrite/dbKuehlschrank";
+import { ActivityIndicator, Image, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { getKuehlschrankInhalt, KuehlschrankItem, } from "../../../lib/appwrite/dbKuehlschrank";
 import { fridgeStyles } from "../../../styles/fridge_styles";
 import QuantityControls from "./fridgeBack/components/QuantityControls";
 import useQuantityManager from "./fridgeBack/hooks/useQuantityManager";
@@ -33,35 +33,6 @@ export default function Fridge() {
     }, [fetchFridgeItems])
   );
 
-  const getCategoryRoute = (category: string) => {
-    switch (category) {
-      case "Fruits":
-      case "Obst":
-        return "/(tabs)/fridge/fridge_fruits";
-      case "Vegetables":
-      case "Gemüse":
-        return "/(tabs)/fridge/fridge_vegetables";
-      case "Dairy":
-      case "Milchprodukte":
-        return "/(tabs)/fridge/fridge_dairy";
-      case "Meat & Fish":
-      case "Fleisch/Fisch":
-      case "Fleisch":
-        return "/(tabs)/fridge/fridge_meat";
-      case "Drinks":
-      case "Getränke":
-        return "/(tabs)/fridge/fridge_drinks";
-      case "Frozen":
-      case "Tiefkühlkost":
-        return "/(tabs)/fridge/fridge_frozen";
-      case "Other":
-      case "Sonstige":
-        return "/(tabs)/fridge/fridge_other";
-      default:
-        return "/(tabs)/fridge/fridge_items";
-    }
-  };
-
   const handleSearch = () => {
     if (!searchTerm.trim()) return;
     const matchingItems = fridgeItems.filter(item => 
@@ -74,11 +45,11 @@ export default function Fridge() {
     }
     
     const firstMatch = matchingItems[0];
-    const categoryRoute = getCategoryRoute(firstMatch.kategorie || "Sonstige");
+    const categoryName = firstMatch.kategorie || "Sonstige";
     
     router.push({
-      pathname: categoryRoute as any,
-      params: { search: searchTerm }
+      pathname: "/(tabs)/fridge/fridge_category",
+      params: { search: searchTerm, category: categoryName }
     });
     
     setSearchTerm("");
