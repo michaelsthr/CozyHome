@@ -1,7 +1,7 @@
-import { useState, useMemo } from 'react';
-import { KuehlschrankItem, FridgeCategoryType } from '../types/fridge';
+import { useMemo, useState } from 'react';
+import { FridgeCategoryType, KuehlschrankItem } from '../../../../../lib/types/fridge';
 
-export const useFridgeFilters = (items: KuehlschrankItem[] = []) => {
+const useFridgeFilters = (items: KuehlschrankItem[] = []) => {
   const [activeFilter, setActiveFilter] = useState<FridgeCategoryType | 'ALL'>('ALL');
   const [sortBy, setSortBy] = useState<'name' | 'category' | 'amount'>('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -48,3 +48,5 @@ export const useFridgeFilters = (items: KuehlschrankItem[] = []) => {
     handleSort
   };
 };
+
+export default useFridgeFilters;

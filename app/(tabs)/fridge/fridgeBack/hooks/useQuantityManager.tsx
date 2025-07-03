@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { deleteKuehlschrankInhalt, KuehlschrankItem, updateKuehlschrankInhalt } from "../../../../../lib/appwrite/dbKuehlschrank";
 
-export const useQuantityManager = () => {
+const useQuantityManager = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [processingItems, setProcessingItems] = useState<Set<string>>(new Set());
 
@@ -89,3 +89,5 @@ export const useQuantityManager = () => {
     isUpdating
   };
 };
+
+export default useQuantityManager;
