@@ -8,6 +8,9 @@ export default function TabLayout() {
             screenOptions={({ route }) => ({
                 tabBarActiveTintColor: "#7749f8",
                 animation: "shift",
+                tabBarStyle: {
+                    paddingTop: 5,
+                },
                 tabBarIcon: ({ focused }) => {
                     let iconSource;
                     const iconStyle = { width: 24, height: 24 };
