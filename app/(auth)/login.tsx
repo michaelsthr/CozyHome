@@ -69,7 +69,7 @@ export default function Auth() {
       await login(username, password);
     } catch (error) {
       console.error("Registration failed:", error);
-      alert("Registration failed.");
+      alert("Username already exists. Please choose another one.");
     }
   }
 
