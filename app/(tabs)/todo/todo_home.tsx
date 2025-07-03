@@ -80,7 +80,6 @@ export default function Todo() {
     const fetchTodos = async () => {
         try {
             const todos = await getTodos();
-            console.log("Todos:", todos);
             setTodos(todos);
         } catch (err) {
             console.error("Error fetching todo contents:", err);
@@ -125,7 +124,7 @@ export default function Todo() {
     return (
         <GluestackUIProvider config={config}>
             <SafeAreaView style={styles.container}>
-                <View style={[headerStyles.container, {paddingBottom: 40}]}>
+                <View style={[headerStyles.container, { paddingBottom: 40 }]}>
                     <View style={headerStyles.leftContainer}>
                         <Text style={fontStyles.h3}>To Do's</Text>
                     </View>
@@ -136,12 +135,12 @@ export default function Todo() {
                                 style={iconStyles.icon1}
                             />
                         </TouchableOpacity>
-                            <TouchableOpacity hitSlop={5} style={buttonStyles.plusButton} onPress={newToDo}>
-                                <Image
-                                    source={require("@/assets/images/symbol-plus.png")}
-                                    style={iconStyles.plusIcon}
-                                />
-                            </TouchableOpacity>
+                        <TouchableOpacity hitSlop={5} style={buttonStyles.plusButton} onPress={newToDo}>
+                            <Image
+                                source={require("@/assets/images/symbol-plus.png")}
+                                style={iconStyles.plusIcon}
+                            />
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View
@@ -157,7 +156,7 @@ export default function Todo() {
                 <View style={{ height: screenHeight / 1.5 }}>
                     <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
                         {filteredTodos && filteredTodos.length > 0 ? (
-                            filteredTodos?.map((item, index) => (
+                            filteredTodos?.slice().reverse().map((item, index) => (
                                 <ToDoItem
                                     key={index}
                                     id={item.$id}

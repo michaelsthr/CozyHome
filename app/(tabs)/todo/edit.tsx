@@ -71,9 +71,9 @@ export default function EditTodos() {
           </View>
         )}
         <View style={{ flex: 1, marginTop: "10%" , height: screenHeight}}>
-          <ScrollView>
+          <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>
             {todos && todos.documents.length > 0 ? (
-            todos?.documents?.map((item, index) => (
+            todos?.documents?.slice().reverse().map((item, index) => (
               <EditToDoItem
                 key={index}
                 id={item.$id}

@@ -1,9 +1,9 @@
-import { Box, Button, HStack, VStack } from "@gluestack-ui/themed";
+import { Box, HStack, VStack } from "@gluestack-ui/themed";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { router, useLocalSearchParams } from "expo-router";
 import { CalendarDays } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
-import { Dimensions, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Button, Alert, Dimensions, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { getTodos, updateTodo } from "../../../lib/appwrite/dbTodo"; //für db
 import styles from "./styles";
@@ -15,6 +15,8 @@ import {
 } from "@/components/todo/pickers";
 import { getUsersByGroupId } from "@/lib/appwrite/dbUser";
 import { useSession } from "@/lib/context/SessionContext";
+import { buttonStyles } from "@/styles/button_styles";
+import { fontStyles } from "@/styles/font_styles";
 
 
 const screenWidth = Dimensions.get("screen").width;
@@ -113,7 +115,7 @@ export default function edit_ToDo() {
     const updatedTodo = {
       $id: selectedTodo?.$id,
       name: title,
-      responsible: responsible || null, 
+      responsible: responsible || null,
       date: (date ? date.toISOString() : null),
       regularity: regularity || null,
       tag: tag || null,
@@ -128,9 +130,13 @@ export default function edit_ToDo() {
   };
 
   return (
-    <SafeAreaView style={styles.container_box}>
+    <SafeAreaView
+      style={[
+        styles.container_box,
+        { backgroundColor: "#fff" },
+      ]}>
       <Text style={styles.heading}>Edit To Do</Text>
-      <Box style={styles.box}>
+      <View style={styles.box}>
         <VStack>
           <Text> Title </Text>
           <TextInput
@@ -152,16 +158,28 @@ export default function edit_ToDo() {
             <DropDownLabel selectedLabel={selectedLabel} setSelectedLabel={setSelectedLabel} />
           </View>
           <DatePickerField date={date} setDate={setDate} />
+          <View
+            style={{
+              flexDirection: "column",
+              justifyContent: "space-between",
+              width: "100%",
+              alignContent: "center",
+            }}>
+            <TouchableOpacity
+              style={[buttonStyles.button, { width: "100%", paddingHorizontal: 50 }]}
+              onPress={() =>
+                edit_todo(
+                  todoName,
+                  selectedPerson,
+                  date,
+                  selectedRepeat,
+                  selectedLabel)}>
+              <Text style={fontStyles.buttonText}>Save</Text>
+            </TouchableOpacity>
+            <Button title='cancel' onPress={cancel} color={"#7749f8"} />
+          </View>
         </VStack>
-      </Box>
-      <HStack style={styles.buttonsContainer}>
-        <Button style={[styles.buttons, { backgroundColor: "grey" }]} onPress={cancel}>
-          <Text style={styles.buttonText}>Cancel</Text>
-        </Button>
-        <Button style={[styles.buttons, { backgroundColor: "blue" }]} onPress={() => edit_todo(todoName, selectedPerson, date, selectedRepeat, selectedLabel)}>
-          <Text style={styles.buttonText}>Save</Text>
-        </Button>
-      </HStack>
-    </SafeAreaView>
+      </View>
+    </SafeAreaView >
   );
 }
