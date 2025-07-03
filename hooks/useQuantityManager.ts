@@ -83,7 +83,7 @@ export function useQuantityManager() {
 
         if (newQuantity === 0) {
             cancelEditing();
-            handleQuantityChange(item, -item.anzahl, setItems, items); // Trigger delete confirmation
+            handleQuantityChange(item, -item.anzahl, setItems, items);
             return;
         }
 
