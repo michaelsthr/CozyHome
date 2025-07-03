@@ -19,7 +19,15 @@ export default function Fridge() {
     setLoading(true);
     try {
       const items = await getKuehlschrankInhalt();
-      setFridgeItems(items.documents);
+      const sortedItems = items.documents.sort((a, b) => {
+        const aDate = a.mhd ? new Date(a.mhd).getTime() : Infinity;
+        const bDate = b.mhd ? new Date(b.mhd).getTime() : Infinity;
+        if (aDate === Infinity && bDate === Infinity) {
+          return 0;
+        }
+        return aDate - bDate;
+      });
+      setFridgeItems(sortedItems);
     } catch (error) {
       console.error("Error fetching fridge items:", error);
     } finally {
