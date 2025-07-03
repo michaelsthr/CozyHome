@@ -5,16 +5,7 @@ import { fontStyles } from "@/styles/font_styles";
 import { fridgeStyles as styles } from "@/styles/fridge_styles";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import {
-    ActivityIndicator,
-    Image,
-    SafeAreaView,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import { ActivityIndicator, Image, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View,} from "react-native";
 
 const getCategoryIcon = (category?: string) => {
     switch (category) {
@@ -49,15 +40,9 @@ const categoryFilters: Record<string, (item: KuehlschrankItem) => boolean> = {
     "Vegetables": (item) => item.kategorie === "Vegetables" || (item.kategorie as any) === "Gemüse",
     "Dairy": (item) => item.kategorie === "Dairy" || (item.kategorie as any) === "Milchprodukte",
     "Drinks": (item) => item.kategorie === "Drinks" || (item.kategorie as any) === "Getränke",
-    "Meat & Fish": (item) =>
-        item.kategorie === "Meat & Fish" ||
-        (item.kategorie as any) === "Fleisch/Fisch" ||
-        (item.kategorie as any) === "Fleisch",
+    "Meat & Fish": (item) => item.kategorie === "Meat & Fish" || (item.kategorie as any) === "Fleisch/Fisch" || (item.kategorie as any) === "Fleisch",
     "Frozen": (item) => item.kategorie === "Frozen" || (item.kategorie as any) === "Tiefkühlkost",
-    "Other": (item) =>
-        item.kategorie === "Other" ||
-        (item.kategorie as any) === "Sonstige" ||
-        !item.kategorie,
+    "Other": (item) => item.kategorie === "Other" || (item.kategorie as any) === "Sonstige" || !item.kategorie,
 };
 
 export default function FridgeCategory() {
@@ -73,7 +58,6 @@ export default function FridgeCategory() {
         editingQuantity,
         setEditingQuantity,
         startEditing,
-        cancelEditing,
         submitEditing,
     } = useQuantityManager();
 
@@ -168,7 +152,7 @@ export default function FridgeCategory() {
 
                     {filteredItems.length === 0 ? (
                         <View style={styles.emptyContainer}>
-                            <Text style={styles.emptyText}>No items found.</Text>
+                            <Text style={styles.emptyText}>{"No items found."}</Text>
                         </View>
                     ) : (
                         filteredItems.map((item) => (
@@ -207,7 +191,7 @@ export default function FridgeCategory() {
                                         style={styles.quantityButton}
                                         disabled={isUpdating}
                                     >
-                                        <Text style={styles.quantityButtonText}>-</Text>
+                                        <Text style={styles.quantityButtonText}>{"-"}</Text>
                                     </TouchableOpacity>
                                     {editingItemId === item.$id ? (
                                         <TextInput

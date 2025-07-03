@@ -2,20 +2,12 @@ import { ContainerStyles } from "@/styles/container_styles";
 import { fontStyles } from "@/styles/font_styles";
 import { useRouter } from "expo-router";
 import React from "react";
-import {
-  Image,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View
-} from "react-native";
+import { Image, SafeAreaView, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import { fridgeStyles as styles } from "../../../styles/fridge_styles";
 
-// Routes matching the screen file names
 const categories = [
   { id: 1, name: "Fruits",      img: require("../../../assets/images/fridge_icons/fruits.png"), route: "/(tabs)/fridge/fridge_category" },
-  { id: 2, name: "Vegetables",   img: require("../../../assets/images/fridge_icons/vegetables.png"), route: "/(tabs)/fridge/fridge_category" },
+  { id: 2, name: "Vegetables",  img: require("../../../assets/images/fridge_icons/vegetables.png"), route: "/(tabs)/fridge/fridge_category" },
   { id: 3, name: "Dairy",       img: require("../../../assets/images/fridge_icons/dairy.png"), route: "/(tabs)/fridge/fridge_category" },
   { id: 4, name: "Drinks",      img: require("../../../assets/images/fridge_icons/drinks.png"), route: "/(tabs)/fridge/fridge_category" },
   { id: 5, name: "Meat & Fish", img: require("../../../assets/images/fridge_icons/meat-fish.png"), route: "/(tabs)/fridge/fridge_category" },
@@ -32,10 +24,8 @@ export default function FridgeItems() {
         contentContainerStyle={styles.scrollContainer}>
 
       <View style={styles.fridgeSection}>
-        {/* Header with Title and Plus Button */}
         <View style={ContainerStyles.titleSection}>
-          <Text style={fontStyles.title}>Categories</Text>
-          
+          <Text style={fontStyles.title}>{"Categories"}</Text>
         </View>
 
         <View style={styles.itemsContainer}>

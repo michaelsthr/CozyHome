@@ -41,7 +41,6 @@ export default function HomePage() {
       }
 
       try {
-        // Fetch group members
         const membersData = await getUsersByGroupId(user.groupID.$id);
         setGroupMembers(membersData.documents.map(doc => ({
           $id: doc.$id,
@@ -78,7 +77,7 @@ export default function HomePage() {
 
       await updateUserGroup(user.$id, null);
 
-      const updatedUser = { ...user, groupID: null }; // aktualisiertes Objekt
+      const updatedUser = { ...user, groupID: null };
       setUser(updatedUser);
 
       console.log("Updated user after leaving group:", updatedUser);
@@ -113,14 +112,12 @@ export default function HomePage() {
           </Text>
         </View>
 
-        {/* Welcome Section */}
         <View style={[ContainerStyles.greetingSection, {paddingTop: 0}]}>
           <Text style={fontStyles.greeting}>Welcome back,</Text>
           <Text style={fontStyles.username}>{user?.username || "Guest"}!</Text>
           <Text style={fontStyles.subtitle}>Manage your {group?.type}.</Text>
         </View>
 
-        {/* Group Information Card */}
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
           <View style={[cardStyles.Card, { marginHorizontal: 20, width: "90%" }]}>
             <View style={{ flexDirection: "row", alignItems: "center", alignContent: "center", marginBottom: 15 }}>
@@ -149,7 +146,6 @@ export default function HomePage() {
           </View>
         </View>
 
-        {/* Group Members Section */}
         <View style={[ContainerStyles.titleSection, { marginHorizontal: 20 }]}>
           <Text style={fontStyles.title}>Group Members</Text>
           <Text style={[fontStyles.subtitle, { marginBottom: 0 }]}>

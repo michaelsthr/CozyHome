@@ -1,19 +1,7 @@
 import { useFocusEffect, useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
-import {
-  ActivityIndicator,
-  Image,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
-} from "react-native";
-import {
-  getKuehlschrankInhalt,
-  KuehlschrankItem,
-} from "../../../lib/appwrite/dbKuehlschrank";
+import {ActivityIndicator, Image, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {getKuehlschrankInhalt, KuehlschrankItem,} from "../../../lib/appwrite/dbKuehlschrank";
 import { fridgeStyles } from "../../../styles/fridge_styles";
 import QuantityControls from "./fridgeBack/components/QuantityControls";
 import useQuantityManager from "./fridgeBack/hooks/useQuantityManager";
@@ -45,7 +33,6 @@ export default function Fridge() {
     }, [fetchFridgeItems])
   );
 
-  // Map categories to route names
   const getCategoryRoute = (category: string) => {
     switch (category) {
       case "Fruits":
@@ -77,13 +64,11 @@ export default function Fridge() {
 
   const handleSearch = () => {
     if (!searchTerm.trim()) return;
-    // Find items that match the search term
     const matchingItems = fridgeItems.filter(item => 
       item.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     if (matchingItems.length === 0) {
-      // If no items found, go to general fridge items page
       router.push("/(tabs)/fridge/fridge_items");
       return;
     }
@@ -170,13 +155,13 @@ export default function Fridge() {
       </SafeAreaView>
     );
   }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView 
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer}>
 
-        {/* Fridge Section */}
         <View style={styles.fridgeSection}>
           <View style={styles.headerContainer}>
             <Text style={styles.homeTitle}>{"Quick check"}</Text>
@@ -193,7 +178,6 @@ export default function Fridge() {
             {fridgeItems.length > 0 ? `${fridgeItems.length} products in your fridge` : "Your fridge is empty"}
           </Text>
 
-          {/* Search Bar */}
         <View style={styles.searchContainer}>
           <TextInput
             placeholder="Search products in your fridge..."
@@ -206,7 +190,6 @@ export default function Fridge() {
           />
         </View>
 
-          {/* Items Grid */}
           {fridgeItems.length > 0 ? (
             <View style={styles.itemsGrid}>
               {fridgeItems.map((item) => {
@@ -259,7 +242,6 @@ export default function Fridge() {
           }
         </View>
 
-        {/* Check Fridge Button */}
         <TouchableOpacity
           style={styles.addButton}
           onPress={() => router.push("/(tabs)/fridge/fridge_items")}

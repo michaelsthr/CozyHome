@@ -4,23 +4,9 @@ import { fontStyles } from "@/styles/font_styles";
 import { inputStyles } from "@/styles/input_styles";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import {
-    ActivityIndicator,
-    Alert,
-    Modal,
-    SafeAreaView,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
-} from "react-native";
+import { ActivityIndicator, Alert, Modal, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View} from "react-native";
 import { setKuehlschrankInhalt } from "../../../lib/appwrite/dbKuehlschrank";
-import {
-    FridgeCategories,
-    FridgeCategoryType,
-    getAllFridgeCategories,
-} from "../../../lib/constants/categories";
+import { FridgeCategories, FridgeCategoryType, getAllFridgeCategories,} from "../../../lib/constants/categories";
 import { fridgeStyles as styles } from "../../../styles/fridge_styles";
 
 export default function AddItem() {
@@ -33,8 +19,8 @@ export default function AddItem() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
     const [showDatePicker, setShowDatePicker] = useState(false);
-    const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+    const [, setSelectedMonth] = useState(new Date().getMonth());
+    const [, setSelectedYear] = useState(new Date().getFullYear());
 
     useEffect(() => {
         if (params.category) {
@@ -44,65 +30,9 @@ export default function AddItem() {
 
     const categories = getAllFridgeCategories();
 
-    // Generate calendar
-    const generateCalendar = () => {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const firstDay = new Date(selectedYear, selectedMonth, 1);
-        const lastDay = new Date(selectedYear, selectedMonth + 1, 0);
-        const daysInMonth = lastDay.getDate();
-        const startingDayOfWeek = firstDay.getDay();
-
-        const startingDay = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1;
-
-        const days = [];
-
-        for (let i = 0; i < startingDay; i++) {
-            days.push(null);
-        }
-
-        for (let day = 1; day <= daysInMonth; day++) {
-            const date = new Date(selectedYear, selectedMonth, day);
-            date.setHours(0, 0, 0, 0);
-
-            days.push({
-                day,
-                date,
-                isPast: date < today,
-                isToday: date.getTime() === today.getTime(),
-            });
-        }
-        return days;
-    };
-
     const selectDate = (day: any) => {
         setExpDate(day);
         setShowDatePicker(false);
-    };
-
-    const goToPreviousMonth = () => {
-        if (selectedMonth === 0) {
-            setSelectedMonth(11);
-            setSelectedYear(selectedYear - 1);
-        } else {
-            setSelectedMonth(selectedMonth - 1);
-        }
-    };
-
-    const goToNextMonth = () => {
-        if (selectedMonth === 11) {
-            setSelectedMonth(0);
-            setSelectedYear(selectedYear + 1);
-        } else {
-            setSelectedMonth(selectedMonth + 1);
-        }
-    };
-
-    const goToToday = () => {
-        const today = new Date();
-        setSelectedMonth(today.getMonth());
-        setSelectedYear(today.getFullYear());
     };
 
     const formatDate = (date: Date | null) => {
@@ -148,12 +78,10 @@ export default function AddItem() {
                 contentContainerStyle={styles.scrollContainer}>
 
                 <View style={styles.fridgeSection}>        
-                {/* Title Section */}
                 <View style={ContainerStyles.titleSection}>
                     <Text style={fontStyles.title}>{"Add New Item"}</Text>
                 </View>
             
-                {/* Form Container */}
                     <View style={styles.inputGroup}>
                         <Text style={styles.inputLabel}>{"Product Name"}</Text>
                         <TextInput
@@ -166,7 +94,6 @@ export default function AddItem() {
                         />
                     </View>
 
-                    {/* Quantity */}
                     <View style={styles.inputGroup}>
                         <Text style={styles.inputLabel}>{"Quantity"} </Text>
                         <TextInput
@@ -180,7 +107,6 @@ export default function AddItem() {
                         />
                     </View>
 
-                    {/* Category */}
                     <View style={styles.inputGroup}>
                         <Text style={styles.inputLabel}>{"Category"}</Text>
                         <TouchableOpacity
@@ -193,7 +119,6 @@ export default function AddItem() {
                         </TouchableOpacity>
                     </View>
 
-                    {/* Expiration Date */}
                     <View style={styles.inputGroup}>
                         <Text style={styles.inputLabel}>{"Expiration Date"}</Text>
                         <TouchableOpacity
@@ -217,7 +142,7 @@ export default function AddItem() {
                         )}
                     </View>
                 </View>
-                {/* Add Button */}
+
                 <TouchableOpacity
                     style={[styles.addButton, isSubmitting && { opacity: 0.5 }]}
                     onPress={handleSave}
@@ -229,14 +154,13 @@ export default function AddItem() {
                                 color='#ffffff'
                                 style={{ marginRight: 10 }}
                             />
-                            <Text style={styles.addButtonText}>{"ADDING..."}</Text>
+                            <Text style={styles.addButtonText}>{"adding..."}</Text>
                         </View>
                     ) : (
-                        <Text style={styles.addButtonText}>{"ADD TO FRIDGE"}</Text>
+                        <Text style={styles.addButtonText}>{"Add to Fridge"}</Text>
                     )}
                 </TouchableOpacity>
 
-                {/* Date Picker Modal */}
                 <TimePickerModal
                     showStartDatePicker={showDatePicker}
                     value={new Date()}
@@ -245,7 +169,6 @@ export default function AddItem() {
                     onDismiss={() => setShowDatePicker(false)}
                 />
 
-                {/* Category Selection Modal */}
                 <Modal
                     visible={showCategoryDropdown}
                     transparent={true}
@@ -258,7 +181,7 @@ export default function AddItem() {
                         <View style={styles.modalContent}>
                             <Text style={styles.modalTitle}>{"Select Category"}</Text>
                             <ScrollView showsVerticalScrollIndicator={false}>
-                                {categories.map((cat, index) => (
+                                {categories.map((cat) => (
                                     <TouchableOpacity
                                         key={cat}
                                         style={[
