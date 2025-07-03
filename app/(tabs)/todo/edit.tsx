@@ -70,9 +70,9 @@ export default function EditTodos() {
             <Badge style={styles.badgeSuccessMessage}><BadgeText style={styles.badgeSuccessMessageText}>{successMessage}</BadgeText></Badge>
           </View>
         )}
-        <View style={{ flex: 1, marginTop: "10%" }}>
+        <View style={{ flex: 1, marginTop: "10%" , height: screenHeight}}>
           <ScrollView>
-            {todos && todos.length > 0 ? (
+            {todos && todos.documents.length > 0 ? (
             todos?.documents?.map((item, index) => (
               <EditToDoItem
                 key={index}
