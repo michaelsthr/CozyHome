@@ -9,7 +9,7 @@ interface QuantityControlsProps {
   styles: any;
 }
 
-export const QuantityControls: React.FC<QuantityControlsProps> = ({
+const QuantityControls: React.FC<QuantityControlsProps> = ({
   item,
   onQuantityChange,
   isUpdating = false,
@@ -224,3 +224,5 @@ export const QuantityControls: React.FC<QuantityControlsProps> = ({
     </View>
   );
 };
+
+export default QuantityControls;

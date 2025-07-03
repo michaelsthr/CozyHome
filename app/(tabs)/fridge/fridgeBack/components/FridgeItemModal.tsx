@@ -1,8 +1,8 @@
-import React from 'react';
-import { Modal, View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
-import { FridgeCategoryType, getAllFridgeCategories } from '../types/fridge';
-import DatePickerField from './DatePickerField';
 import { inputStyles } from '@/styles/input_styles';
+import React from 'react';
+import { Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { FridgeCategoryType, getAllFridgeCategories } from '../../../../../lib/types/fridge';
+import DatePickerField from './DatePickerField';
 
 interface FridgeItemModalProps {
   visible: boolean;
@@ -21,7 +21,7 @@ interface FridgeItemModalProps {
   styles: any;
 }
 
-export const FridgeItemModal: React.FC<FridgeItemModalProps> = ({
+const FridgeItemModal: React.FC<FridgeItemModalProps> = ({
   visible,
   onClose,
   onSave,
@@ -151,3 +151,5 @@ export const FridgeItemModal: React.FC<FridgeItemModalProps> = ({
     </Modal>
   );
 };
+
+export default FridgeItemModal

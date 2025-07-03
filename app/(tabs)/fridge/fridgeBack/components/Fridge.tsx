@@ -1,13 +1,13 @@
 import { fontStyles } from "@/styles/font_styles";
 import React, { useMemo } from "react";
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useFridgeData } from "../hooks/useFridgeData";
-import { useFridgeFilters } from "../hooks/useFridgeFilters";
-import { useFridgeForm } from "../hooks/useFridgeForm";
-import { KuehlschrankItem } from "../types/fridge";
-import { FridgeFilters } from "./FridgeFilters";
-import { FridgeItemList } from "./FridgeItem";
-import { FridgeItemModal } from "./FridgeItemModal";
+import { KuehlschrankItem } from "../../../../../lib/types/fridge";
+import useFridgeData from "../hooks/useFridgeData";
+import useFridgeFilters from "../hooks/useFridgeFilters";
+import useFridgeForm from "../hooks/useFridgeForm";
+import FridgeFilters from "./FridgeFilters";
+import FridgeItemList from "./FridgeItem";
+import FridgeItemModal from "./FridgeItemModal";
 
 const styles = StyleSheet.create({
     container: {
