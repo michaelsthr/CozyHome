@@ -97,4 +97,10 @@ export const fontStyles = StyleSheet.create({
     fontWeight: "700",
     letterSpacing: 0.5,
   },
+  homeTitle: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#1e293b",
+    letterSpacing: -0.5,
+  },
 });
