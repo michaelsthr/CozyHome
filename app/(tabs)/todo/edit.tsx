@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, SafeAreaView, ScrollView, Text, View } from "react-native";
 import { EditToDoItem } from "../../../components/todo/todo_item";
 import { deleteTodo, getTodos } from "../../../lib/appwrite/dbTodo"; //für db
-import styles, { containerWidth } from "./styles";
+import styles, { containerWidth, screenHeight } from "./styles";
 
 const formatDate = (isoString: string) => {
   if (!isoString) return null;
@@ -63,7 +63,7 @@ export default function EditTodos() {
 
   return (
     <GluestackUIProvider config={config}>
-      <SafeAreaView style={[styles.container, { backgroundColor: "white", flex: 1 }]}>
+      <SafeAreaView style={styles.container}>
         <Text style={styles.heading}>Edit To Do</Text>
         {successMessage !== "" && (
           <View style={{ position: "absolute", alignItems: "center", zIndex: 2000, marginTop: "20%", width: containerWidth, alignSelf: "center" }}>
@@ -72,22 +72,24 @@ export default function EditTodos() {
         )}
         <View style={{ flex: 1, marginTop: "10%" }}>
           <ScrollView>
-            {todos && todos.documents.length > 0 ? (
-              todos?.documents?.map((item, index) => (
-                <EditToDoItem
-                  key={index}
-                  id={item.$id}
-                  title={item.name}
-                  date={formatDate(item.date) || null}
-                  routine={item.regularity || null}
-                  isChecked={item.done}
-                  onTrashPress={() => handleDeletePress(item.$id, item.name)}
-                  tag={item.tag || null}
-                  responsible={item.responsible || null}
-                />
-              ))
-            ) : (
-              <Text style={{ textAlign: "center", fontSize: 20, marginTop: 300 }}> No To Dos yet</Text>
+            {todos && todos.length > 0 ? (
+            todos?.documents?.map((item, index) => (
+              <EditToDoItem
+                key={index}
+                id={item.$id}
+                title={item.name}
+                date={formatDate(item.date) || null}
+                routine={item.regularity || null}
+                isChecked={item.done}
+                onTrashPress={() => handleDeletePress(item.$id, item.name)}
+                tag={item.tag || null}
+                responsible={item.responsible || null}
+              />
+            ))
+          ) : (
+            <View style= {{flex: 1, backgroundColor:"white", justifyContent:"center", alignItems:"center", height: screenHeight}}>
+              <Text style= {{textAlign:"center", fontSize:20, marginBottom: 320}}> No To Dos yet</Text>
+            </View>
             )}
           </ScrollView>
         </View>
