@@ -5,7 +5,19 @@ import { fontStyles } from "@/styles/font_styles";
 import { inputStyles } from "@/styles/input_styles";
 import { router, useNavigation } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Alert, Button, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+    Alert,
+    Button,
+    Image,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import { addGroup, getGroups } from "../../lib/appwrite/dbGroup";
 
 interface GroupProps {
@@ -97,49 +109,65 @@ export default function NewGroup() {
 
     return (
         <View style={styles.container}>
-            {/* Header */}
-            <View style={{ alignItems: "center" }}>
-                <Text
-                    style={{
-                        fontSize: 40,
-                        fontWeight: "800",
-                        color: "#7749f8",
-                        letterSpacing: -1,
-                        lineHeight: 40,
-                        paddingTop: 10,
-                    }}>
-                    Create new group
-                </Text>
-                <Image
-                    source={require("@/assets/images/groups_page.png")}
-                    style={{
-                        width: 320,
-                        height: 320,
-                    }}
-                    resizeMode='contain'
-                />
-            </View>
-            <View style={{width: "100%", paddingHorizontal: 32, flexDirection: "column", gap: 15, alignContent: "center"}}>
-                <Text style={{textAlign: "center"}}>Generated Key: {groupKey}</Text>
-                <TextInput
-                    style={inputStyles.input}
-                    placeholder='Name'
-                    value={groupName}
-                    onChangeText={setGroupName}
-                    autoCapitalize='words'
-                />
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={{ flex: 1, paddingTop: 50}}>
+                <ScrollView
+                    contentContainerStyle={{ flexGrow: 1 }}
+                    showsVerticalScrollIndicator={false}
+                    keyboardShouldPersistTaps='handled'>
+                    {/* Header */}
+                    <View style={{ alignItems: "center" }}>
+                        <Text
+                            style={{
+                                fontSize: 40,
+                                fontWeight: "800",
+                                color: "#7749f8",
+                                letterSpacing: -1,
+                                lineHeight: 40,
+                                paddingTop: 10,
+                            }}>
+                            Create new group
+                        </Text>
+                        <Image
+                            source={require("@/assets/images/groups_page.png")}
+                            style={{
+                                width: 320,
+                                height: 320,
+                            }}
+                            resizeMode='contain'
+                        />
+                    </View>
+                    <View
+                        style={{
+                            width: "100%",
+                            paddingHorizontal: 32,
+                            flexDirection: "column",
+                            gap: 15,
+                            alignContent: "center",
+                        }}>
+                        <Text style={{ textAlign: "center" }}>Generated Key: {groupKey}</Text>
+                        <TextInput
+                            style={inputStyles.input}
+                            placeholder='Name'
+                            value={groupName}
+                            onChangeText={setGroupName}
+                            autoCapitalize='words'
+                        />
 
-                <TextInput
-                    style={inputStyles.input}
-                    placeholder='Type e.g.: Shared Appartment'
-                    value={groupType}
-                    onChangeText={setGroupType}
-                />
-                <TouchableOpacity style={buttonStyles.button} onPress={handleCreate}>
-                    <Text style={fontStyles.buttonText}>Create</Text>
-                </TouchableOpacity>
-                <Button title="Go Back" color="#7749f8" onPress={router.back}/>
-            </View>
+                        <TextInput
+                            style={inputStyles.input}
+                            placeholder='Type e.g.: Shared Appartment'
+                            value={groupType}
+                            onChangeText={setGroupType}
+                        />
+                        <TouchableOpacity style={buttonStyles.button} onPress={handleCreate}>
+                            <Text style={fontStyles.buttonText}>Create</Text>
+                        </TouchableOpacity>
+                        <Button title='Go Back' color='#7749f8' onPress={router.back} />
+                    </View>
+                </ScrollView>
+            </KeyboardAvoidingView>
         </View>
     );
 }

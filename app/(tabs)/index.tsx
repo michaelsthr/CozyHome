@@ -94,7 +94,7 @@ export default function HomePage() {
       setLoading(true);
 
       setUser(null);
-      router.push
+      router.push("/(auth)");
 
     } catch (error) {
       console.error("Error log out:", error);

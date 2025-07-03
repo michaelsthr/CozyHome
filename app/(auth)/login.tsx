@@ -1,7 +1,17 @@
 import { useSession } from "@/lib/context/SessionContext";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+    Image,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from "react-native";
 
 import { checkUserValid, createNewUser, User } from "@/lib/appwrite/dbUser";
 import { buttonStyles } from "@/styles/button_styles";
@@ -17,7 +27,6 @@ export default function Auth() {
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
     const { group, user, setUser, setGroup } = useSession();
     const router = useRouter();
-    
 
     async function login(username: string, password: string) {
         try {
@@ -67,15 +76,15 @@ export default function Auth() {
         }
     }
 
-  async function register(username: string, password: string) {
-    try {
-      await createNewUser(username, password);
-      await login(username, password);
-    } catch (error) {
-      console.error("Registration failed:", error);
-      alert("Username already exists. Please choose another one.");
+    async function register(username: string, password: string) {
+        try {
+            await createNewUser(username, password);
+            await login(username, password);
+        } catch (error) {
+            console.error("Registration failed:", error);
+            alert("Username already exists. Please choose another one.");
+        }
     }
-  }
 
     async function logout() {
         setLoggedInUser(null);
@@ -85,152 +94,158 @@ export default function Auth() {
 
     return (
         <SafeAreaView style={styles.container}>
-            {/* Header */}
-            <View style={{ alignItems: "center" }}>
-                <Text
-                    style={{
-                        fontSize: 40,
-                        fontWeight: "800",
-                        color: "#7749f8",
-                        letterSpacing: -1,
-                        lineHeight: 40,
-                    }}>
-                    Cozy Home
-                </Text>
-                <Image
-                    source={require("@/assets/images/login_page.png")}
-                    style={{
-                        width: 320,
-                        height: 320,
-                    }}
-                    resizeMode='contain'
-                />
-            </View>
-
-            {/* Inputs */}
-            <View
-                style={{
-                    width: "100%",
-                    paddingHorizontal: 32,
-                    marginBottom: 40,
-                }}>
-                <View style={{ marginBottom: 20 }}>
-                    <Text
-                        style={{
-                            fontSize: 14,
-                            fontWeight: "600",
-                            color: "#374151",
-                            marginBottom: 8,
-                            marginLeft: 4,
-                        }}>
-                        Username
-                    </Text>
-                    <TextInput
-                        placeholder='Benutzername eingeben'
-                        placeholderTextColor='#9ca3af'
-                        autoCapitalize='none'
-                        value={username}
-                        onChangeText={setUsername}
-                        style={[
-                            inputStyles.input,
-                            {
-                                height: 56,
-                                fontSize: 16,
-                                shadowColor: "#000",
-                                shadowOffset: { width: 0, height: 1 },
-                                shadowOpacity: 0.05,
-                                shadowRadius: 3,
-                                elevation: 2,
-                            },
-                        ]}
-                    />
-                </View>
-
-                <View style={{ marginBottom: 32 }}>
-                    <Text
-                        style={{
-                            fontSize: 14,
-                            fontWeight: "600",
-                            color: "#374151",
-                            marginBottom: 8,
-                            marginLeft: 4,
-                        }}>
-                        Password
-                    </Text>
-                    <TextInput
-                        placeholder='Passwort eingeben'
-                        placeholderTextColor='#9ca3af'
-                        autoCapitalize='none'
-                        secureTextEntry={true}
-                        value={password}
-                        onChangeText={setPassword}
-                        style={[
-                            inputStyles.input,
-                            {
-                                height: 56,
-                                fontSize: 16,
-                                shadowColor: "#000",
-                                shadowOffset: { width: 0, height: 1 },
-                                shadowOpacity: 0.05,
-                                shadowRadius: 3,
-                                elevation: 2,
-                            },
-                        ]}
-                    />
-                </View>
-            </View>
-
-            {/* Buttons */}
-            <View style={{ width: "100%", paddingHorizontal: 32 }}>
-                <TouchableOpacity
-                    style={[
-                        buttonStyles.button,
-                        {
-                            height: 56,
-                            marginBottom: 32,
-                        },
-                    ]}
-                    onPress={() => login(username, password)}>
-                    <Text
-                        style={[
-                            fontStyles.buttonText,
-                            {
-                                fontSize: 18,
-                                fontWeight: "600",
-                            },
-                        ]}>
-                        Log in
-                    </Text>
-                </TouchableOpacity>
-
-                <View
-                    style={{
-                        flexDirection: "row",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        gap: 8,
-                    }}>
-                    <Text
-                        style={fontStyles.lighter}>
-                        Don't have an account?
-                    </Text>
-                    <TouchableOpacity
-                        onPress={() => register(username, password)}
-                        style={{
-                            paddingVertical: 8,
-                            paddingHorizontal: 12,
-                        }}>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={{ flex: 1 }}>
+                <ScrollView
+                    contentContainerStyle={{ flexGrow: 1 }}
+                    showsVerticalScrollIndicator={false}
+                    keyboardShouldPersistTaps='handled'>
+                    {/* Header */}
+                    <View style={{ alignItems: "center" }}>
                         <Text
                             style={{
-                                fontSize: 16,
+                                fontSize: 40,
+                                fontWeight: "800",
                                 color: "#7749f8",
-                                fontWeight: "600",
+                                letterSpacing: -1,
+                                lineHeight: 40,
                             }}>
-                            Register
+                            Cozy Home
                         </Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
+                        <Image
+                            source={require("@/assets/images/login_page.png")}
+                            style={{
+                                width: 320,
+                                height: 320,
+                            }}
+                            resizeMode='contain'
+                        />
+                    </View>
+
+                    {/* Inputs */}
+                    <View
+                        style={{
+                            width: "100%",
+                            paddingHorizontal: 32,
+                            marginBottom: 20,
+                        }}>
+                        <View style={{ marginBottom: 10 }}>
+                            <Text
+                                style={{
+                                    fontSize: 14,
+                                    fontWeight: "600",
+                                    color: "#374151",
+                                    marginBottom: 8,
+                                    marginLeft: 4,
+                                }}>
+                                Username
+                            </Text>
+                            <TextInput
+                                placeholder='Benutzername eingeben'
+                                placeholderTextColor='#9ca3af'
+                                autoCapitalize='none'
+                                value={username}
+                                onChangeText={setUsername}
+                                style={[
+                                    inputStyles.input,
+                                    {
+                                        height: 56,
+                                        fontSize: 16,
+                                        shadowColor: "#000",
+                                        shadowOffset: { width: 0, height: 1 },
+                                        shadowOpacity: 0.05,
+                                        shadowRadius: 3,
+                                        elevation: 2,
+                                    },
+                                ]}
+                            />
+                        </View>
+
+                        <View style={{ marginBottom: 32 }}>
+                            <Text
+                                style={{
+                                    fontSize: 14,
+                                    fontWeight: "600",
+                                    color: "#374151",
+                                    marginBottom: 8,
+                                    marginLeft: 4,
+                                }}>
+                                Password
+                            </Text>
+                            <TextInput
+                                placeholder='Passwort eingeben'
+                                placeholderTextColor='#9ca3af'
+                                autoCapitalize='none'
+                                secureTextEntry={true}
+                                value={password}
+                                onChangeText={setPassword}
+                                style={[
+                                    inputStyles.input,
+                                    {
+                                        height: 56,
+                                        fontSize: 16,
+                                        shadowColor: "#000",
+                                        shadowOffset: { width: 0, height: 1 },
+                                        shadowOpacity: 0.05,
+                                        shadowRadius: 3,
+                                        elevation: 2,
+                                    },
+                                ]}
+                            />
+                        </View>
+                    </View>
+
+                    {/* Buttons */}
+                    <View style={{ width: "100%", paddingHorizontal: 32 }}>
+                        <TouchableOpacity
+                            style={[
+                                buttonStyles.button,
+                                {
+                                    height: 56,
+                                    marginBottom: 10,
+                                },
+                            ]}
+                            onPress={() => login(username, password)}>
+                            <Text
+                                style={[
+                                    fontStyles.buttonText,
+                                    {
+                                        fontSize: 18,
+                                        fontWeight: "600",
+                                    },
+                                ]}>
+                                Log in
+                            </Text>
+                        </TouchableOpacity>
+
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                gap: 8,
+                            }}>
+                            <Text style={fontStyles.lighter}>Don't have an account?</Text>
+                            <TouchableOpacity
+                                onPress={() => register(username, password)}
+                                style={{
+                                    paddingVertical: 8,
+                                    paddingHorizontal: 12,
+                                }}>
+                                <Text
+                                    style={{
+                                        fontSize: 16,
+                                        color: "#7749f8",
+                                        fontWeight: "600",
+                                    }}>
+                                    Register
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </ScrollView>
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 }
