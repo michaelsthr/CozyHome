@@ -91,6 +91,10 @@ export const fontStyles = StyleSheet.create({
     color: "gray",
     fontSize: 11,
   },
+    lighter: {
+      fontSize: 16,
+      color: "#6b7280",
+    },
   buttonText: {
     color: "#ffffff",
     fontSize: 18,

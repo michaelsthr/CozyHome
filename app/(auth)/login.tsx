@@ -210,10 +210,7 @@ export default function Auth() {
                         gap: 8,
                     }}>
                     <Text
-                        style={{
-                            fontSize: 16,
-                            color: "#6b7280",
-                        }}>
+                        style={fontStyles.lighter}>
                         Don't have an account?
                     </Text>
                     <TouchableOpacity

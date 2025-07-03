@@ -1,126 +1,118 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Button } from 'react-native';
-import { router, useNavigation } from 'expo-router';
+import { updateUserGroup } from "@/lib/appwrite/dbUser";
+import { User, useSession } from "@/lib/context/SessionContext";
+import { buttonStyles } from "@/styles/button_styles";
+import { fontStyles } from "@/styles/font_styles";
+import { inputStyles } from "@/styles/input_styles";
+import { router, useNavigation } from "expo-router";
+import React, { useLayoutEffect, useState } from "react";
+import { Alert, Button, Text, TextInput, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { getGroups } from "../../lib/appwrite/dbGroup";
-import { Group, useSession } from '@/lib/context/SessionContext';
-import { updateUserGroup } from '@/lib/appwrite/dbUser';
-
 
 interface GroupProps {
-  name: string;
-  groupKey: string;
-  type: string;
+    name: string;
+    groupKey: string;
+    type: string;
 }
 
 export default function EnterGroupKey() {
-  const navigation = useNavigation();
-  const [groupKey, setGroupKey] = useState('');
-  const { user, setUser, group, setGroup } = useSession();
+    const navigation = useNavigation();
+    const [groupKey, setGroupKey] = useState("");
+    const { user, setUser, setGroup } = useSession();
 
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            title: "Enter Group Key",
+        });
+    }, [navigation]);
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: 'Enter Group Key',
-    });
-  }, [navigation]);
+    const handleSubmit = async () => {
+        const existingGroups = await getGroups();
+        const foundGroup = (existingGroups.documents ?? []).find(
+            (group: GroupProps) => group.groupKey.toUpperCase() === groupKey.trim().toUpperCase()
+        );
 
-  const handleSubmit = async () => {
-    const existingGroups = await getGroups();
-    const foundGroup = (existingGroups.documents ?? []).find(
-      (group: GroupProps) => group.groupKey.toUpperCase() === groupKey.trim().toUpperCase()
+        if (!foundGroup) {
+            Alert.alert("Please enter a valid Group Key");
+            return;
+        }
+
+        if (!user) {
+            Alert.alert("No logged-in user found.");
+            return;
+        }
+        console.log(user);
+
+        setGroup(foundGroup);
+
+        try {
+            const updatedUserDoc = await updateUserGroup(user.$id, foundGroup.$id);
+            const updatedUser: User = {
+                ...user,
+                groupID: foundGroup.$id,
+                ...updatedUserDoc,
+            };
+            setUser(updatedUser);
+            router.replace("/(tabs)");
+        } catch {
+            Alert.alert("Failed to update user group.");
+        }
+    };
+
+    return (
+        <SafeAreaView
+            style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "white",
+                paddingHorizontal: 32,
+            }}>
+            <Button title='← Back' color='blue' onPress={() => router.back()} />
+            <Text
+                style={{
+                    fontSize: 28,
+                    fontWeight: "600",
+                    color: "#374151",
+                    marginBottom: 40,
+                    textAlign: "center",
+                }}>
+                Please put in an existing Group Key:
+            </Text>
+            <TextInput
+                style={[
+                    inputStyles.input,
+                    {
+                        height: 56,
+                        fontSize: 16,
+                        shadowColor: "#000",
+                        shadowOffset: { width: 0, height: 1 },
+                        shadowOpacity: 0.05,
+                        shadowRadius: 3,
+                        elevation: 2,
+                        width: "100%",
+                        marginBottom: 32,
+                    },
+                ]}
+                placeholder='Key'
+                value={groupKey}
+                onChangeText={setGroupKey}
+                autoCapitalize='characters'
+                autoCorrect={false}
+            />
+            <TouchableOpacity
+                style={[
+                    buttonStyles.button,
+                    {
+                        height: 56,
+                        width: "100%",
+                    },
+                ]}
+                onPress={handleSubmit}>
+                <Text style={[fontStyles.buttonText, { fontSize: 18, fontWeight: "600" }]}>
+                    Join
+                </Text>
+            </TouchableOpacity>
+        </SafeAreaView>
     );
-
-    if (!foundGroup) {
-      Alert.alert('Please enter a valid Group Key');
-      return;
-    }
-
-    if (!user) {
-      Alert.alert("No logged-in user found.");
-      return;
-    }
-    console.log(user);
-    
-
-    setGroup(foundGroup);
-
-    try {
-      const updatedUser = await updateUserGroup(user.$id, foundGroup.$id);
-      setUser(updatedUser);
-      router.replace('/(tabs)');
-    } catch {
-      Alert.alert('Failed to update user group.');
-    }
-  };
-
-  return (
-    <View style={styles.container}>
-      <Button
-        title="← Back"
-        color="blue"
-        onPress={() => router.back()}
-      />
-      <Text style={styles.titleText}>Please put in an existing Group Key:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Key"
-        value={groupKey}
-        onChangeText={setGroupKey}
-        autoCapitalize="characters"
-        autoCorrect={false}
-      />
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Join</Text>
-      </TouchableOpacity>
-    </View>
-  );
 }
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f0f0f0',
-    paddingHorizontal: 20,
-  },
-  titleText: {
-    fontSize: 28,
-    fontWeight: '600',
-    marginBottom: 40,
-    textAlign: 'center',
-  },
-  input: {
-    width: '90%',
-    height: 60,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    paddingHorizontal: 20,
-    fontSize: 18,
-    marginBottom: 30,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 5,
-    elevation: 3,
-  },
-  button: {
-    backgroundColor: '#007bff',
-    width: '90%',
-    height: 60,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-  },
-});
