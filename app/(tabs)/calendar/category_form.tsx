@@ -14,7 +14,6 @@ import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const COLORS = [
-    "tomato",
     "skyblue",
     "gold",
     "lightgreen",
@@ -23,7 +22,6 @@ const COLORS = [
     "lightpink",
     "lightgray",
     "lavender",
-    "peachpuff",
 ];
 
 const CategoryForm = () => {
