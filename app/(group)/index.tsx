@@ -89,7 +89,7 @@ export default function Index() {
             width: "100%",
             paddingTop: 20,
           }}>
-          <Button title="Other user" color="#7749f8" onPress={otherUser} />
+          <Button title={`Other user than ${user?.username}?`} color="#7749f8" onPress={otherUser} />
         </View>
       </View>
     </SafeAreaView>
