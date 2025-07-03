@@ -63,7 +63,7 @@ export default function EditTodos() {
 
   return (
     <GluestackUIProvider config={config}>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, { backgroundColor: "white", flex: 1 }]}>
         <Text style={styles.heading}>Edit To Do</Text>
         {successMessage !== "" && (
           <View style={{ position: "absolute", alignItems: "center", zIndex: 2000, marginTop: "20%", width: containerWidth, alignSelf: "center" }}>
