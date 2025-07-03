@@ -5,7 +5,7 @@ import { ContainerStyles } from "@/styles/container_styles";
 import { fontStyles } from "@/styles/font_styles";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useState } from "react";
-import { Button, View, Text } from "react-native";
+import { Button, KeyboardAvoidingView, Platform, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import EventForm from "./event_form";
 
@@ -65,32 +65,35 @@ const EventView = () => {
 
     return (
         <SafeAreaView style={ContainerStyles.ModalContainer}>
-            <View style={ContainerStyles.titleSection}>
-                <Text style={fontStyles.title}>{isEdit ? "Update Event" : "New Event"}</Text>
-            </View>
-            <EventForm
-                event={eventFromParams}
-                onSubmit={handleAddOrUpdateEvent}
-                isEditMode={isEdit}
-            />
-            {isEdit && (
-                <>
-                    <Button
-                        title='Delete Event'
-                        color='red'
-                        onPress={() => setShowDeleteModal(true)}
-                    />
-                    <DeleteModal
-                        visible={showDeleteModal}
-                        onClose={() => setShowDeleteModal(false)}
-                        onDelete={handleDeleteEvent}
-                        title='Delete Event?'
-                    />
-                </>
-            )}
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={{ flex: 1 }}>
+                <View style={ContainerStyles.titleSection}>
+                    <Text style={fontStyles.title}>{isEdit ? "Update Event" : "New Event"}</Text>
+                </View>
+                <EventForm
+                    event={eventFromParams}
+                    onSubmit={handleAddOrUpdateEvent}
+                    isEditMode={isEdit}
+                />
+                {isEdit && (
+                    <>
+                        <Button
+                            title='Delete Event'
+                            color='red'
+                            onPress={() => setShowDeleteModal(true)}
+                        />
+                        <DeleteModal
+                            visible={showDeleteModal}
+                            onClose={() => setShowDeleteModal(false)}
+                            onDelete={handleDeleteEvent}
+                            title='Delete Event?'
+                        />
+                    </>
+                )}
+            </KeyboardAvoidingView>
         </SafeAreaView>
     );
 };
 
 export default EventView;
-

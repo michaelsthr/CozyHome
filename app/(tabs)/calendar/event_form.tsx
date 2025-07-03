@@ -72,18 +72,18 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
         }
     }, [event?.category, event?.creator, user?.username]);
 
-    const handleDateTimeChange = (type: 'date' | 'startTime' | 'endTime') => 
-        (event: any, selectedDate?: Date) => {
+    const handleDateTimeChange =
+        (type: "date" | "startTime" | "endTime") => (event: any, selectedDate?: Date) => {
             if (!selectedDate) return;
-            
+
             switch (type) {
-                case 'date':
+                case "date":
                     setDate(selectedDate);
                     break;
-                case 'startTime':
+                case "startTime":
                     setStartTime(selectedDate);
                     break;
-                case 'endTime':
+                case "endTime":
                     setEndTime(selectedDate);
                     break;
             }
@@ -105,14 +105,18 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
             return;
         }
 
-        if (description.length > 200){
-            alert("The Description can only have up to 200 characters.\nYou have " + description.length)
+        if (description.length > 200) {
+            alert(
+                "The Description can only have up to 200 characters.\nYou have " +
+                    description.length
+            );
         }
 
-        if (name.length > 200){
-            alert("The Event Name can only have up to 200 characters.\nYou have " + description.length)
+        if (name.length > 200) {
+            alert(
+                "The Event Name can only have up to 200 characters.\nYou have " + description.length
+            );
         }
-
 
         const eventData: Event = {
             name: name || "new Event",
@@ -143,31 +147,33 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
                 placeholderTextColor={"grey"}
                 onChangeText={(text) => setName(text)}
                 value={name}
+                returnKeyType='done'
+                onSubmitEditing={() => {}}
             />
-            
-            <View style={{marginVertical: 10}}>
+
+            <View style={{ marginVertical: 10 }}>
                 <CustomDateTimePicker
                     value={date}
-                    mode="date"
-                    onChange={handleDateTimeChange('date')}
-                    display="inline"
-                    />
+                    mode='date'
+                    onChange={handleDateTimeChange("date")}
+                    display='inline'
+                />
             </View>
-            
+
             <TimeRangePicker
                 startTime={startTime}
                 endTime={endTime}
-                onStartTimeChange={handleDateTimeChange('startTime')}
-                onEndTimeChange={handleDateTimeChange('endTime')}
-                display="spinner"
+                onStartTimeChange={handleDateTimeChange("startTime")}
+                onEndTimeChange={handleDateTimeChange("endTime")}
+                display='spinner'
             />
-            
+
             <View style={cardStyles.BasicCard}>
                 <Pressable
                     onPress={() => setCategoryModalVisible(true)}
                     style={{ flexDirection: "row", alignItems: "center" }}>
                     <Text style={ContainerStyles.categoryPickerText}>Category:</Text>
-                    {selectedCategory ?
+                    {selectedCategory ? (
                         <View style={ContainerStyles.categoryPickerValueContainer}>
                             <View
                                 style={[
@@ -176,47 +182,54 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
                                         backgroundColor: selectedCategory.color || "#ccc",
                                     },
                                 ]}
-                                />
+                            />
                             <Text style={ContainerStyles.categoryPickerValueText}>
                                 {selectedCategory.name}
                             </Text>
                         </View>
-                    :   <Text style={ContainerStyles.categoryPickerPlaceholder}>
+                    ) : (
+                        <Text style={ContainerStyles.categoryPickerPlaceholder}>
                             No categories available
                         </Text>
-                    }
+                    )}
                 </Pressable>
             </View>
-                <CategoryModal
-                    visible={categoryModalVisible}
-                    categories={categories}
-                    onClose={() => setCategoryModalVisible(false)}
-                    onSelectCategory={handleCategorySelect}
-                />
-                <TextInput
-                    placeholder='Description'
-                    placeholderTextColor={"black"}
-                    onChangeText={setDescription}
-                    value={description}
-                    style={[inputStyles.input, {
+            <CategoryModal
+                visible={categoryModalVisible}
+                categories={categories}
+                onClose={() => setCategoryModalVisible(false)}
+                onSelectCategory={handleCategorySelect}
+            />
+            <TextInput
+                placeholder='Description'
+                placeholderTextColor={"black"}
+                onChangeText={setDescription}
+                value={description}
+                style={[
+                    inputStyles.input,
+                    {
                         height: 80,
-                        textAlignVertical: 'top',
+                        textAlignVertical: "top",
                         paddingTop: 10,
-                    }]}
-                    multiline={true}
-                    numberOfLines={4}
-                />
-                <Text
-                    style={[
-                        fontStyles.subtitle,
-                        { textAlign: "left", marginTop: 10, marginBottom: 40},
-                    ]}>
-                    {"The Creator of this Event is: " + creatorName || "Unknown"}
+                    },
+                ]}
+                multiline={true}
+                numberOfLines={4}
+                returnKeyType='done'
+                blurOnSubmit={true}
+                onSubmitEditing={() => {}}
+            />
+            <Text
+                style={[
+                    fontStyles.subtitle,
+                    { textAlign: "left", marginTop: 10, marginBottom: 40 },
+                ]}>
+                {"The Creator of this Event is: " + creatorName || "Unknown"}
+            </Text>
+            <TouchableOpacity style={buttonStyles.button} onPress={handleSubmit}>
+                <Text style={fontStyles.buttonText}>
+                    {isEditMode ? "Update Event" : "Add Event"}
                 </Text>
-                <TouchableOpacity style={buttonStyles.button} onPress={handleSubmit}>
-                    <Text style={fontStyles.buttonText}>
-                        {isEditMode ?  "Update Event" : "Add Event"}
-                    </Text>
             </TouchableOpacity>
         </>
     );
