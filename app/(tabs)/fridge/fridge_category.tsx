@@ -221,7 +221,7 @@ export default function FridgeCategory() {
                                             onSubmitEditing={() => submitEditing(item, setItems, items)}
                                         />
                                     ) : (
-                                        <TouchableOpacity onPress={() => startEditing(item)}>
+                                        <TouchableOpacity onPress={() => startEditing(item)} style={styles.quantityDisplay}>
                                             <Text style={styles.quantityText}>{item.anzahl}</Text>
                                         </TouchableOpacity>
                                     )}

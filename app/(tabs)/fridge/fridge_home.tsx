@@ -229,12 +229,14 @@ export default function Fridge() {
                       <Text style={styles.fridgeHomeItemName} numberOfLines={2}>
                         {item.name}
                       </Text>
-                      <QuantityControls
-                        item={item}
-                        onQuantityChange={onQuantityChange}
-                        isUpdating={isUpdating}
-                        styles={fridgeStyles}
-                      />
+                      <View style={styles.quantityContainer}>
+                        <QuantityControls
+                          item={item}
+                          onQuantityChange={onQuantityChange}
+                          isUpdating={isUpdating}
+                          styles={fridgeStyles}
+                        />
+                      </View>
                     </View>
                   </View>
                 );
