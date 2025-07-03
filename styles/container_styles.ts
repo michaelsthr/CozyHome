@@ -159,5 +159,9 @@ export const ContainerStyles = StyleSheet.create({
     },
     titleSection: {
       paddingVertical: 25,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      paddingTop: 20,
     },
 });;

@@ -19,6 +19,7 @@ import {
   View
 } from "react-native";
 import { Models } from "react-native-appwrite";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface GroupMember {
   $id: string;
@@ -92,7 +93,7 @@ export default function HomePage() {
   const logOut = async () => {
     try {
       setLoading(true);
-      
+
       setUser(null);
       setGroup(null);
 
@@ -106,116 +107,112 @@ export default function HomePage() {
   }
 
   return (
-    <ScrollView style={ContainerStyles.container} showsVerticalScrollIndicator={false}>
-      {/* Header with App Logo */}
-      <View style={ContainerStyles.header}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Image
-            source={require("@/assets/images/fridge_icons/logo-2.png")}
-            style={globalStyles.logo}
-          />
-          <Text style={[fontStyles.h1, { marginLeft: 10, marginRight: 0 }]}>
-            CozyHome
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+      <ScrollView style={ContainerStyles.container} showsVerticalScrollIndicator={false}>
+        <View style={[ContainerStyles.greetingSection, { paddingBottom: 20 }]}>
+          <Text style={[fontStyles.modernHeading, { marginTop:10}]}>
+            Cozy Home
           </Text>
         </View>
-      </View>
 
-      {/* Welcome Section */}
-      <View style={ContainerStyles.greetingSection}>
-        <Text style={fontStyles.greeting}>Welcome back,</Text>
-        <Text style={fontStyles.username}>{user?.username || "Guest"}!</Text>
-        <Text style={fontStyles.subtitle}>Manage your {group?.type}.</Text>
-      </View>
-
-      {/* Group Information Card */}
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <View style={[cardStyles.Card, { marginHorizontal: 20, width: "90%" }]}>
-          <View style={{ flexDirection: "row", alignItems: "center", alignContent: "center", marginBottom: 15 }}>
-            <View
-              style={{
-                width: 50,
-                height: 50,
-                backgroundColor: "#3b82f6",
-                borderRadius: 25,
-                justifyContent: "center",
-                alignItems: "center",
-                marginRight: 15,
-              }}
-            >
-              <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
-                {group?.name?.charAt(0)?.toUpperCase() || "G"}
-              </Text>
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={fontStyles.title}>{group?.name || "Unknown Group"}</Text>
-              <Text style={[fontStyles.large, { color: "#64748b", marginTop: 5 }]}>
-                Group Key: {group?.groupKey || "N/A"}
-              </Text>
-            </View>
-          </View>
+        {/* Welcome Section */}
+        <View style={[ContainerStyles.greetingSection, {paddingTop: 0}]}>
+          <Text style={fontStyles.greeting}>Welcome back,</Text>
+          <Text style={fontStyles.username}>{user?.username || "Guest"}!</Text>
+          <Text style={fontStyles.subtitle}>Manage your {group?.type}.</Text>
         </View>
-      </View>
 
-      {/* Group Members Section */}
-      <View style={[ContainerStyles.titleSection, { marginHorizontal: 20 }]}>
-        <Text style={fontStyles.title}>Group Members</Text>
-        <Text style={[fontStyles.subtitle, { marginBottom: 0 }]}>
-          {groupMembers.length} member{groupMembers.length !== 1 ? "s" : ""}
-        </Text>
-      </View>
-
-      {groupMembers.length > 0 ? (
-        <View style={{ paddingHorizontal: 20 }}>
-          {groupMembers.map((member, index) => (
-            <View key={member.$id} style={ContainerStyles.row}>
+        {/* Group Information Card */}
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <View style={[cardStyles.Card, { marginHorizontal: 20, width: "90%" }]}>
+            <View style={{ flexDirection: "row", alignItems: "center", alignContent: "center", marginBottom: 15 }}>
               <View
                 style={{
-                  width: 45,
-                  height: 45,
-                  backgroundColor: member.$id === user.$id ? "#22c55e" : "#6366f1",
-                  borderRadius: 22.5,
+                  width: 50,
+                  height: 50,
+                  backgroundColor: "#3b82f6",
+                  borderRadius: 25,
                   justifyContent: "center",
                   alignItems: "center",
                   marginRight: 15,
                 }}
               >
-                <Text style={{ color: "white", fontSize: 16, fontWeight: "600" }}>
-                  {member.username.charAt(0).toUpperCase()}
+                <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
+                  {group?.name?.charAt(0)?.toUpperCase() || "G"}
                 </Text>
               </View>
-              <View style={ContainerStyles.info}>
-                <Text style={[fontStyles.itemName, { textAlign: "left" }]}>
-                  {member.username}
-                  {member.$id === user.$id && (
-                    <Text style={{ color: "#22c55e", fontWeight: "normal" }}> (You)</Text>
-                  )}
+              <View style={{ flex: 1 }}>
+                <Text style={fontStyles.title}>{group?.name || "Unknown Group"}</Text>
+                <Text style={[fontStyles.large, { color: "#64748b", marginTop: 5 }]}>
+                  Group Key: {group?.groupKey || "N/A"}
                 </Text>
               </View>
             </View>
-          ))}
-          <Button
-            title="Leave Group"
-            color="blue"
-            onPress={() => leaveGroup()}
-          />
-          <Button
-            title="Log Out"
-            color="blue"
-            onPress={() => logOut()}
-          />
+          </View>
         </View>
-      ) : (
-        <View style={ContainerStyles.emptyState}>
-          <Image
-            source={require("@/assets/images/fridge_icons/profile-picture.png")}
-            style={globalStyles.emptyIcon}
-          />
-          <Text style={fontStyles.emptyText}>No members found</Text>
-          <Text style={fontStyles.emptySubtext}>
-            Invite others to join your group
+
+        {/* Group Members Section */}
+        <View style={[ContainerStyles.titleSection, { marginHorizontal: 20 }]}>
+          <Text style={fontStyles.title}>Group Members</Text>
+          <Text style={[fontStyles.subtitle, { marginBottom: 0 }]}>
+            {groupMembers.length} member{groupMembers.length !== 1 ? "s" : ""}
           </Text>
         </View>
-      )}
-    </ScrollView>
+
+        {groupMembers.length > 0 ? (
+          <View style={{ paddingHorizontal: 20 }}>
+            {groupMembers.map((member, index) => (
+              <View key={member.$id} style={ContainerStyles.row}>
+                <View
+                  style={{
+                    width: 45,
+                    height: 45,
+                    backgroundColor: member.$id === user.$id ? "#22c55e" : "#6366f1",
+                    borderRadius: 22.5,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginRight: 15,
+                  }}
+                >
+                  <Text style={{ color: "white", fontSize: 16, fontWeight: "600" }}>
+                    {member.username.charAt(0).toUpperCase()}
+                  </Text>
+                </View>
+                <View style={ContainerStyles.info}>
+                  <Text style={[fontStyles.itemName, { textAlign: "left" }]}>
+                    {member.username}
+                    {member.$id === user.$id && (
+                      <Text style={{ color: "#22c55e", fontWeight: "normal" }}> (You)</Text>
+                    )}
+                  </Text>
+                </View>
+              </View>
+            ))}
+            <Button
+              title="Leave Group"
+              color="blue"
+              onPress={() => leaveGroup()}
+            />
+            <Button
+              title="Log Out"
+              color="blue"
+              onPress={() => logOut()}
+            />
+          </View>
+        ) : (
+          <View style={ContainerStyles.emptyState}>
+            <Image
+              source={require("@/assets/images/fridge_icons/profile-picture.png")}
+              style={globalStyles.emptyIcon}
+            />
+            <Text style={fontStyles.emptyText}>No members found</Text>
+            <Text style={fontStyles.emptySubtext}>
+              Invite others to join your group
+            </Text>
+          </View>
+        )}
+      </ScrollView>
+    </SafeAreaView>
+
   );
 }
