@@ -1,7 +1,7 @@
 import { useFocusEffect, useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
-import {ActivityIndicator, Image, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View} from "react-native";
-import {getKuehlschrankInhalt, KuehlschrankItem,} from "../../../lib/appwrite/dbKuehlschrank";
+import { ActivityIndicator, Image, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { getKuehlschrankInhalt, KuehlschrankItem, } from "../../../lib/appwrite/dbKuehlschrank";
 import { fridgeStyles } from "../../../styles/fridge_styles";
 import QuantityControls from "./fridgeBack/components/QuantityControls";
 import useQuantityManager from "./fridgeBack/hooks/useQuantityManager";
@@ -19,7 +19,15 @@ export default function Fridge() {
     setLoading(true);
     try {
       const items = await getKuehlschrankInhalt();
-      setFridgeItems(items.documents);
+      const sortedItems = items.documents.sort((a, b) => {
+        const aDate = a.mhd ? new Date(a.mhd).getTime() : Infinity;
+        const bDate = b.mhd ? new Date(b.mhd).getTime() : Infinity;
+        if (aDate === Infinity && bDate === Infinity) {
+          return 0;
+        }
+        return aDate - bDate;
+      });
+      setFridgeItems(sortedItems);
     } catch (error) {
       console.error("Error fetching fridge items:", error);
     } finally {
@@ -33,35 +41,6 @@ export default function Fridge() {
     }, [fetchFridgeItems])
   );
 
-  const getCategoryRoute = (category: string) => {
-    switch (category) {
-      case "Fruits":
-      case "Obst":
-        return "/(tabs)/fridge/fridge_fruits";
-      case "Vegetables":
-      case "Gemüse":
-        return "/(tabs)/fridge/fridge_vegetables";
-      case "Dairy":
-      case "Milchprodukte":
-        return "/(tabs)/fridge/fridge_dairy";
-      case "Meat & Fish":
-      case "Fleisch/Fisch":
-      case "Fleisch":
-        return "/(tabs)/fridge/fridge_meat";
-      case "Drinks":
-      case "Getränke":
-        return "/(tabs)/fridge/fridge_drinks";
-      case "Frozen":
-      case "Tiefkühlkost":
-        return "/(tabs)/fridge/fridge_frozen";
-      case "Other":
-      case "Sonstige":
-        return "/(tabs)/fridge/fridge_other";
-      default:
-        return "/(tabs)/fridge/fridge_items";
-    }
-  };
-
   const handleSearch = () => {
     if (!searchTerm.trim()) return;
     const matchingItems = fridgeItems.filter(item => 
@@ -74,11 +53,11 @@ export default function Fridge() {
     }
     
     const firstMatch = matchingItems[0];
-    const categoryRoute = getCategoryRoute(firstMatch.kategorie || "Sonstige");
+    const categoryName = firstMatch.kategorie || "Sonstige";
     
     router.push({
-      pathname: categoryRoute as any,
-      params: { search: searchTerm }
+      pathname: "/(tabs)/fridge/fridge_category",
+      params: { search: searchTerm, category: categoryName }
     });
     
     setSearchTerm("");
@@ -86,6 +65,14 @@ export default function Fridge() {
 
   const onQuantityChange = (item: KuehlschrankItem, change: number) => {
     handleQuantityChange(item, change, setFridgeItems, fridgeItems);
+  };
+
+  const handleItemPress = (item: KuehlschrankItem) => {
+    const categoryName = item.kategorie || "Sonstige";
+    router.push({
+      pathname: "/(tabs)/fridge/fridge_category",
+      params: { category: categoryName, search: item.name },
+    });
   };
 
   
@@ -148,6 +135,14 @@ export default function Fridge() {
     }
   };
 
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.container, { flex: 1, justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color="#8B5CF6" />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView 
@@ -187,7 +182,7 @@ export default function Fridge() {
               {fridgeItems.map((item) => {
                 const { days, label } = getDaysLeft(item.mhd);
                 return (
-                  <View key={item.$id} style={styles.fridgeHomeItemCard}>
+                  <TouchableOpacity key={item.$id} onPress={() => handleItemPress(item)} style={styles.fridgeHomeItemCard}>
                     <Image
                       source={getCategoryImage(item.kategorie)}
                       style={styles.fridgeHomeItemImage}
@@ -216,7 +211,7 @@ export default function Fridge() {
                         />
                       </View>
                     </View>
-                  </View>
+                  </TouchableOpacity>
                 );
               })} 
             </View> ) : (

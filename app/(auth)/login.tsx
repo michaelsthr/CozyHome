@@ -145,6 +145,7 @@ export default function Auth() {
                                 placeholder='Benutzername eingeben'
                                 placeholderTextColor='#9ca3af'
                                 autoCapitalize='none'
+                                returnKeyType='done'
                                 value={username}
                                 onChangeText={setUsername}
                                 style={[
@@ -177,6 +178,7 @@ export default function Auth() {
                                 placeholder='Passwort eingeben'
                                 placeholderTextColor='#9ca3af'
                                 autoCapitalize='none'
+                                returnKeyType='done'
                                 secureTextEntry={true}
                                 value={password}
                                 onChangeText={setPassword}

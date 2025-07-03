@@ -3,9 +3,9 @@ import { getKuehlschrankInhalt, KuehlschrankItem } from "@/lib/appwrite/dbKuehls
 import { ContainerStyles } from "@/styles/container_styles";
 import { fontStyles } from "@/styles/font_styles";
 import { fridgeStyles as styles } from "@/styles/fridge_styles";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Image, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View,} from "react-native";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
+import React, { useCallback, useState } from "react";
+import { ActivityIndicator, Image, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View, } from "react-native";
 
 const getCategoryIcon = (category?: string) => {
     switch (category) {
@@ -63,22 +63,25 @@ export default function FridgeCategory() {
 
     const categoryName = typeof category === "string" ? category : "Other";
 
-    useEffect(() => {
-        const fetchItems = async () => {
-            try {
-                const allItems = await getKuehlschrankInhalt();
-                const filterFunction = categoryFilters[categoryName] || categoryFilters["Other"];
-                const categoryItems = allItems.documents.filter(filterFunction);
-                setItems(categoryItems);
-            } catch (error) {
-                console.error(`Error fetching ${categoryName} items:`, error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchItems();
+    const fetchItems = useCallback(async () => {
+        setLoading(true);
+        try {
+            const allItems = await getKuehlschrankInhalt();
+            const filterFunction = categoryFilters[categoryName] || categoryFilters["Other"];
+            const categoryItems = allItems.documents.filter(filterFunction);
+            setItems(categoryItems);
+        } catch (error) {
+            console.error(`Error fetching ${categoryName} items:`, error);
+        } finally {
+            setLoading(false);
+        }
     }, [categoryName]);
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchItems();
+        }, [fetchItems])
+    );
 
     const filteredItems = items.filter((item) =>
         item.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -120,7 +123,7 @@ export default function FridgeCategory() {
 
     if (loading) {
         return (
-            <SafeAreaView style={styles.container}>
+            <SafeAreaView style={[styles.container, { flex: 1, justifyContent: 'center', alignItems: 'center' }]}>
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="large" color="#8B5CF6" />
                     <Text style={styles.loadingText}>{`Loading ${categoryName}...`}</Text>
