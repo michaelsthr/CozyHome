@@ -47,6 +47,9 @@ const CategoryForm = () => {
             alert("Please enter a name for the category.");
             return null;
         }
+        if (name.length > 100){
+            alert("The Category name can only have up to 100 characters.\nYou have " + name.length)
+        }
         try {
             if (isEdit) {
                 await updateCategory(params.id as string, { name, color: selectedColor });

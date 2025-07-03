@@ -105,6 +105,15 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSubmit, isEditMode }) =>
             return;
         }
 
+        if (description.length > 200){
+            alert("The Description can only have up to 200 characters.\nYou have " + description.length)
+        }
+
+        if (name.length > 200){
+            alert("The Event Name can only have up to 200 characters.\nYou have " + description.length)
+        }
+
+
         const eventData: Event = {
             name: name || "new Event",
             startDate: startDateTime.toISOString(),
