@@ -1,6 +1,7 @@
 import { getAllCategory } from "@/lib/appwrite/dbKalender";
+import { CELL_HEIGHT } from "@/lib/constants/calendar";
 import { EventWithId } from "@/lib/types/calendar";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ScrollView, View } from "react-native";
 import { Models } from "react-native-appwrite";
 import { Days } from "./days";
@@ -29,12 +30,24 @@ export const WeekView: React.FC<WeekViewProps> = ({ dateForWeek, events, viewWid
     weekEnd.setDate(startOfWeek.getDate() + 7);
 
     const [categories, setCategories] = useState<Models.Document[]>([]);
+    const scrollViewRef = useRef<ScrollView>(null);
 
     useEffect(() => {
         getAllCategory()
             .then((res) => setCategories(res.documents))
             .catch(() => {});
     }, []);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            scrollViewRef.current?.scrollTo({
+                y: 6 * CELL_HEIGHT,
+                animated: false,
+            });
+        }, 100);
+
+        return () => clearTimeout(timer);
+    }, [dateForWeek]);
 
     const categoryColorMap = new Map<string, string>();
     categories.forEach((cat) => {
@@ -51,7 +64,7 @@ export const WeekView: React.FC<WeekViewProps> = ({ dateForWeek, events, viewWid
     return (
         <View style={{ width: viewWidth, height: "100%" }}>
             <Days startOfWeek={startOfWeek} />
-            <ScrollView style={{ flex: 1 }}>
+            <ScrollView ref={scrollViewRef} style={{ flex: 1 }}>
                 <View style={{ flexDirection: "row" }}>
                     <View>
                         <Hours />
@@ -59,7 +72,7 @@ export const WeekView: React.FC<WeekViewProps> = ({ dateForWeek, events, viewWid
                     <View style={{ position: "relative", flex: 1 }}>
                         <Grid />
                         {weekEvents.map((event, index) => {
-                            const categoryColor = (event.category as any)?.color || '#000000';
+                            const categoryColor = (event.category as any)?.color || "#000000";
                             return (
                                 <EventBlock
                                     key={index}
