@@ -1,9 +1,12 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Button } from 'react-native';
-import { useNavigation, router } from 'expo-router';
+import { updateUserGroup } from "@/lib/appwrite/dbUser";
+import { Group, useSession } from "@/lib/context/SessionContext";
+import { buttonStyles } from "@/styles/button_styles";
+import { fontStyles } from "@/styles/font_styles";
+import { inputStyles } from "@/styles/input_styles";
+import { router, useNavigation } from "expo-router";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { Alert, Button, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { addGroup, getGroups } from "../../lib/appwrite/dbGroup";
-import { Group, useSession } from '@/lib/context/SessionContext';
-import { updateUserGroup } from '@/lib/appwrite/dbUser';
 
 interface GroupProps {
     name: string;
@@ -12,9 +15,9 @@ interface GroupProps {
 }
 
 const generateUniqueGroupKey = async (): Promise<string> => {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const generateKey = (): string => {
-        let result = '';
+        let result = "";
         for (let i = 0; i < 4; i++) {
             result += letters.charAt(Math.floor(Math.random() * letters.length));
         }
@@ -22,7 +25,9 @@ const generateUniqueGroupKey = async (): Promise<string> => {
     };
 
     const existingGroups = await getGroups();
-    const existingKeys = new Set((existingGroups.documents ?? []).map((group: GroupProps) => group.groupKey));
+    const existingKeys = new Set(
+        (existingGroups.documents ?? []).map((group: GroupProps) => group.groupKey)
+    );
 
     let uniqueKey = generateKey();
     while (existingKeys.has(uniqueKey)) {
@@ -33,9 +38,9 @@ const generateUniqueGroupKey = async (): Promise<string> => {
 };
 export default function NewGroup() {
     const navigation = useNavigation();
-    const [groupName, setGroupName] = useState('');
-    const [groupType, setGroupType] = useState('');
-    const [groupKey, setGroupKey] = useState('');
+    const [groupName, setGroupName] = useState("");
+    const [groupType, setGroupType] = useState("");
+    const [groupKey, setGroupKey] = useState("");
     const { user, setUser, group, setGroup } = useSession();
 
     useEffect(() => {
@@ -48,13 +53,13 @@ export default function NewGroup() {
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            title: 'Create New Group',
+            title: "Create New Group",
         });
     }, [navigation]);
 
     const handleCreate = async () => {
         if (!groupName.trim() || !groupType.trim()) {
-            Alert.alert('Please put in Name and Type.');
+            Alert.alert("Please put in Name and Type.");
             return;
         }
 
@@ -83,99 +88,68 @@ export default function NewGroup() {
             const updatedUser = await updateUserGroup(user.$id, createdGroup.$id);
             setUser(updatedUser);
 
-            router.replace('/(tabs)');
+            router.replace("/(tabs)");
         } catch (error) {
-            console.error('Error while creating group or updating user:', error);
-            Alert.alert('Failed to create group. Please try again.');
+            console.error("Error while creating group or updating user:", error);
+            Alert.alert("Failed to create group. Please try again.");
         }
     };
 
     return (
         <View style={styles.container}>
-            <Button
-                    title="← Back"
-                    color="blue"
-                    onPress={() => router.back()}
-                  />
-            <Text style={styles.titleText}>Create new group</Text>
+            {/* Header */}
+            <View style={{ alignItems: "center" }}>
+                <Text
+                    style={{
+                        fontSize: 40,
+                        fontWeight: "800",
+                        color: "#7749f8",
+                        letterSpacing: -1,
+                        lineHeight: 40,
+                        paddingTop: 10,
+                    }}>
+                    Create new group
+                </Text>
+                <Image
+                    source={require("@/assets/images/groups_page.png")}
+                    style={{
+                        width: 320,
+                        height: 320,
+                    }}
+                    resizeMode='contain'
+                />
+            </View>
+            <View style={{width: "100%", paddingHorizontal: 32, flexDirection: "column", gap: 15, alignContent: "center"}}>
+                <Text style={{textAlign: "center"}}>Generated Key: {groupKey}</Text>
+                <TextInput
+                    style={inputStyles.input}
+                    placeholder='Name'
+                    value={groupName}
+                    onChangeText={setGroupName}
+                    autoCapitalize='words'
+                />
 
-            <TextInput
-                style={styles.input}
-                placeholder="Name"
-                value={groupName}
-                onChangeText={setGroupName}
-                autoCapitalize="words"
-            />
-
-            <TextInput
-                style={styles.input}
-                placeholder="Type e.g.: Shared Appartment"
-                value={groupType}
-                onChangeText={setGroupType}
-            />
-
-            <Text style={styles.text}>
-                Generated Key:    {groupKey}
-            </Text>
-
-            <TouchableOpacity style={styles.button} onPress={handleCreate}>
-                <Text style={styles.buttonText}>Create</Text>
-            </TouchableOpacity>
+                <TextInput
+                    style={inputStyles.input}
+                    placeholder='Type e.g.: Shared Appartment'
+                    value={groupType}
+                    onChangeText={setGroupType}
+                />
+                <TouchableOpacity style={buttonStyles.button} onPress={handleCreate}>
+                    <Text style={fontStyles.buttonText}>Create</Text>
+                </TouchableOpacity>
+                <Button title="Go Back" color="#7749f8" onPress={router.back}/>
+            </View>
         </View>
     );
 }
 
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#f0f0f0',
-        paddingHorizontal: 20,
+        justifyContent: "center",
+        alignItems: "center",
+        paddingVertical: 20,
+        backgroundColor: "white",
     },
-    titleText: {
-        fontSize: 28,
-        fontWeight: '600',
-        marginBottom: 40,
-        textAlign: 'center',
-    },
-    input: {
-        width: '90%',
-        height: 60,
-        backgroundColor: '#fff',
-        borderRadius: 12,
-        paddingHorizontal: 20,
-        fontSize: 18,
-        marginBottom: 20,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 5,
-        elevation: 3,
-    },
-    button: {
-        backgroundColor: '#007bff',
-        width: '90%',
-        height: 60,
-        borderRadius: 12,
-        justifyContent: 'center',
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOpacity: 0.2,
-        shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 5,
-        elevation: 5,
-        marginTop: 10,
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: '600',
-    },
-    text: {
-        fontSize: 18,
-        fontWeight: '600',
-        margin: 15,
-    }
 });

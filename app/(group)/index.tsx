@@ -1,12 +1,15 @@
+import { useSession } from "@/lib/context/SessionContext";
 import { fontStyles } from "@/styles/font_styles";
 import { useNavigation, useRouter } from "expo-router";
 import React, { useLayoutEffect } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
     const router = useRouter();
     const navigation = useNavigation();
+    const { group, user, setUser, setGroup } = useSession();
+
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -15,10 +18,8 @@ export default function Index() {
     }, [navigation]);
 
     function goBack() {
-        router.back();
-        setLoading(true);
         setUser(null);
-        setGroup(null);
+        router.back();
     }
 
     return (
@@ -88,9 +89,7 @@ export default function Index() {
                         width: "100%",
                         paddingTop: 20,
                     }}>
-                    <TouchableOpacity onPress={() => router.back()}>
-                        <Text style={{ color: "#007aff", fontSize: 18 }}>Go Back</Text>
-                    </TouchableOpacity>
+                    <Button title="Go Back" color="#7749f8" onPress={goBack}/>
                 </View>
             </View>
         </SafeAreaView>
@@ -106,14 +105,3 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
     },
 });
-function setUser(arg0: null) {
-    throw new Error("Function not implemented.");
-}
-
-function setGroup(arg0: null) {
-    throw new Error("Function not implemented.");
-}
-
-function setLoading(arg0: boolean) {
-    throw new Error("Function not implemented.");
-}

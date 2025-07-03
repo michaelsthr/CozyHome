@@ -5,7 +5,7 @@ import { fontStyles } from "@/styles/font_styles";
 import { inputStyles } from "@/styles/input_styles";
 import { router, useNavigation } from "expo-router";
 import React, { useLayoutEffect, useState } from "react";
-import { Alert, Button, Text, TextInput, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View, Image} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getGroups } from "../../lib/appwrite/dbGroup";
 
@@ -60,59 +60,89 @@ export default function EnterGroupKey() {
     };
 
     return (
-        <SafeAreaView
-            style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "white",
-                paddingHorizontal: 32,
-            }}>
-            <Button title='← Back' color='blue' onPress={() => router.back()} />
-            <Text
-                style={{
-                    fontSize: 28,
-                    fontWeight: "600",
-                    color: "#374151",
-                    marginBottom: 40,
-                    textAlign: "center",
-                }}>
-                Please put in an existing Group Key:
-            </Text>
-            <TextInput
-                style={[
-                    inputStyles.input,
-                    {
-                        height: 56,
-                        fontSize: 16,
-                        shadowColor: "#000",
-                        shadowOffset: { width: 0, height: 1 },
-                        shadowOpacity: 0.05,
-                        shadowRadius: 3,
-                        elevation: 2,
-                        width: "100%",
-                        marginBottom: 32,
-                    },
-                ]}
-                placeholder='Key'
-                value={groupKey}
-                onChangeText={setGroupKey}
-                autoCapitalize='characters'
-                autoCorrect={false}
-            />
-            <TouchableOpacity
-                style={[
-                    buttonStyles.button,
-                    {
-                        height: 56,
-                        width: "100%",
-                    },
-                ]}
-                onPress={handleSubmit}>
-                <Text style={[fontStyles.buttonText, { fontSize: 18, fontWeight: "600" }]}>
-                    Join
+        <SafeAreaView style={styles.container}>
+            <View style={{ alignItems: "center" }}>
+                <Text
+                    style={{
+                        fontSize: 40,
+                        fontWeight: "800",
+                        color: "#7749f8",
+                        letterSpacing: -1,
+                        lineHeight: 40,
+                        paddingTop: 10,
+                    }}>
+                    Join your friends
                 </Text>
-            </TouchableOpacity>
+                <Image
+                    source={require("@/assets/images/groups_page.png")}
+                    style={{
+                        width: 320,
+                        height: 320,
+                    }}
+                    resizeMode='contain'
+                />
+            </View>
+            <View style={{ width: "100%", paddingHorizontal: 32 }}>
+                <Text style={[fontStyles.lighter, { paddingVertical: 20, textAlign: "center" }]}>
+                    Please put in an existing Group Key:
+                </Text>
+                <TextInput
+                    style={[
+                        inputStyles.input,
+                        {
+                            height: 56,
+                            fontSize: 16,
+                            shadowColor: "#000",
+                            shadowOffset: { width: 0, height: 1 },
+                            shadowOpacity: 0.05,
+                            shadowRadius: 3,
+                            elevation: 2,
+                            width: "100%",
+                            marginBottom: 32,
+                        },
+                    ]}
+                    placeholder='Key'
+                    value={groupKey}
+                    onChangeText={setGroupKey}
+                    autoCapitalize='characters'
+                    autoCorrect={false}
+                />
+                <TouchableOpacity
+                    style={[
+                        buttonStyles.button,
+                        {
+                            height: 56,
+                            width: "100%",
+                        },
+                    ]}
+                    onPress={handleSubmit}>
+                    <Text style={[fontStyles.buttonText, { fontSize: 18, fontWeight: "600" }]}>
+                        Join
+                    </Text>
+                </TouchableOpacity>
+                <View
+                    style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "100%",
+                        paddingTop: 20,
+                    }}>
+                    <TouchableOpacity onPress={() => router.back()}>
+                        <Text style={{ color: "#7749f8", fontSize: 18 }}>Go Back</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
         </SafeAreaView>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        paddingVertical: 20,
+        backgroundColor: "white",
+    },
+});

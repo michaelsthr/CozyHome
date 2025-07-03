@@ -17,6 +17,7 @@ export default function Auth() {
     const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
     const { group, user, setUser, setGroup } = useSession();
     const router = useRouter();
+    
 
     async function login(username: string, password: string) {
         try {
