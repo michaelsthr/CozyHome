@@ -107,7 +107,7 @@ export default function HomePage() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={ContainerStyles.container} showsVerticalScrollIndicator={false}>
         <View style={[ContainerStyles.greetingSection, { paddingBottom: 20 }]}>
           <Text style={[fontStyles.modernHeading, { marginTop:10}]}>

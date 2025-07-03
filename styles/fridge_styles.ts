@@ -4,7 +4,6 @@ export const fridgeStyles = StyleSheet.create({
   // General Container Styles
   container: {
     flex: 1,
-    backgroundColor: "#f8fafc",
   },
   scrollContainer: {
     flexGrow: 1,
