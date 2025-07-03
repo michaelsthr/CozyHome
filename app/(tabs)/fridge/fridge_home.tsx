@@ -67,6 +67,14 @@ export default function Fridge() {
     handleQuantityChange(item, change, setFridgeItems, fridgeItems);
   };
 
+  const handleItemPress = (item: KuehlschrankItem) => {
+    const categoryName = item.kategorie || "Sonstige";
+    router.push({
+      pathname: "/(tabs)/fridge/fridge_category",
+      params: { category: categoryName, search: item.name },
+    });
+  };
+
   
   const getStatusIcon = (mhd?: string) => {
     if (!mhd) return require("../../../assets/images/fridge_icons/eatable.png");
@@ -174,7 +182,7 @@ export default function Fridge() {
               {fridgeItems.map((item) => {
                 const { days, label } = getDaysLeft(item.mhd);
                 return (
-                  <View key={item.$id} style={styles.fridgeHomeItemCard}>
+                  <TouchableOpacity key={item.$id} onPress={() => handleItemPress(item)} style={styles.fridgeHomeItemCard}>
                     <Image
                       source={getCategoryImage(item.kategorie)}
                       style={styles.fridgeHomeItemImage}
@@ -203,7 +211,7 @@ export default function Fridge() {
                         />
                       </View>
                     </View>
-                  </View>
+                  </TouchableOpacity>
                 );
               })} 
             </View> ) : (
