@@ -98,7 +98,7 @@ const Timetable = forwardRef<TimetableRef, TimetableProps>(({ onMonthChange }, r
 
     return (
         <View
-            style={{ flex: 1 }}
+            style={{height: "100%"}}
             onLayout={(event) => {
                 setViewWidth(event.nativeEvent.layout.width);
             }}>

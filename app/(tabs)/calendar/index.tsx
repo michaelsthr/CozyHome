@@ -22,7 +22,7 @@ export default function Calendar() {
     };
 
     return (
-        <SafeAreaView style={{ height: "100%" }}>
+        <SafeAreaView style={{ height: "100%"}}>
             <Header currentMonth={currentMonth} onCalendarPress={handleCalendarPress} />
             <Timetable ref={timetableRef} onMonthChange={setCurrentMonth} />
             <TimePickerModal
