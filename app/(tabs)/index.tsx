@@ -1,3 +1,4 @@
+import { getGroupById } from "@/lib/appwrite/dbGroup";
 import { getUsersByGroupId, updateUserGroup } from "@/lib/appwrite/dbUser";
 import { useSession } from "@/lib/context/SessionContext";
 import { cardStyles } from "@/styles/card_styles";
@@ -5,6 +6,7 @@ import { ContainerStyles } from "@/styles/container_styles";
 import { fontStyles } from "@/styles/font_styles";
 import { globalStyles } from "@/styles/global_styles";
 import { useRouter } from "expo-router";
+import { User } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -13,6 +15,7 @@ import {
   Image,
   ScrollView,
   Text,
+  TouchableOpacity,
   View
 } from "react-native";
 import { Models } from "react-native-appwrite";
@@ -39,17 +42,12 @@ export default function HomePage() {
 
       try {
         // Fetch group members
-        const groupRef = user.groupID;
-        const groupId = typeof groupRef === 'object' && groupRef !== null ? (groupRef as any).$id : groupRef;
-
-        const membersData = await getUsersByGroupId(groupId);
-        setGroupMembers(
-          membersData.documents.map((doc) => ({
-            $id: doc.$id,
-            username: doc.username,
-            groupID: doc.groupID,
-          }))
-        );
+        const membersData = await getUsersByGroupId(user.groupID.$id);
+        setGroupMembers(membersData.documents.map(doc => ({
+          $id: doc.$id,
+          username: doc.username,
+          groupID: doc.groupID.$id
+        })));
       } catch (error) {
         console.error("Error fetching group data:", error);
         Alert.alert("Error", "Failed to load group information");
@@ -72,27 +70,15 @@ export default function HomePage() {
     );
   }
 
-  if (!user) {
-    // Optional: Redirect to login or show a message if user is not available
-    return (
-      <View style={globalStyles.loadingContainer}>
-        <Text>User not found. Please log in.</Text>
-        <Button title="Go to Login" onPress={() => router.push("/login")} />
-      </View>
-    );
-  }
-
   const leaveGroup = async () => {
     try {
-      console.log(user);
-
       if (!user || !user.$id) {
         return Alert.alert("Error", "User can't be loaded.");
       }
 
-      await updateUserGroup(user.$id, "");
+      await updateUserGroup(user.$id, null);
 
-      const updatedUser = { ...user, groupID: "" };
+      const updatedUser = { ...user, groupID: null }; // aktualisiertes Objekt
       setUser(updatedUser);
 
       console.log("Updated user after leaving group:", updatedUser);
@@ -116,26 +102,16 @@ export default function HomePage() {
     } catch (error) {
       console.error("Error log out:", error);
       Alert.alert("Error", "Failed to log out");
-    } finally {
-      setLoading(false);
     }
 
   }
 
   return (
-    <ScrollView
-      style={ContainerStyles.container}
-      showsVerticalScrollIndicator={false}
-    >
-      {/* Header with App Logo */}
-      <View style={ContainerStyles.header}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Image
-            source={require("@/assets/images/fridge_icons/logo-2.png")}
-            style={globalStyles.logo}
-          />
-          <Text style={[fontStyles.h1, { marginLeft: 10, marginRight: 0 }]}>
-            CozyHome
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+      <ScrollView style={ContainerStyles.container} showsVerticalScrollIndicator={false}>
+        <View style={[ContainerStyles.greetingSection, { paddingBottom: 20 }]}>
+          <Text style={[fontStyles.modernHeading, { marginTop:10}]}>
+            Cozy Home
           </Text>
         </View>
 

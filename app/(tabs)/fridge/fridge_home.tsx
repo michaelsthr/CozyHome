@@ -10,10 +10,13 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { getKuehlschrankInhalt, KuehlschrankItem } from "../../../lib/appwrite/dbKuehlschrank";
+import {
+  getKuehlschrankInhalt,
+  KuehlschrankItem,
+} from "../../../lib/appwrite/dbKuehlschrank";
 import { fridgeStyles } from "../../../styles/fridge_styles";
-import { QuantityControls } from "./fridgeBack/components/QuantityControls";
-import { useQuantityManager } from "./fridgeBack/hooks/useQuantityManager";
+import QuantityControls from "./fridgeBack/components/QuantityControls";
+import useQuantityManager from "./fridgeBack/hooks/useQuantityManager";
 
 export default function Fridge() {
   const router = useRouter();
