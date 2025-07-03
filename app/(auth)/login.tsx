@@ -1,67 +1,70 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Button, TextInput } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
-import { useRouter } from 'expo-router';
-import { useSession } from '@/lib/context/SessionContext';
+import { useSession } from "@/lib/context/SessionContext";
+import { useRouter } from "expo-router";
+import React, { useState } from "react";
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
-import { createNewUser, checkUserValid, User } from '@/lib/appwrite/dbUser';
+import { checkUserValid, createNewUser, User } from "@/lib/appwrite/dbUser";
+import { buttonStyles } from "@/styles/button_styles";
+import { fontStyles } from "@/styles/font_styles";
+import { inputStyles } from "@/styles/input_styles";
 import * as Crypto from "expo-crypto";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Auth() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-  const { group, user, setUser, setGroup } = useSession();
-  const router = useRouter();
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+    const { group, user, setUser, setGroup } = useSession();
+    const router = useRouter();
 
-  async function login(username: string, password: string) {
-    try {
-      const userDoc = await checkUserValid(username);
+    async function login(username: string, password: string) {
+        try {
+            const userDoc = await checkUserValid(username);
 
-      const hashedInput = await Crypto.digestStringAsync(
-        Crypto.CryptoDigestAlgorithm.SHA256,
-        password
-      );
-      if (userDoc && (hashedInput === userDoc.password)) {
-        const currentUser: User = {
-          username: userDoc.username,
-          password: userDoc.password,
-          groupID: userDoc.groupID,
-          $id: userDoc.$id,
-          $collectionId: userDoc.$collectionId,
-          $databaseId: userDoc.$databaseId,
-          $createdAt: userDoc.$createdAt,
-          $updatedAt: userDoc.$updatedAt,
-          $permissions: []
-        };
-        setLoggedInUser(currentUser);
-        setIsAuthenticated(true);
-        
-        const sessionUser = {
-          username: userDoc.username,
-          password: userDoc.password,
-          groupID: userDoc.groupID,
-          $id: userDoc.$id
-        };
-        setUser(sessionUser);
-        if (currentUser.groupID === null) {
-          router.push("/(group)");
-          return;
+            const hashedInput = await Crypto.digestStringAsync(
+                Crypto.CryptoDigestAlgorithm.SHA256,
+                password
+            );
+            if (userDoc && hashedInput === userDoc.password) {
+                const currentUser: User = {
+                    username: userDoc.username,
+                    password: userDoc.password,
+                    groupID: userDoc.groupID,
+                    $id: userDoc.$id,
+                    $collectionId: userDoc.$collectionId,
+                    $databaseId: userDoc.$databaseId,
+                    $createdAt: userDoc.$createdAt,
+                    $updatedAt: userDoc.$updatedAt,
+                    $permissions: [],
+                };
+                setLoggedInUser(currentUser);
+                setIsAuthenticated(true);
+
+                const sessionUser = {
+                    username: userDoc.username,
+                    password: userDoc.password,
+                    groupID: userDoc.groupID,
+                    $id: userDoc.$id,
+                };
+                setUser(sessionUser);
+                if (currentUser.groupID === null) {
+                    router.push("/(group)");
+                    return;
+                }
+
+                setGroup(currentUser.groupID);
+
+                router.push("/(tabs)");
+                console.log("LoggedInUser: ", currentUser);
+            } else {
+                alert("Username or password is incorrect. Please try again.");
+            }
+        } catch (error) {
+            console.error("Login failed:", error);
+            alert("Login failed.");
         }
-        
-        setGroup(currentUser.groupID);
-
-        router.push("/(tabs)");
-        console.log("LoggedInUser: ", currentUser);
-      } else {
-        alert("Username or password is incorrect. Please try again.");
-      }
-    } catch (error) {
-      console.error("Login failed:", error);
-      alert("Login failed.");
     }
-  }
 
   async function register(username: string, password: string) {
     try {
@@ -73,52 +76,173 @@ export default function Auth() {
     }
   }
 
-  async function logout() {
-    setLoggedInUser(null);
-    setIsAuthenticated(false);
-    router.push("/(auth)/login");
-  }
+    async function logout() {
+        setLoggedInUser(null);
+        setIsAuthenticated(false);
+        router.push("/(auth)/login");
+    }
 
-  return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
+    return (
+        <SafeAreaView style={styles.container}>
+            {/* Header */}
+            <View style={{ alignItems: "center" }}>
+                <Text
+                    style={{
+                        fontSize: 32,
+                        fontWeight: "bold",
+                        color: "#1e293b",
+                        marginBottom: 8,
+                        letterSpacing: -0.5,
+                    }}>
+                    Cozy Home
+                </Text>
+                <Image
+                    source={require("@/assets/images/login_page.png")}
+                    style={{
+                        width: 320,
+                        height: 320,
+                    }}
+                    resizeMode='contain'
+                />
+            </View>
 
-      <TextInput
-        placeholder="Username"
-        placeholderTextColor="black"
-        autoCapitalize="none"
-        value={username}
-        onChangeText={setUsername}
-      />
+            {/* Inputs */}
+            <View
+                style={{
+                    width: "100%",
+                    paddingHorizontal: 32,
+                    marginBottom: 40,
+                }}>
+                <View style={{ marginBottom: 20 }}>
+                    <Text
+                        style={{
+                            fontSize: 14,
+                            fontWeight: "600",
+                            color: "#374151",
+                            marginBottom: 8,
+                            marginLeft: 4,
+                        }}>
+                        Username
+                    </Text>
+                    <TextInput
+                        placeholder='Benutzername eingeben'
+                        placeholderTextColor='#9ca3af'
+                        autoCapitalize='none'
+                        value={username}
+                        onChangeText={setUsername}
+                        style={[
+                            inputStyles.input,
+                            {
+                                height: 56,
+                                fontSize: 16,
+                                shadowColor: "#000",
+                                shadowOffset: { width: 0, height: 1 },
+                                shadowOpacity: 0.05,
+                                shadowRadius: 3,
+                                elevation: 2,
+                            },
+                        ]}
+                    />
+                </View>
 
-      <TextInput
-        placeholder="Password"
-        placeholderTextColor="black"
-        autoCapitalize="none"
-        secureTextEntry={true}
-        value={password}
-        onChangeText={setPassword}
-      />
+                <View style={{ marginBottom: 32 }}>
+                    <Text
+                        style={{
+                            fontSize: 14,
+                            fontWeight: "600",
+                            color: "#374151",
+                            marginBottom: 8,
+                            marginLeft: 4,
+                        }}>
+                        Password
+                    </Text>
+                    <TextInput
+                        placeholder='Passwort eingeben'
+                        placeholderTextColor='#9ca3af'
+                        autoCapitalize='none'
+                        secureTextEntry={true}
+                        value={password}
+                        onChangeText={setPassword}
+                        style={[
+                            inputStyles.input,
+                            {
+                                height: 56,
+                                fontSize: 16,
+                                shadowColor: "#000",
+                                shadowOffset: { width: 0, height: 1 },
+                                shadowOpacity: 0.05,
+                                shadowRadius: 3,
+                                elevation: 2,
+                            },
+                        ]}
+                    />
+                </View>
+            </View>
 
-      <Button
-        title="Login"
-        onPress={() => login(username, password)}
-      />
+            {/* Buttons */}
+            <View style={{ width: "100%", paddingHorizontal: 32 }}>
+                <TouchableOpacity
+                    style={[
+                        buttonStyles.button,
+                        {
+                            height: 56,
+                            marginBottom: 32,
+                        },
+                    ]}
+                    onPress={() => login(username, password)}>
+                    <Text
+                        style={[
+                            fontStyles.buttonText,
+                            {
+                                fontSize: 18,
+                                fontWeight: "600",
+                            },
+                        ]}>
+                        Log in
+                    </Text>
+                </TouchableOpacity>
 
-      <Button
-        title="Register"
-        onPress={() => register(username, password)}
-      />
-    </View>
-  );
+                <View
+                    style={{
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: 8,
+                    }}>
+                    <Text
+                        style={{
+                            fontSize: 16,
+                            color: "#6b7280",
+                        }}>
+                        Don't have an account?
+                    </Text>
+                    <TouchableOpacity
+                        onPress={() => register(username, password)}
+                        style={{
+                            paddingVertical: 8,
+                            paddingHorizontal: 12,
+                        }}>
+                        <Text
+                            style={{
+                                fontSize: 16,
+                                color: "#7749f8",
+                                fontWeight: "600",
+                            }}>
+                            Register
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </SafeAreaView>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 12,
-    backgroundColor: "white"
-  },
+    container: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        paddingVertical: 20,
+        backgroundColor: "white"
+    },
 });
