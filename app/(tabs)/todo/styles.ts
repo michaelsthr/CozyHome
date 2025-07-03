@@ -12,13 +12,11 @@ const styles = StyleSheet.create({
   },
   container_box: {
       flex: 1,
-      backgroundColor: "white",
       alignItems: "center",
       paddingVertical: 20,
   },
   box: {
       width: containerWidth,
-      backgroundColor: "#fff",
       borderRadius: 12,
       padding: 16,
       shadowColor: "#000",

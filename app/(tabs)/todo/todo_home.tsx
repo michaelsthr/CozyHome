@@ -6,9 +6,17 @@ import { iconStyles } from "@/styles/icon_styles";
 import { config } from "@gluestack-ui/config";
 import { GluestackUIProvider } from "@gluestack-ui/themed";
 import { useIsFocused } from "@react-navigation/native";
-import { useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Image, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+    Image,
+    Pressable,
+    SafeAreaView,
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import { ToDoItem, ToDoItemProps } from "../../../components/todo/todo_item";
 import { getTodos, updateTodo } from "../../../lib/appwrite/dbTodo"; //für db
 import styles, { screenHeight, screenWidth } from "./styles";
@@ -117,7 +125,7 @@ export default function Todo() {
     return (
         <GluestackUIProvider config={config}>
             <SafeAreaView style={styles.container}>
-                <View style={[headerStyles.container, { paddingBottom: 40 }]}>
+                <View style={[headerStyles.container, {paddingBottom: 40}]}>
                     <View style={headerStyles.leftContainer}>
                         <Text style={fontStyles.h3}>To Do's</Text>
                     </View>
@@ -128,15 +136,12 @@ export default function Todo() {
                                 style={iconStyles.icon1}
                             />
                         </TouchableOpacity>
-                        <TouchableOpacity
-                            hitSlop={5}
-                            style={buttonStyles.plusButton}
-                            onPress={newToDo}>
-                            <Image
-                                source={require("@/assets/images/symbol-plus.png")}
-                                style={iconStyles.plusIcon}
-                            />
-                        </TouchableOpacity>
+                            <TouchableOpacity hitSlop={5} style={buttonStyles.plusButton} onPress={newToDo}>
+                                <Image
+                                    source={require("@/assets/images/symbol-plus.png")}
+                                    style={iconStyles.plusIcon}
+                                />
+                            </TouchableOpacity>
                     </View>
                 </View>
                 <View
