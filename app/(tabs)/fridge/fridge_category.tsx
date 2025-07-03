@@ -123,7 +123,7 @@ export default function FridgeCategory() {
 
     if (loading) {
         return (
-            <SafeAreaView style={styles.container}>
+            <SafeAreaView style={[styles.container, { flex: 1, justifyContent: 'center', alignItems: 'center' }]}>
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="large" color="#8B5CF6" />
                     <Text style={styles.loadingText}>{`Loading ${categoryName}...`}</Text>
