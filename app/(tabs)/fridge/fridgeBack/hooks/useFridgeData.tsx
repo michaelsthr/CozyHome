@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
 import { Models } from 'appwrite';
-import { getKuehlschrankInhalt, updateKuehlschrankInhalt, setKuehlschrankInhalt, deleteKuehlschrankInhalt } from "../../../../../lib/appwrite/dbKuehlschrank"; // Adjust the import path as necessary
-import { KuehlschrankItem, NewKuehlschrankItem } from '../types/fridge';
+import { useEffect, useState } from 'react';
+import { deleteKuehlschrankInhalt, getKuehlschrankInhalt, setKuehlschrankInhalt, updateKuehlschrankInhalt } from "../../../../../lib/appwrite/dbKuehlschrank"; // Adjust the import path as necessary
+import { KuehlschrankItem, NewKuehlschrankItem } from '../../../../../lib/types/fridge';
 
-export const useFridgeData = () => {
+const useFridgeData = () => {
   const [contents, setContents] = useState<Models.DocumentList<any> | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -47,3 +47,5 @@ export const useFridgeData = () => {
     refetch: fetchData
   };
 };
+
+export default useFridgeData;

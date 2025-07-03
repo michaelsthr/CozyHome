@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { FridgeCategoryType, getAllFridgeCategories } from '../types/fridge';
-import { getCategoryDisplayInfo } from '../utils/categoryUtils';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { FridgeCategoryType, getAllFridgeCategories } from '../../../../../lib/types/fridge';
+import getCategoryDisplayInfo from '../utils/categoryUtils';
 
 interface FridgeFiltersProps {
   activeFilter: FridgeCategoryType | 'ALL';
@@ -11,7 +11,7 @@ interface FridgeFiltersProps {
   styles: any;
 }
 
-export const FridgeFilters: React.FC<FridgeFiltersProps> = ({
+const FridgeFilters: React.FC<FridgeFiltersProps> = ({
   activeFilter,
   onFilterChange,
   itemCounts,
@@ -82,3 +82,5 @@ export const FridgeFilters: React.FC<FridgeFiltersProps> = ({
     </View>
   );
 };
+
+export default FridgeFilters;

@@ -1,11 +1,11 @@
-import { FridgeCategories, FridgeCategoryType } from '../types/fridge';
+import { FridgeCategories, FridgeCategoryType } from '../../../../../lib/types/fridge';
 
 export interface CategoryDisplayInfo {
   label: string;
   color: string;
 }
 
-export const getCategoryDisplayInfo = (categoryValue: string | undefined): CategoryDisplayInfo => {
+const getCategoryDisplayInfo = (categoryValue: string | undefined): CategoryDisplayInfo => {
   if (!categoryValue) return { label: 'Keine Kategorie', color: '#777777' };
   
   const isValidCategory = Object.values(FridgeCategories).includes(categoryValue as unknown as FridgeCategoryType);
@@ -31,3 +31,5 @@ export const getCategoryDisplayInfo = (categoryValue: string | undefined): Categ
   
   return { label: categoryValue, color: '#eeeeee' };
 };
+
+export default getCategoryDisplayInfo;

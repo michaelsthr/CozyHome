@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { FridgeCategoryType, KuehlschrankItem, NewKuehlschrankItem } from '../types/fridge';
+import { FridgeCategoryType, KuehlschrankItem, NewKuehlschrankItem } from '../../../../../lib/types/fridge';
 
-export const useFridgeForm = () => {
+const useFridgeForm = () => {
   const [itemName, setItemName] = useState('');
   const [itemAmount, setItemAmount] = useState('1');
   const [selectedCategory, setSelectedCategory] = useState<FridgeCategoryType | ''>('');
@@ -59,4 +59,6 @@ export const useFridgeForm = () => {
     setEditMode,
     getFormData
   };
-}; 
+};
+
+export default useFridgeForm;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
-import { FridgeCategoryType, KuehlschrankItem } from '../types/fridge';
-import { getCategoryDisplayInfo } from '../utils/categoryUtils';
+import { FridgeCategoryType, KuehlschrankItem } from '../../../../../lib/types/fridge';
+import getCategoryDisplayInfo from '../utils/categoryUtils';
 import { isExpired } from '../utils/dateUtils';
 
 interface FridgeItemListProps {
@@ -13,7 +13,7 @@ interface FridgeItemListProps {
   styles: any;
 }
 
-export const FridgeItemList: React.FC<FridgeItemListProps> = ({
+const FridgeItemList: React.FC<FridgeItemListProps> = ({
   items,
   onEditItem,
   onDeleteItem,
@@ -88,3 +88,5 @@ export const FridgeItemList: React.FC<FridgeItemListProps> = ({
     />
   );
 };
+
+export default FridgeItemList;
