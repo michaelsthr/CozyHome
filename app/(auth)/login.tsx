@@ -142,7 +142,7 @@ export default function Auth() {
                                 Username
                             </Text>
                             <TextInput
-                                placeholder='Benutzername eingeben'
+                                placeholder='Enter your username'
                                 placeholderTextColor='#9ca3af'
                                 autoCapitalize='none'
                                 returnKeyType='done'
@@ -175,7 +175,7 @@ export default function Auth() {
                                 Password
                             </Text>
                             <TextInput
-                                placeholder='Passwort eingeben'
+                                placeholder='Enter your password'
                                 placeholderTextColor='#9ca3af'
                                 autoCapitalize='none'
                                 returnKeyType='done'

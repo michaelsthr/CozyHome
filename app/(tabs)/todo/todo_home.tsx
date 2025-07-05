@@ -6,16 +6,15 @@ import { iconStyles } from "@/styles/icon_styles";
 import { config } from "@gluestack-ui/config";
 import { GluestackUIProvider } from "@gluestack-ui/themed";
 import { useIsFocused } from "@react-navigation/native";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
     Image,
-    Pressable,
     SafeAreaView,
     ScrollView,
     Text,
     TouchableOpacity,
-    View,
+    View
 } from "react-native";
 import { ToDoItem, ToDoItemProps } from "../../../components/todo/todo_item";
 import { getTodos, updateTodo } from "../../../lib/appwrite/dbTodo"; //für db
@@ -173,7 +172,7 @@ export default function Todo() {
                         ) : (
                             <Text style={{ textAlign: "center", fontSize: 20, marginTop: 220 }}>
                                 {" "}
-                                No To Dos yet
+                                No To Do's yet
                             </Text>
                         )}
                     </ScrollView>

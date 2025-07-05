@@ -88,7 +88,7 @@ export default function EditTodos() {
             ))
           ) : (
             <View style= {{flex: 1, justifyContent:"center", alignItems:"center", height: screenHeight}}>
-              <Text style= {{textAlign:"center", fontSize:20, marginBottom: 320}}> No To Dos yet</Text>
+              <Text style= {{textAlign:"center", fontSize:20, marginBottom: 320}}> No To Do's yet</Text>
             </View>
             )}
           </ScrollView>
