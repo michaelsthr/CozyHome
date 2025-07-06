@@ -1,22 +1,19 @@
-import { Box, HStack, VStack } from "@gluestack-ui/themed";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { router, useLocalSearchParams } from "expo-router";
-import { CalendarDays } from "lucide-react-native";
-import React, { useEffect, useState } from "react";
-import { Button, Alert, Dimensions, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
-import { getTodos, updateTodo } from "../../../lib/appwrite/dbTodo"; //für db
-import styles from "./styles";
 import {
-  DropDownResponsible,
+  DatePickerField,
   DropDownLabel,
   DropDownRepeat,
-  DatePickerField,
+  DropDownResponsible,
 } from "@/components/todo/pickers";
 import { getUsersByGroupId } from "@/lib/appwrite/dbUser";
 import { useSession } from "@/lib/context/SessionContext";
 import { buttonStyles } from "@/styles/button_styles";
 import { fontStyles } from "@/styles/font_styles";
+import { VStack } from "@gluestack-ui/themed";
+import { router, useLocalSearchParams } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { Alert, Button, Dimensions, Platform, SafeAreaView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { getTodos, updateTodo } from "../../../lib/appwrite/dbTodo"; //für db
+import styles from "./styles";
 
 
 const screenWidth = Dimensions.get("screen").width;
@@ -174,7 +171,7 @@ export default function edit_ToDo() {
                   date,
                   selectedRepeat,
                   selectedLabel)}>
-              <Text style={fontStyles.buttonText}>Save</Text>
+              <Text style={fontStyles.buttonText}>Update To Do</Text>
             </TouchableOpacity>
             <Button title='cancel' onPress={cancel} color={"#7749f8"} />
           </View>
