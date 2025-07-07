@@ -1,107 +1,252 @@
-import { useRouter } from "expo-router";
-import React from "react";
-import {
-    Image,
-    SafeAreaView,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-} from "react-native";
-import { fridgeStyles as styles } from "./styles";
-
-const fridgeItems = [
-  {
-    id: 1,
-    name: "Milk",
-    img: require("../../../assets/images/fridge_icons/milk.png"),
-    statusIcon: require("../../../assets/images/fridge_icons/expired.png"),
-    days: 0,
-    label: "Days left",
-  },
-  {
-    id: 2,
-    name: "Bananas",
-    img: require("../../../assets/images/fridge_icons/banana.png"),
-    statusIcon: require("../../../assets/images/fridge_icons/warning.png"),
-    days: 2,
-    label: "Days left",
-  },
-  {
-    id: 3,
-    name: "Apple",
-    img: require("../../../assets/images/fridge_icons/apple.png"),
-    statusIcon: require("../../../assets/images/fridge_icons/eatable.png"),
-    days: 10,
-    label: "Days left",
-  },
-  // ...more items
-];
+import { useFocusEffect, useRouter } from "expo-router";
+import React, { useCallback, useState } from "react";
+import { ActivityIndicator, Image, RefreshControl, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { getKuehlschrankInhalt, KuehlschrankItem, } from "../../../lib/appwrite/dbKuehlschrank";
+import { fridgeStyles } from "../../../styles/fridge_styles";
+import QuantityControls from "./fridgeBack/components/QuantityControls";
+import useQuantityManager from "./fridgeBack/hooks/useQuantityManager";
 
 export default function Fridge() {
   const router = useRouter();
+  const [fridgeItems, setFridgeItems] = useState<KuehlschrankItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const { handleQuantityChange, isUpdating } = useQuantityManager();
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const styles = fridgeStyles;
+
+  const fetchFridgeItems = useCallback(async () => {
+    setLoading(true);
+    try {
+      const items = await getKuehlschrankInhalt();
+      const sortedItems = items.documents.sort((a, b) => {
+        const aDate = a.mhd ? new Date(a.mhd).getTime() : Infinity;
+        const bDate = b.mhd ? new Date(b.mhd).getTime() : Infinity;
+        if (aDate === Infinity && bDate === Infinity) {
+          return 0;
+        }
+        return aDate - bDate;
+      });
+      setFridgeItems(sortedItems);
+    } catch (error) {
+      console.error("Error fetching fridge items:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchFridgeItems();
+    }, [fetchFridgeItems])
+  );
+
+  const onRefresh = React.useCallback(async () => {
+      setRefreshing(true);
+      await fetchFridgeItems();
+      setRefreshing(false);
+    }, []);
+  
+
+  const handleSearch = () => {
+    if (!searchTerm.trim()) return;
+    const matchingItems = fridgeItems.filter(item => 
+      item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    if (matchingItems.length === 0) {
+      router.push("/(tabs)/fridge/fridge_items");
+      return;
+    }
+    
+    const firstMatch = matchingItems[0];
+    const categoryName = firstMatch.kategorie || "Sonstige";
+    
+    router.push({
+      pathname: "/(tabs)/fridge/fridge_category",
+      params: { search: searchTerm, category: categoryName }
+    });
+    
+    setSearchTerm("");
+  };
+
+  const onQuantityChange = (item: KuehlschrankItem, change: number) => {
+    handleQuantityChange(item, change, setFridgeItems, fridgeItems);
+  };
+
+  const handleItemPress = (item: KuehlschrankItem) => {
+    const categoryName = item.kategorie || "Sonstige";
+    router.push({
+      pathname: "/(tabs)/fridge/fridge_category",
+      params: { category: categoryName, search: item.name },
+    });
+  };
+
+  
+  const getStatusIcon = (mhd?: string) => {
+    if (!mhd) return require("../../../assets/images/fridge_icons/eatable.png");
+    const today = new Date();
+    const expDate = new Date(mhd);
+    const diffTime = expDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 0) {
+      return require("../../../assets/images/fridge_icons/expired.png");
+    } else if (diffDays <= 2) {
+      return require("../../../assets/images/fridge_icons/warning.png");
+    } else {
+      return require("../../../assets/images/fridge_icons/eatable.png");
+    }
+  };
+
+  const getDaysLeft = (mhd?: string) => {
+    if (!mhd) return { days: "", label: "No date" };
+    const today = new Date();
+    const expDate = new Date(mhd);
+    const diffTime = expDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+   if (diffDays < 0) {
+      return { days: Math.abs(diffDays), label: diffDays === -1 ? "day over" : "days over" };
+    } else {
+      return { days: diffDays, label: diffDays === 1 ? "day left" : "days left" };
+    }
+  };
+  
+  const getCategoryImage = (category?: string) => {
+    switch (category) {
+      case "Fruits":
+      case "Obst":
+        return require("../../../assets/images/fridge_icons/fruits.png");
+      case "Vegetables":
+      case "Gemüse":
+        return require("../../../assets/images/fridge_icons/vegetables.png");
+      case "Dairy":
+      case "Milchprodukte":
+        return require("../../../assets/images/fridge_icons/dairy.png");
+      case "Meat & Fish":
+      case "Fleisch/Fisch":
+      case "Fleisch":
+        return require("../../../assets/images/fridge_icons/meat-fish.png");
+      case "Drinks":
+      case "Getränke":
+        return require("../../../assets/images/fridge_icons/drinks.png");
+      case "Frozen":
+      case "Tiefkühlkost":
+        return require("../../../assets/images/fridge_icons/freezer.png");
+      case "Other":
+      case "Sonstige":
+        return require("../../../assets/images/fridge_icons/fridge.png");
+      default:
+        return require("../../../assets/images/placeholder_icon.png");
+    }
+  };
+
+  // if (loading) {
+  //   return (
+  //     <SafeAreaView style={[styles.container, { flex: 1, justifyContent: 'center', alignItems: 'center' }]}>
+  //       <ActivityIndicator size="large" color="#8B5CF6" />
+  //     </SafeAreaView>
+  //   );
+  // } Sorry Julian 
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Image
-          source={require("../../../assets/images/fridge_icons/profile-picture.png")}
-          style={styles.avatar}
-        />
-        <Image
-          source={require("../../../assets/images/fridge_icons/logo-2.png")}
-          style={styles.logo}
-        />
-      </View>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContainer}
+        refreshControl={
+                  <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        >
 
-      {/* Greeting */}
-      <Text style={styles.greeting}>Hey!</Text>
-      <Text style={styles.username}>Max Mustermann</Text>
-
-      {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <TextInput
-          placeholder="Search"
-          placeholderTextColor="#999"
-          style={styles.searchInput}
-        />
-      </View>
-
-      {/* Fridge Title */}
-      <Text style={styles.title}>FRIDGE</Text>
-      <Text style={styles.subtitle}>Found {fridgeItems.length} new items</Text>
-
-      {/* Items Carousel */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.itemsList}
-      >
-        {fridgeItems.map((item) => (
-          <View key={item.id} style={styles.itemCard}>
-            <Image source={item.img} style={styles.itemImage} />
-            <View style={styles.statusRow}>
+        <View style={styles.fridgeSection}>
+          <View style={styles.headerContainer}>
+            <Text style={styles.homeTitle}>{"Quick check"}</Text>
+            <TouchableOpacity
+              style={styles.plusButton}
+              onPress={() => router.push("/(tabs)/fridge/fridge_add")}>
               <Image
-                source={item.statusIcon}
-                style={styles.statusIcon}
+                source={require("../../../assets/images/symbol-plus.png")}
+                style={styles.plusIcon}
               />
-              <Text style={styles.statusText}>
-                {item.days} {item.label}
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.subtitle}>
+            {fridgeItems.length > 0 ? `${fridgeItems.length} products in your fridge` : "Your fridge is empty"}
+          </Text>
+
+        <View style={styles.searchContainer}>
+          <TextInput
+            placeholder="Search products in your fridge..."
+            placeholderTextColor="#9ca3af"
+            style={styles.searchInput}
+            value={searchTerm}
+            onChangeText={setSearchTerm}
+            onSubmitEditing={handleSearch}
+            returnKeyType="search"
+          />
+        </View>
+
+          {fridgeItems.length > 0 ? (
+            <View style={styles.itemsGrid}>
+              {fridgeItems.map((item) => {
+                const { days, label } = getDaysLeft(item.mhd);
+                return (
+                  <TouchableOpacity key={item.$id} onPress={() => handleItemPress(item)} style={styles.fridgeHomeItemCard}>
+                    <Image
+                      source={getCategoryImage(item.kategorie)}
+                      style={styles.fridgeHomeItemImage}
+                    />
+                    <View style={styles.statusRow}>
+                      <View style={styles.statusIconContainer}>
+                        <Image
+                          source={getStatusIcon(item.mhd)}
+                          style={styles.statusIcon}
+                        />
+                        <Text style={styles.statusText}>
+                          {`${days} ${label}`}
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={styles.itemDetailsContainer}>
+                      <Text style={styles.fridgeHomeItemName} numberOfLines={2}>
+                        {item.name}
+                      </Text>
+                      <View style={styles.quantityContainer}>
+                        <QuantityControls
+                          item={item}
+                          onQuantityChange={onQuantityChange}
+                          isUpdating={isUpdating}
+                          styles={fridgeStyles}
+                        />
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                );
+              })} 
+            </View> ) : (
+            <View style={styles.emptyState}>
+              <Image
+                source={require("../../../assets/images/fridge_icons/fridge.png")}
+                style={styles.emptyIcon}
+              />
+              <Text style={styles.emptyText}>{"Your fridge is empty!"}</Text>
+              <Text style={styles.emptySubtext}>
+                {"Start adding items to keep track of\nyour food and expiration dates"}
               </Text>
             </View>
-          </View>
-        ))}
-      </ScrollView>
+            )
+          }
+        </View>
 
-      {/* Check Fridge Button */}
-      <TouchableOpacity
-        style={styles.checkButton}
-        onPress={() => router.push("/fridge/fridge_items")}
-      >
-        <Text style={styles.checkButtonText}>CHECK FRIDGE</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => router.push("/(tabs)/fridge/fridge_items")}
+        >
+          <Text style={styles.addButtonText}>{"Open Fridge"}</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 }

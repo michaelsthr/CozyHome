@@ -3,29 +3,25 @@ import React from "react";
 
 export default function FridgeStack() {
   return (
-    <Stack>
-      {/* this will render fridge_home.tsx on /fridge or /fridge/fridge_home */}
+    <Stack >
       <Stack.Screen 
         name="fridge_home" 
-        options={{ headerTitle: "Home" }} 
+        options={{ headerShown: false }} 
       />
 
-      {/* screen for the “Check Fridge” grid */}
       <Stack.Screen 
         name="fridge_items" 
-        options={{ headerTitle: "Fridge" }} 
+        options={{ headerShown: false, presentation: "formSheet" }} 
       />
 
-      {/* screen for Fruits detail */}
       <Stack.Screen 
-        name="fridge_fruits" 
-        options={{ headerTitle: "Fruits" }} 
+        name="fridge_category" 
+        options={{ headerShown: false, presentation: "formSheet" }} 
       />
 
-      {/* screen for adding new item, no header shown */}
       <Stack.Screen 
         name="fridge_add" 
-        options={{ headerTitle: "New Item" }} 
+        options={{ headerShown: false, presentation: "formSheet" }} 
       />
     </Stack>
   );

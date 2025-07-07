@@ -1,75 +1,214 @@
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
-import {
-  Image,
-  SafeAreaView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { fridgeAddStyles as styles } from "./styles";
+import TimePickerModal from "@/components/calendar/time_picker_modal";
+import { ContainerStyles } from "@/styles/container_styles";
+import { fontStyles } from "@/styles/font_styles";
+import { inputStyles } from "@/styles/input_styles";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, Alert, Modal, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View} from "react-native";
+import { setKuehlschrankInhalt } from "../../../lib/appwrite/dbKuehlschrank";
+import { FridgeCategories, FridgeCategoryType, getAllFridgeCategories,} from "../../../lib/constants/categories";
+import { fridgeStyles as styles } from "../../../styles/fridge_styles";
 
 export default function AddItem() {
-  const router = useRouter();
-  const [name, setName] = useState("");
-  const [weight, setWeight] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [category, setCategory] = useState("");
+    const router = useRouter();
+    const params = useLocalSearchParams();
+    const [name, setName] = useState("");
+    const [quantity, setQuantity] = useState("1");
+    const [category, setCategory] = useState<FridgeCategoryType>(FridgeCategories.OTHER);
+    const [expDate, setExpDate] = useState<Date | null>(new Date());
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [, setSelectedMonth] = useState(new Date().getMonth());
+    const [, setSelectedYear] = useState(new Date().getFullYear());
 
-  return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Image
-          source={require("../../../assets/images/fridge_icons/profile-picture.png")}
-          style={styles.avatar}
-        />
-      </View>
+    useEffect(() => {
+        if (params.category) {
+            setCategory(params.category as FridgeCategoryType);
+        }
+    }, [params.category]);
 
-      {/* Title */}
-      <Text style={styles.title}>Add</Text>
+    const categories = getAllFridgeCategories();
 
-      {/* Form Fields */}
-      <TextInput
-        placeholder="Product name"
-        placeholderTextColor="#999"
-        style={styles.input}
-        value={name}
-        onChangeText={setName}
-      />
-      <TextInput
-        placeholder="Weight/Volume"
-        placeholderTextColor="#999"
-        style={styles.input}
-        value={weight}
-        onChangeText={setWeight}
-      />
-      <TextInput
-        placeholder="Quantity"
-        placeholderTextColor="#999"
-        style={styles.input}
-        value={quantity}
-        onChangeText={setQuantity}
-      />
-      <TextInput
-        placeholder="Category"
-        placeholderTextColor="#999"
-        style={styles.input}
-        value={category}
-        onChangeText={setCategory}
-      />
+    const selectDate = (day: any) => {
+        setExpDate(day);
+        setShowDatePicker(false);
+    };
 
-      {/* Add Button */}
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => {
-          // TODO: handle save
-          router.back();
-        }}
-      >
-        <Text style={styles.addButtonText}>ADD</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
-  );
+    const formatDate = (date: Date | null) => {
+        if (!date) return "Select expiration date";
+        return date.toLocaleDateString("en-GB");
+    };
+
+    const handleSave = async () => {
+        if (!name.trim()) {
+            Alert.alert("Error", "Please enter a product name");
+            return;
+        }
+
+        if (!quantity.trim() || isNaN(Number(quantity))) {
+            Alert.alert("Error", "Please enter a valid quantity");
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            await setKuehlschrankInhalt({
+                name: name.trim(),
+                anzahl: Number(quantity),
+                kategorie: category,
+                mhd: expDate ? expDate.toISOString().split("T")[0] : undefined,
+            });
+
+            Alert.alert("Success", "Item added successfully!", [
+                { text: "OK", onPress: () => router.back() },
+            ]);
+        } catch (error) {
+            console.error("Error adding item:", error);
+            Alert.alert("Error", "Failed to add item. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    return (
+        <SafeAreaView style={styles.container}>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.scrollContainer}>
+
+                <View style={styles.fridgeSection}>        
+                <View style={ContainerStyles.titleSection}>
+                    <Text style={fontStyles.title}>{"Add New Item"}</Text>
+                </View>
+            
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.inputLabel}>{"Product Name"}</Text>
+                        <TextInput
+                            placeholder='Enter product name...'
+                            placeholderTextColor='#9ca3af'
+                            style={inputStyles.input}
+                            value={name}
+                            onChangeText={setName}
+                            returnKeyType='done'
+                        />
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.inputLabel}>{"Quantity"} </Text>
+                        <TextInput
+                            placeholder='Enter quantity...'
+                            placeholderTextColor='#9ca3af'
+                            style={inputStyles.input}
+                            value={quantity}
+                            onChangeText={setQuantity}
+                            keyboardType='numeric'
+                            returnKeyType='done'
+                        />
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.inputLabel}>{"Category"}</Text>
+                        <TouchableOpacity
+                            style={styles.dropdownInput}
+                            onPress={() => setShowCategoryDropdown(!showCategoryDropdown)}>
+                            <Text style={styles.dropdownText}>{category}</Text>
+                            <Text style={styles.dropdownArrow}>
+                                {showCategoryDropdown ? "▲" : "▼"}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.inputLabel}>{"Expiration Date"}</Text>
+                        <TouchableOpacity
+                            style={inputStyles.input}
+                            onPress={() => {
+                                const now = new Date();
+                                setSelectedMonth(now.getMonth());
+                                setSelectedYear(now.getFullYear());
+                                setShowDatePicker(true);
+                            }}>
+                            <Text style={[styles.dropdownText, !expDate && { color: "#9ca3af" }]}>
+                                {formatDate(expDate)}
+                            </Text>
+                        </TouchableOpacity>
+                        {expDate && (
+                            <TouchableOpacity
+                                style={styles.clearButton}
+                                onPress={() => setExpDate(null)}>
+                                <Text style={styles.clearButtonText}>{"Clear"}</Text>
+                            </TouchableOpacity>
+                        )}
+                    </View>
+                </View>
+
+                <TouchableOpacity
+                    style={[styles.addButton, isSubmitting && { opacity: 0.5 }]}
+                    onPress={handleSave}
+                    disabled={isSubmitting}>
+                    {isSubmitting ? (
+                        <View style={styles.buttonContent}>
+                            <ActivityIndicator
+                                size='small'
+                                color='#ffffff'
+                                style={{ marginRight: 10 }}
+                            />
+                            <Text style={styles.addButtonText}>{"adding..."}</Text>
+                        </View>
+                    ) : (
+                        <Text style={styles.addButtonText}>{"Add to Fridge"}</Text>
+                    )}
+                </TouchableOpacity>
+
+                <TimePickerModal
+                    showStartDatePicker={showDatePicker}
+                    value={new Date()}
+                    onDateChanges={(event, date) => selectDate(date)}
+                    title='Select a date'
+                    onDismiss={() => setShowDatePicker(false)}
+                />
+
+                <Modal
+                    visible={showCategoryDropdown}
+                    transparent={true}
+                    animationType='fade'
+                    onRequestClose={() => setShowCategoryDropdown(false)}>
+                    <TouchableOpacity
+                        style={styles.modalOverlay}
+                        activeOpacity={1}
+                        onPress={() => setShowCategoryDropdown(false)}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalTitle}>{"Select Category"}</Text>
+                            <ScrollView showsVerticalScrollIndicator={false}>
+                                {categories.map((cat) => (
+                                    <TouchableOpacity
+                                        key={cat}
+                                        style={[
+                                            styles.modalItem,
+                                            category === cat && styles.selectedItem,
+                                        ]}
+                                        onPress={() => {
+                                            setCategory(cat);
+                                            setShowCategoryDropdown(false);
+                                        }}>
+                                        <Text
+                                            style={[
+                                                styles.modalItemText,
+                                                category === cat && styles.selectedItemText,
+                                            ]}>
+                                            {cat}
+                                        </Text>
+                                        {category === cat && (
+                                            <Text style={styles.checkmark}>✓</Text>
+                                        )}
+                                    </TouchableOpacity>
+                                ))}
+                            </ScrollView>
+                        </View>
+                    </TouchableOpacity>
+                </Modal>
+            </ScrollView>
+        </SafeAreaView>
+    );
 }

@@ -1,77 +1,48 @@
+import { ContainerStyles } from "@/styles/container_styles";
+import { fontStyles } from "@/styles/font_styles";
 import { useRouter } from "expo-router";
 import React from "react";
-import {
-  Image,
-  SafeAreaView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { fridgeItemsStyles as styles } from "./styles";
+import { Image, SafeAreaView, ScrollView, Text, TouchableOpacity, View} from "react-native";
+import { fridgeStyles as styles } from "../../../styles/fridge_styles";
 
-// add a `route` field matching your screen file names
 const categories = [
-  { id: 1, name: "Fruits",    img: require("../../../assets/images/fridge_icons/fruits.png"),    route: "fridge_fruits" },
-  { id: 2, name: "Vegetable", img: require("../../../assets/images/fridge_icons/vegetables.png"), route: "" },
-  { id: 3, name: "Dairy",     img: require("../../../assets/images/fridge_icons/dairy.png") },
-  { id: 4, name: "Bread",     img: require("../../../assets/images/fridge_icons/bread.png") },
-  { id: 5, name: "Drinks",    img: require("../../../assets/images/fridge_icons/drinks.png") },
-  { id: 6, name: "Meat",      img: require("../../../assets/images/fridge_icons/meat-fish.png") },
+  { id: 1, name: "Fruits",      img: require("../../../assets/images/fridge_icons/fruits.png"), route: "/(tabs)/fridge/fridge_category" },
+  { id: 2, name: "Vegetables",  img: require("../../../assets/images/fridge_icons/vegetables.png"), route: "/(tabs)/fridge/fridge_category" },
+  { id: 3, name: "Dairy",       img: require("../../../assets/images/fridge_icons/dairy.png"), route: "/(tabs)/fridge/fridge_category" },
+  { id: 4, name: "Drinks",      img: require("../../../assets/images/fridge_icons/drinks.png"), route: "/(tabs)/fridge/fridge_category" },
+  { id: 5, name: "Meat & Fish", img: require("../../../assets/images/fridge_icons/meat-fish.png"), route: "/(tabs)/fridge/fridge_category" },
+  { id: 6, name: "Frozen",      img: require("../../../assets/images/fridge_icons/freezer.png"), route: "/(tabs)/fridge/fridge_category" },
+  { id: 7, name: "Other",       img: require("../../../assets/images/fridge_icons/fridge.png"), route: "/(tabs)/fridge/fridge_category" },
 ];
 
 export default function FridgeItems() {
   const router = useRouter();
-
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Image
-          source={require("../../../assets/images/fridge_icons/profile-picture.png")}
-          style={styles.avatar}/>
-      </View>
-      <Text style={styles.title}>Fridge</Text>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContainer}>
 
-      {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <TextInput
-          placeholder="Find products"
-          placeholderTextColor="#999"
-          style={styles.searchInput}
-        />
-      </View>
+      <View style={styles.fridgeSection}>
+        <View style={ContainerStyles.titleSection}>
+          <Text style={fontStyles.title}>{"Categories"}</Text>
+        </View>
 
-      {/* Items Label */}
-      <View style={styles.labelContainer}>
-        <Text style={styles.itemsLabel}>ITEMS</Text>
-        <TouchableOpacity>
-          <Text style={styles.filterText}>Filter</Text>
-        </TouchableOpacity>
+        <View style={styles.itemsContainer}>
+          {categories.map((category) => (
+            <TouchableOpacity
+              key={category.id}
+              style={styles.categoryContainer}
+              onPress={() => router.push({ pathname: "/(tabs)/fridge/fridge_category", params: { category: category.name } })}
+            >
+              <Image source={category.img} style={styles.categoryImage} />
+              <Text style={styles.categoryName}>{category.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+        
       </View>
-
-      {/* Categories Grid */}
-      <View style={styles.itemsContainer}>
-        {categories.map((item) => (
-          <TouchableOpacity
-            key={item.id}
-            style={styles.itemCard}
-            disabled={!item.route}
-            onPress={() => router.push("/fridge/fridge_fruits")}
-          >
-            <Image source={item.img} style={styles.itemImage} />
-            <Text style={styles.itemText}>{item.name}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      {/* Add New Item Button */}
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => router.push("/fridge/fridge_add")}
-      >
-        <Text style={styles.addButtonText}>ADD NEW ITEM</Text>
-      </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 }
