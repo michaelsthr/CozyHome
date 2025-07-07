@@ -152,8 +152,8 @@ export default function Todo() {
                     }}>
                     <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
                 </View>
-                <View style={{ height: screenHeight / 1.5 }}>
-                    <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
+                <View style={{ height: "100%"}}>
+                    <ScrollView contentContainerStyle={{ paddingBottom: 60 }}>
                         {filteredTodos && filteredTodos.length > 0 ? (
                             filteredTodos?.slice().reverse().map((item, index) => (
                                 <ToDoItem

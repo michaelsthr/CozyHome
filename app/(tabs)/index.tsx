@@ -104,15 +104,15 @@ export default function HomePage() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={ContainerStyles.container} showsVerticalScrollIndicator={false}>
+    <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+      <ScrollView style={[ContainerStyles.container, {flex: 1}]} showsVerticalScrollIndicator={false}>
         <View style={[ContainerStyles.greetingSection, { paddingBottom: 20 }]}>
-          <Text style={[fontStyles.modernHeading, { marginTop:10}]}>
+          <Text style={[fontStyles.modernHeading, { marginTop: 10 }]}>
             Cozy Home
           </Text>
         </View>
 
-        <View style={[ContainerStyles.greetingSection, {paddingTop: 0}]}>
+        <View style={[ContainerStyles.greetingSection, { paddingTop: 0, flex: 1 }]}>
           <Text style={fontStyles.greeting}>Welcome back,</Text>
           <Text style={fontStyles.username}>{user?.username || "Guest"}!</Text>
           <Text style={fontStyles.subtitle}>Manage your {group?.type}.</Text>
@@ -146,7 +146,7 @@ export default function HomePage() {
           </View>
         </View>
 
-        <View style={[ContainerStyles.titleSection, { marginHorizontal: 20 }]}>
+        <View style={[ContainerStyles.titleSection, { marginHorizontal: 20, flex: 1 }]}>
           <Text style={fontStyles.title}>Group Members</Text>
           <Text style={[fontStyles.subtitle, { marginBottom: 0 }]}>
             {groupMembers.length} member{groupMembers.length !== 1 ? "s" : ""}
@@ -154,7 +154,7 @@ export default function HomePage() {
         </View>
 
         {groupMembers.length > 0 ? (
-          <View style={{ paddingHorizontal: 20 }}>
+          <View style={{ paddingHorizontal: 20, flex: 1}}>
             {groupMembers.map((member, index) => (
               <View key={member.$id} style={ContainerStyles.row}>
                 <View
@@ -182,16 +182,6 @@ export default function HomePage() {
                 </View>
               </View>
             ))}
-            <Button
-              title="Leave Group"
-              color="blue"
-              onPress={() => leaveGroup()}
-            />
-            <Button
-              title="Log Out"
-              color="blue"
-              onPress={() => logOut()}
-            />
           </View>
         ) : (
           <View style={ContainerStyles.emptyState}>
@@ -205,6 +195,18 @@ export default function HomePage() {
             </Text>
           </View>
         )}
+        <View style={{flex: 1}} >
+          <Button
+            title="Leave Group"
+            color="blue"
+            onPress={() => leaveGroup()}
+          />
+          <Button
+            title="Log Out"
+            color="blue"
+            onPress={() => logOut()}
+          />
+        </View>
       </ScrollView>
     </SafeAreaView>
 
