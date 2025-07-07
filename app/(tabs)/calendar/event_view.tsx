@@ -1,11 +1,10 @@
-import DeleteModal from "@/components/DeleteModal";
 import { createNewEvent, deleteEvent, updateEvent } from "@/lib/appwrite/dbKalender";
 import { Event } from "@/lib/types/calendar";
 import { ContainerStyles } from "@/styles/container_styles";
 import { fontStyles } from "@/styles/font_styles";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useState } from "react";
-import { Button, KeyboardAvoidingView, Platform, Text, View } from "react-native";
+import { Alert, Button, KeyboardAvoidingView, Platform, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import EventForm from "./event_form";
 
@@ -52,14 +51,32 @@ const EventView = () => {
         }
     };
 
-    const handleDeleteEvent = async () => {
-        try {
-            if (isEdit && params.id) {
-                await deleteEvent(params.id as string);
-                navigation.goBack();
+    const handleDeleteEventRequest = async () => {
+        const confirmAndDelete = async () => {
+            try {
+                if (isEdit && params.id) {
+                    await deleteEvent(params.id as string);
+                    navigation.goBack();
+                }
+            } catch (error) {
+                console.error("Error deleting event:", error);
             }
-        } catch (error) {
-            console.error("Error deleting event:", error);
+        };
+    if (Platform.OS == "web") {
+        const confirmed = window.confirm("Are you sure you want to delete this event?");
+        if (confirmed) {
+            confirmAndDelete();
+        }
+    } else {
+            Alert.alert (
+                "Delete Calender Event",
+                "Are you sure you want to delete this event?",
+                [
+                    {text: "cancel", style:"cancel"},
+                    {text:"Delete", style:"destructive", onPress: () => confirmAndDelete()}
+                ],
+                {cancelable:true}
+            );
         }
     };
 
@@ -81,13 +98,7 @@ const EventView = () => {
                         <Button
                             title='Delete Event'
                             color='red'
-                            onPress={() => setShowDeleteModal(true)}
-                        />
-                        <DeleteModal
-                            visible={showDeleteModal}
-                            onClose={() => setShowDeleteModal(false)}
-                            onDelete={handleDeleteEvent}
-                            title='Delete Event?'
+                            onPress={handleDeleteEventRequest}
                         />
                     </>
                 )}
