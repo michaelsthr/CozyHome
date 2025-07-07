@@ -8,7 +8,7 @@ import { getUsersByGroupId } from "@/lib/appwrite/dbUser";
 import { useSession } from "@/lib/context/SessionContext";
 import { buttonStyles } from "@/styles/button_styles";
 import { fontStyles } from "@/styles/font_styles";
-import { VStack } from "@gluestack-ui/themed";
+import { Badge, BadgeText, VStack } from "@gluestack-ui/themed";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
