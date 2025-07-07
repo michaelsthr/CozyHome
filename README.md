@@ -1,60 +1,39 @@
-# Welcome to your Expo app 👋
+# Welcome to Cozy Home👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Dieses Projekt wurde mit [`create-expo-app`](https://www.npmjs.com/package/create-expo-app) erstellt.
+Cozy Home ist ein Verwaltungstool für WGs, Familien und Partnerschaften und bietet Unterstützung in der Aufgabenverteilung und hilft dabei den Überblick über Termine, Ereignisse und Vorräte zu behalten.
 
-## Get started
+## Erste Schritte
 
-1. Install dependencies
+1. Abhängigkeiten installieren
 
    ```bash
    npm install
    ```
 
-2. Start the app
+2. App starten
 
    ```bash
    npx expo start
    ```
+Im Terminal erscheint ein QR-Code sowie Optionen zur Ausführung der App auf verschiedenen Plattformen.
 
-In the output, you'll find options to open the app in a
+3. App ausführen
+Um das Projekt auf dem Smartphone zu öffnen, muss zuvor die App Expo Go installiert werden. Nach erfolgreicher Installation kann der QR-Code im Terminal gescannt werden. Dadurch erfolgt eine Weiterleitung zu Expo und die App startet automatisch auf dem Smartphone. 
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Viel Spaß beim Testen unserer App Cozy Home!
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Weitere Informationen:
 
-## Get a fresh project
+- [Expo documentation](https://docs.expo.dev/): 
+- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/)
 
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
 
 ## Icons
+Einige Icons stammen von Flaticon.
 
-Tip: Just take a screenshot (256x256), otherwise you'll have to download the png (512x512). There's a download limit until you register.
-
-Used for fridge:
+Icons für den virtuellen Kühlschrank:
 https://www.flaticon.com/search?author_id=1&style_id=15&type=standard&word= (Lineal color by Freepik)
 
-Attribution and Link example:
+Beispiel für den Bildnachweis:
 <a href="https://www.flaticon.com/free-icons/food" title="food icons">Food icons created by Freepik - Flaticon</a>
