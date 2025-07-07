@@ -171,7 +171,7 @@ export default function HomePage() {
                     style={{
                       width: 45,
                       height: 45,
-                      backgroundColor: member.$id === user.$id ? "#22c55e" : "#6366f1",
+                      backgroundColor: member.$id === user?.$id ? "#22c55e" : "#6366f1",
                       borderRadius: 22.5,
                       justifyContent: "center",
                       alignItems: "center",
@@ -185,7 +185,7 @@ export default function HomePage() {
                   <View style={ContainerStyles.info}>
                     <Text style={[fontStyles.itemName, { textAlign: "left" }]}>
                       {member.username}
-                      {member.$id === user.$id && (
+                      {member.$id === user?.$id && (
                         <Text style={{ color: "#22c55e", fontWeight: "normal" }}> (You)</Text>
                       )}
                     </Text>
