@@ -5,6 +5,7 @@ import { cardStyles } from "@/styles/card_styles";
 import { ContainerStyles } from "@/styles/container_styles";
 import { fontStyles } from "@/styles/font_styles";
 import { globalStyles } from "@/styles/global_styles";
+import { useIsFocused } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import { User } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
@@ -13,6 +14,7 @@ import {
   Alert,
   Button,
   Image,
+  RefreshControl,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -32,42 +34,31 @@ export default function HomePage() {
   const router = useRouter();
   const [groupMembers, setGroupMembers] = useState<GroupMember[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = React.useState(false);
 
-  useEffect(() => {
-    const fetchGroupMembers = async () => {
-      if (!user?.groupID) {
-        setLoading(false);
-        return;
-      }
+  const fetchGroupMembers = async () => {
+    if (!group) {
+      setLoading(false);
+      return;
+    }
 
-      try {
-        const membersData = await getUsersByGroupId(user.groupID.$id);
-        setGroupMembers(membersData.documents.map(doc => ({
-          $id: doc.$id,
-          username: doc.username,
-          groupID: doc.groupID.$id
-        })));
-      } catch (error) {
-        console.error("Error fetching group data:", error);
-        Alert.alert("Error", "Failed to load group information");
-      } finally {
-        setLoading(false);
-      }
-    };
+    try {
+      const membersData = await getUsersByGroupId(group.$id);
+      setGroupMembers(membersData.documents.map(doc => ({
+        $id: doc.$id,
+        username: doc.username,
+        groupID: doc.groupID.$id
+      })));
+    } catch (error) {
+      console.error("Error fetching group data:", error);
+      Alert.alert("Error", "Failed to load group information");
+    } finally {
+      setLoading(false);
+      return
+    }
+  };
 
-    fetchGroupMembers();
-  }, [user?.groupID]);
 
-  if (loading) {
-    return (
-      <View style={globalStyles.loadingContainer}>
-        <ActivityIndicator size="large" color="#3b82f6" />
-        <Text style={[fontStyles.medium, { marginTop: 10, color: "#64748b" }]}>
-          Loading your group...
-        </Text>
-      </View>
-    );
-  }
 
   const leaveGroup = async () => {
     try {
@@ -100,12 +91,29 @@ export default function HomePage() {
       console.error("Error log out:", error);
       Alert.alert("Error", "Failed to log out");
     }
-
   }
+
+  const isFocused = useIsFocused();
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    await fetchGroupMembers();
+    setRefreshing(false);
+  }, []);
+
+  useEffect(() => {
+    if (isFocused) fetchGroupMembers();
+  }, [isFocused, group!.$id]);
+
 
   return (
     <SafeAreaView style={{ flex: 1 }} edges={['top']}>
-      <ScrollView style={[ContainerStyles.container, {flex: 1}]} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={[ContainerStyles.container, { flex: 1 }]}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
         <View style={[ContainerStyles.greetingSection, { paddingBottom: 20 }]}>
           <Text style={[fontStyles.modernHeading, { marginTop: 10 }]}>
             Cozy Home
@@ -154,34 +162,36 @@ export default function HomePage() {
         </View>
 
         {groupMembers.length > 0 ? (
-          <View style={{ paddingHorizontal: 20, flex: 1}}>
-            {groupMembers.map((member, index) => (
-              <View key={member.$id} style={ContainerStyles.row}>
-                <View
-                  style={{
-                    width: 45,
-                    height: 45,
-                    backgroundColor: member.$id === user.$id ? "#22c55e" : "#6366f1",
-                    borderRadius: 22.5,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginRight: 15,
-                  }}
-                >
-                  <Text style={{ color: "white", fontSize: 16, fontWeight: "600" }}>
-                    {member.username.charAt(0).toUpperCase()}
-                  </Text>
+          <View style={{ paddingHorizontal: 20, flex: 1 }}>
+            {[...groupMembers]
+              .sort((a, b) => (a.$id === user?.$id ? -1 : b.$id === user?.$id ? 1 : 0))
+              .map((member) => (
+                <View key={member.$id} style={ContainerStyles.row}>
+                  <View
+                    style={{
+                      width: 45,
+                      height: 45,
+                      backgroundColor: member.$id === user.$id ? "#22c55e" : "#6366f1",
+                      borderRadius: 22.5,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      marginRight: 15,
+                    }}
+                  >
+                    <Text style={{ color: "white", fontSize: 16, fontWeight: "600" }}>
+                      {member.username.charAt(0).toUpperCase()}
+                    </Text>
+                  </View>
+                  <View style={ContainerStyles.info}>
+                    <Text style={[fontStyles.itemName, { textAlign: "left" }]}>
+                      {member.username}
+                      {member.$id === user.$id && (
+                        <Text style={{ color: "#22c55e", fontWeight: "normal" }}> (You)</Text>
+                      )}
+                    </Text>
+                  </View>
                 </View>
-                <View style={ContainerStyles.info}>
-                  <Text style={[fontStyles.itemName, { textAlign: "left" }]}>
-                    {member.username}
-                    {member.$id === user.$id && (
-                      <Text style={{ color: "#22c55e", fontWeight: "normal" }}> (You)</Text>
-                    )}
-                  </Text>
-                </View>
-              </View>
-            ))}
+              ))}
           </View>
         ) : (
           <View style={ContainerStyles.emptyState}>
@@ -195,7 +205,7 @@ export default function HomePage() {
             </Text>
           </View>
         )}
-        <View style={{flex: 1}} >
+        <View style={{ flex: 1 }} >
           <Button
             title="Leave Group"
             color="blue"

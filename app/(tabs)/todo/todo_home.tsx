@@ -10,6 +10,7 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
     Image,
+    RefreshControl,
     SafeAreaView,
     ScrollView,
     Text,
@@ -19,6 +20,7 @@ import {
 import { ToDoItem, ToDoItemProps } from "../../../components/todo/todo_item";
 import { getTodos, updateTodo } from "../../../lib/appwrite/dbTodo"; //für db
 import styles, { screenHeight, screenWidth } from "./styles";
+import React from "react";
 
 const formatDate = (isoString: string) => {
     if (!isoString) return null;
@@ -75,6 +77,8 @@ export default function Todo() {
         if (selectedTab === "All") return true;
         return todo.tag === selectedTab;
     });
+    const [refreshing, setRefreshing] = React.useState(false);
+
 
     const fetchTodos = async () => {
         try {
@@ -96,9 +100,14 @@ export default function Todo() {
     useEffect(() => {
         if (isFocused) {
             fetchTodos();
-            console.log("Screen is focused – Daten neu geladen");
         }
     }, [isFocused]);
+
+     const onRefresh = React.useCallback(async () => {
+        setRefreshing(true);
+        await fetchTodos();
+        setRefreshing(false);
+      }, []);
 
     const changeToDoStatus = async (id: string, done: boolean) => {
         if (!todos) return;
@@ -153,7 +162,10 @@ export default function Todo() {
                     <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
                 </View>
                 <View style={{ height: "100%"}}>
-                    <ScrollView contentContainerStyle={{ paddingBottom: 60 }}>
+                    <ScrollView 
+                    contentContainerStyle={{ paddingBottom: 60 }}
+                    refreshControl={
+                              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
                         {filteredTodos && filteredTodos.length > 0 ? (
                             filteredTodos?.slice().reverse().map((item, index) => (
                                 <ToDoItem

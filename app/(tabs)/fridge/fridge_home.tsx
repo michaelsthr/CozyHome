@@ -1,6 +1,6 @@
 import { useFocusEffect, useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
-import { ActivityIndicator, Image, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Image, RefreshControl, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { getKuehlschrankInhalt, KuehlschrankItem, } from "../../../lib/appwrite/dbKuehlschrank";
 import { fridgeStyles } from "../../../styles/fridge_styles";
 import QuantityControls from "./fridgeBack/components/QuantityControls";
@@ -12,6 +12,7 @@ export default function Fridge() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const { handleQuantityChange, isUpdating } = useQuantityManager();
+  const [refreshing, setRefreshing] = React.useState(false);
 
   const styles = fridgeStyles;
 
@@ -40,6 +41,13 @@ export default function Fridge() {
       fetchFridgeItems();
     }, [fetchFridgeItems])
   );
+
+  const onRefresh = React.useCallback(async () => {
+      setRefreshing(true);
+      await fetchFridgeItems();
+      setRefreshing(false);
+    }, []);
+  
 
   const handleSearch = () => {
     if (!searchTerm.trim()) return;
@@ -147,7 +155,10 @@ export default function Fridge() {
     <SafeAreaView style={styles.container}>
       <ScrollView 
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContainer}>
+        contentContainerStyle={styles.scrollContainer}
+        refreshControl={
+                  <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        >
 
         <View style={styles.fridgeSection}>
           <View style={styles.headerContainer}>
