@@ -19,6 +19,7 @@ Cozy Home ist ein Verwaltungstool für WGs, Familien und Partnerschaften und bie
 Im Terminal erscheint ein QR-Code sowie Optionen zur Ausführung der App auf verschiedenen Plattformen.
 
 3. App ausführen
+
 Um das Projekt auf dem Smartphone zu öffnen, muss zuvor die App Expo Go installiert werden. Nach erfolgreicher Installation kann der QR-Code im Terminal gescannt werden. Dadurch erfolgt eine Weiterleitung zu Expo und die App startet automatisch auf dem Smartphone. 
 
 Viel Spaß beim Testen unserer App Cozy Home!
